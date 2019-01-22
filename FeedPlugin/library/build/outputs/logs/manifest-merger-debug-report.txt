@@ -1,0 +1,43 @@
+-- Merging decision tree log ---
+manifest
+ADDED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml:2:1-14:12
+INJECTED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml:2:1-14:12
+INJECTED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml:2:1-14:12
+	package
+		ADDED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml:3:5-30
+		INJECTED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml
+		INJECTED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml:2:11-69
+application
+ADDED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml:5:5-12:19
+	android:label
+		ADDED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml:5:18-50
+activity#com.feed.plugin.GalleryActivity
+ADDED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml:6:9-10:20
+	android:name
+		ADDED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml:6:19-50
+intent-filter#action:name:android.intent.action.MAIN
+ADDED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml:7:13-9:29
+action#android.intent.action.MAIN
+ADDED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml:8:17-69
+	android:name
+		ADDED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml:8:25-66
+activity#com.feed.plugin.ImgEditActivity
+ADDED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml:11:9-62
+	android:name
+		ADDED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml:11:19-50
+uses-sdk
+INJECTED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml
+INJECTED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml
+INJECTED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml
+INJECTED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml
+		ADDED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml
+		INJECTED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml
+		ADDED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml
+		INJECTED from D:\Unity\Plugin\FeedPlugin\library\src\main\AndroidManifest.xml

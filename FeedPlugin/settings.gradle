@@ -1,0 +1,2 @@
+include ':FeedApi'
+project(':FeedApi').projectDir = new File('library')
