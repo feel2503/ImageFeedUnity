@@ -7,7 +7,8 @@ import android.view.View;
 
 import com.unity3d.player.UnityPlayerActivity;
 
-public class GalleryActivity extends UnityPlayerActivity {
+//public class GalleryActivity extends UnityPlayerActivity {
+public class GalleryActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

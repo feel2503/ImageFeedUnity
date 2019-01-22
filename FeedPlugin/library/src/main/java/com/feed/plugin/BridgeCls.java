@@ -26,8 +26,7 @@ public class BridgeCls {
         Toast.makeText(this.mContext, msg, Toast.LENGTH_LONG).show();
 
     }
-
-    private void startGalleryActivity(Context context)
+    public void startGalleryActivity(Context context)
     {
         Intent intent = new Intent(context, GalleryActivity.class);
         context.startActivity(intent);
