@@ -27,7 +27,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     compileOnly files('libs/unity_classes.jar')
 }
 
