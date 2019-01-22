@@ -19,6 +19,8 @@ gen/
 out/
 build/
 
+Release
+
 # Configuration file
 local.properties
 gradle.properties
