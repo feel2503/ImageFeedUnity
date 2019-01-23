@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">FeedPlugin</string>
+
+    <string name="gallelry">Gallery</string>
+    <string name="stylebook">StyleBook</string>
+    <string name="camera">Camera</string>
 </resources>

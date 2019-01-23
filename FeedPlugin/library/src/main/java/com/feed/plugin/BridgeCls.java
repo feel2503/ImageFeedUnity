@@ -28,7 +28,7 @@ public class BridgeCls {
     }
     public void startGalleryActivity(Context context)
     {
-        Intent intent = new Intent(context, GalleryActivity.class);
+        Intent intent = new Intent(context, ImgSelectActivity.class);
         context.startActivity(intent);
     }
 }
