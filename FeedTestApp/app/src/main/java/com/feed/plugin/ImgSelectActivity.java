@@ -14,8 +14,11 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.feed.plugin.adapter.TabPagerAdapter;
+
+import java.util.ArrayList;
 
 public class ImgSelectActivity extends AppCompatActivity{
 
@@ -25,6 +28,7 @@ public class ImgSelectActivity extends AppCompatActivity{
             Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};  // 외부 저장소
 
     private TabLayout mTabLayout;
+    private TabPagerAdapter mTabpagerAdapter;
     private ViewPager mViewPager;
 
     @Override
@@ -38,7 +42,7 @@ public class ImgSelectActivity extends AppCompatActivity{
             initTab();
         }
 
-        //findViewById(R.id.btn_next).setOnClickListener(mClickListener);
+        findViewById(R.id.btn_next).setOnClickListener(mClickListener);
     }
 
 
@@ -54,10 +58,10 @@ public class ImgSelectActivity extends AppCompatActivity{
         mViewPager = findViewById(R.id.viewPager);
 
         //Creating adapter
-        TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), mTabLayout.getTabCount());
+        mTabpagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), mTabLayout.getTabCount());
         //TabPagerAdapter pagerAdapter = new TabPagerAdapter(getFragmentManager(), mTabLayout.getTabCount());
 
-        mViewPager.setAdapter(pagerAdapter);
+        mViewPager.setAdapter(mTabpagerAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         //Set TabSelectedListener
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -83,8 +87,17 @@ public class ImgSelectActivity extends AppCompatActivity{
         public void onClick(View v) {
             if(v.getId() == R.id.btn_next)
             {
+                mTabpagerAdapter.getItem(mViewPager.getCurrentItem());
+                ArrayList<String> imgList = mTabpagerAdapter.getItem(mViewPager.getCurrentItem()).getImgList();
+
+                if(imgList == null || imgList.size() < 1)
+                {
+                    Toast.makeText(getApplicationContext(), "이미지를 선택해 주세요.", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), ImgEditActivity.class);
+                intent.putStringArrayListExtra("ImageList", imgList);
                 startActivity(intent);
             }
         }
