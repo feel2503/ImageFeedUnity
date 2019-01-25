@@ -15,11 +15,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.feed.plugin.R;
-import com.feed.plugin.fragment.gallelry.GalleryAdapter;
-import com.feed.plugin.fragment.gallelry.GalleryManager;
-import com.feed.plugin.fragment.gallelry.GridDividerDecoration;
-import com.feed.plugin.fragment.gallelry.OnItemClickListener;
-import com.feed.plugin.fragment.gallelry.PhotoVO;
+import com.feed.plugin.fragment.gallery.GalleryAdapter;
+import com.feed.plugin.fragment.gallery.GalleryManager;
+import com.feed.plugin.fragment.gallery.GridDividerDecoration;
+import com.feed.plugin.fragment.gallery.OnItemClickListener;
+import com.feed.plugin.fragment.gallery.PhotoVO;
 
 import java.util.List;
 

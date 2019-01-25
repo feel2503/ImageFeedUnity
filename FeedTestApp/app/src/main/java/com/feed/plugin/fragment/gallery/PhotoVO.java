@@ -1,4 +1,4 @@
-package com.feed.plugin.fragment.gallelry;
+package com.feed.plugin.fragment.gallery;
 
 /**
  * Created by woong on 2015. 10. 20..

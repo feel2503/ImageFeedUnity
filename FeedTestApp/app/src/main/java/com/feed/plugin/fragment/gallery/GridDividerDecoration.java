@@ -1,4 +1,4 @@
-package com.feed.plugin.fragment.gallelry;
+package com.feed.plugin.fragment.gallery;
 
 import android.content.res.Resources;
 import android.graphics.Canvas;

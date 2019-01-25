@@ -1,4 +1,4 @@
-package com.feed.plugin.fragment.gallelry;
+package com.feed.plugin.fragment.gallery;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -9,58 +9,33 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-/**
- * Created by woong on 2015. 10. 20..
- */
+
 public class GalleryManager {
-
-
     private Context mContext;
 
     public GalleryManager(Context context) {
         mContext = context;
     }
 
-
-    /**
-     * 갤러리 이미지 반환
-     *
-     * @return
-     */
     public List<PhotoVO> getAllPhotoPathList() {
-
         ArrayList<PhotoVO> photoList = new ArrayList<>();
-
-        Uri uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-
+        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         String[] projection = {
                 MediaStore.MediaColumns.DATA,
                 MediaStore.Images.Media.DATE_ADDED
         };
 
         Cursor cursor = mContext.getContentResolver().query(uri, projection, null, null, null);
-
         int columnIndexData = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-
         while (cursor.moveToNext()) {
-
-            PhotoVO photoVO = new PhotoVO(cursor.getString(columnIndexData),false);
+            PhotoVO photoVO = new PhotoVO(cursor.getString(columnIndexData), false);
             photoList.add(photoVO);
         }
-
         cursor.close();
-
         return photoList;
     }
 
-
-    /**
-     * 날짜별 갤러리 이미지 반환
-     *
-     * @return
-     */
     public List<PhotoVO> getDatePhotoPathList(int year, int month, int day) {
-
         Calendar startCalendar = Calendar.getInstance();
         startCalendar.set(year, month, day, 0, 0);
 
@@ -71,9 +46,7 @@ public class GalleryManager {
         String endTitme = String.valueOf(endCalendar.getTimeInMillis()).substring(0, 10);
 
         ArrayList<PhotoVO> photoList = new ArrayList<>();
-
-        Uri uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-
+        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         String[] projection = {
                 MediaStore.MediaColumns.DATA,
                 MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
@@ -81,20 +54,16 @@ public class GalleryManager {
         };
 
         String selection = MediaStore.Images.Media.DATE_ADDED + " >= " + startTitme + " AND "
-                         + MediaStore.Images.Media.DATE_ADDED + " <= " + endTitme;
+                + MediaStore.Images.Media.DATE_ADDED + " <= " + endTitme;
 
         Cursor cursor = mContext.getContentResolver().query(uri, projection, selection, null, null);
-
         int columnIndexData = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-
         while (cursor.moveToNext()) {
-
-            PhotoVO photoVO = new PhotoVO(cursor.getString(columnIndexData),false);
+            PhotoVO photoVO = new PhotoVO(cursor.getString(columnIndexData), false);
             photoList.add(photoVO);
         }
         cursor.close();
         return photoList;
     }
-
 
 }
