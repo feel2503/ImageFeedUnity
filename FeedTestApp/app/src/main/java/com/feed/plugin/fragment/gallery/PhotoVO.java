@@ -1,8 +1,5 @@
 package com.feed.plugin.fragment.gallery;
 
-/**
- * Created by woong on 2015. 10. 20..
- */
 public class PhotoVO {
 
     private String imgPath;

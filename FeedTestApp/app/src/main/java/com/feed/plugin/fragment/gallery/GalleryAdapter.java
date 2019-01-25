@@ -14,62 +14,33 @@ import com.feed.plugin.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by woong on 2015. 10. 20..
- */
+
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoViewHolder> {
-
-
     private Activity mActivity;
-
     private int itemLayout;
     private List<PhotoVO> mPhotoList;
 
     private OnItemClickListener onItemClickListener;
 
-
-    /**
-     * PhotoList 반환
-     * @return
-     */
     public List<PhotoVO> getmPhotoList() {
         return mPhotoList;
     }
 
-
-    /**
-     * 선택된 PhotoList 반환
-     * @return
-     */
-    public List<PhotoVO> getSelectedPhotoList(){
-
+    public List<PhotoVO> getSelectedPhotoList() {
         List<PhotoVO> mSelectPhotoList = new ArrayList<>();
-
         for (int i = 0; i < mPhotoList.size(); i++) {
-
             PhotoVO photoVO = mPhotoList.get(i);
-            if(photoVO.isSelected()){
+            if (photoVO.isSelected()) {
                 mSelectPhotoList.add(photoVO);
             }
         }
-
         return mSelectPhotoList;
     }
 
-    /**
-     * 아이템 선택시 호출되는 리스너
-     * @param onItemClickListener
-     */
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
-
-    /**
-     * 생성자
-     * @param photoList
-     * @param itemLayout
-     */
     public GalleryAdapter(Activity activity, List<PhotoVO> photoList, int itemLayout) {
 
         mActivity = activity;
@@ -79,16 +50,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoVie
 
     }
 
-
-
-
-    /**
-     * 레이아웃을 만들어서 Holer에 저장
-     *
-     * @param viewGroup
-     * @param viewType
-     * @return
-     */
     @Override
     public PhotoViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
@@ -96,13 +57,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoVie
         return new PhotoViewHolder(view);
     }
 
-
-    /**
-     * listView getView 를 대체
-     * 넘겨 받은 데이터를 화면에 출력하는 역할
-     * @param viewHolder
-     * @param position
-     */
     @Override
     public void onBindViewHolder(final PhotoViewHolder viewHolder, final int position) {
 
@@ -115,9 +69,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoVie
                 .into(viewHolder.imgPhoto);
 
         //선택
-        if(photoVO.isSelected()){
+        if (photoVO.isSelected()) {
             viewHolder.layoutSelect.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             viewHolder.layoutSelect.setVisibility(View.INVISIBLE);
         }
 
@@ -139,10 +93,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoVie
         return mPhotoList.size();
     }
 
-
-    /**
-     * 뷰 재활용을 위한 viewHolder
-     */
     public static class PhotoViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView imgPhoto;
@@ -151,8 +101,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoVie
         public PhotoViewHolder(View itemView) {
             super(itemView);
 
-            imgPhoto = (ImageView) itemView.findViewById(R.id.imgPhoto);
-            layoutSelect = (RelativeLayout) itemView.findViewById(R.id.layoutSelect);
+            imgPhoto = (ImageView) itemView.findViewById(R.id.img_photo);
+            layoutSelect = (RelativeLayout) itemView.findViewById(R.id.layout_select);
         }
 
     }
