@@ -24,6 +24,10 @@
         <activity android:name=".ImgEditActivity"
             android:theme="@style/AppTheme" />
 
+        <activity android:name=".FeedUploadActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme" />
+
     </application>
 
 </manifest>

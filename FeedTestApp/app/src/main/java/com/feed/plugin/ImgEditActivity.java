@@ -1,5 +1,6 @@
 package com.feed.plugin;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -7,8 +8,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -37,6 +40,8 @@ public class ImgEditActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeFile(imgPath);
         mImgView.setImageBitmap(bitmap);
 
+        findViewById(R.id.btn_next).setOnClickListener(mOnClickListener);
+        findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -51,6 +56,29 @@ public class ImgEditActivity extends AppCompatActivity {
                     return true;
             }
             return false;
+        }
+    };
+
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if(v.getId() == R.id.btn_next)
+            {
+
+                if(mImagList == null || mImagList.size() < 1)
+                {
+                    Toast.makeText(getApplicationContext(), "이미지를 선택해 주세요.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), FeedUploadActivity.class);
+                intent.putStringArrayListExtra("ImageList", mImagList);
+                startActivity(intent);
+            }
+            else if(v.getId() == R.id.btn_back)
+            {
+                finish();
+            }
         }
     };
 }

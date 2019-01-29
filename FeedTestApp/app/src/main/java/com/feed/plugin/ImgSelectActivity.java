@@ -42,7 +42,8 @@ public class ImgSelectActivity extends AppCompatActivity{
             initTab();
         }
 
-        findViewById(R.id.btn_next).setOnClickListener(mClickListener);
+        findViewById(R.id.btn_next).setOnClickListener(mOnClickListener);
+        findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
     }
 
 
@@ -82,7 +83,7 @@ public class ImgSelectActivity extends AppCompatActivity{
     }
 
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if(v.getId() == R.id.btn_next)
@@ -99,6 +100,10 @@ public class ImgSelectActivity extends AppCompatActivity{
                 intent.setClass(getApplicationContext(), ImgEditActivity.class);
                 intent.putStringArrayListExtra("ImageList", imgList);
                 startActivity(intent);
+            }
+            else if(v.getId() == R.id.btn_back)
+            {
+                finish();
             }
         }
     };
