@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.feed.plugin.R;
 
-public class CameraFragment extends Fragment{
+public class CameraFragment extends ImgSelFragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){

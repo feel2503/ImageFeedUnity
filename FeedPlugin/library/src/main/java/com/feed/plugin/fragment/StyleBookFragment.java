@@ -8,7 +8,22 @@ import android.view.ViewGroup;
 
 import com.feed.plugin.R;
 
-public class StyleBookFragment extends Fragment{
+public class StyleBookFragment extends ImgSelFragment{
+
+    private static StyleBookFragment instance;
+
+    public static StyleBookFragment getInstance()
+    {
+        if(instance == null)
+            instance = new StyleBookFragment();
+
+        return instance;
+    }
+
+    public StyleBookFragment()
+    {
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){

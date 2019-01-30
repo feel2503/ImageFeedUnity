@@ -13,7 +13,12 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".ImgEditActivity"></activity>
+        <activity android:name=".ImgEditActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
+
+        <activity android:name=".FeedUploadActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.AppCompat.Light" />
     </application>
 
 </manifest>

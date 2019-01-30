@@ -21,18 +21,36 @@ import com.feed.plugin.fragment.gallery.GridDividerDecoration;
 import com.feed.plugin.fragment.gallery.OnItemClickListener;
 import com.feed.plugin.fragment.gallery.PhotoVO;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class GalleryFragment extends Fragment{
+public class GalleryFragment extends ImgSelFragment{
+
+    private static GalleryFragment instance;
 
     private RelativeLayout mRelImgViewer;
 
     private ImageView mImgSelImg;
     private GalleryManager mGalleryManager;
+
     private RecyclerView recyclerGallery;
     private GalleryAdapter galleryAdapter;
 
     private boolean imgViewState = true;
+
+    public static GalleryFragment getInstance()
+    {
+        if(instance == null)
+            instance = new GalleryFragment();
+
+        return instance;
+    }
+
+    public GalleryFragment()
+    {
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -88,6 +106,14 @@ public class GalleryFragment extends Fragment{
             String imgPath = photoVO.getImgPath();
             Bitmap bitmap = BitmapFactory.decodeFile(imgPath);
             mImgSelImg.setImageBitmap(bitmap);
+
+            if(mArrImgList == null)
+                mArrImgList = new ArrayList<>();
+
+            if(mArrImgList.size() < 1)
+                mArrImgList.add(imgPath);
+            else
+                mArrImgList.set(0, imgPath);    // 일단 하나만
 
             galleryAdapter.getmPhotoList().set(position,photoVO);
             galleryAdapter.notifyDataSetChanged();

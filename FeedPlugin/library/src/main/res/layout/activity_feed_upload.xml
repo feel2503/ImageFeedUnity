@@ -45,36 +45,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/img_editimg"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:scaleType="center"/>
-
         <RelativeLayout
-            android:id="@+id/rel_edit_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/img_editimg"
-            android:layout_above="@id/btnavigation">
+            android:layout_above="@id/input_form">
 
-            <TextView
-                android:id="@+id/text_editmenu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="filter"/>
+            <ImageView
+                android:id="@+id/img_feedImglist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"/>
         </RelativeLayout>
 
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/btnavigation"
+
+
+        <com.feed.plugin.widget.HashTagTextView
+            android:id="@+id/input_form"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:background="?android:attr/windowBackground"
+            android:layout_height="100dp"
             android:layout_alignParentBottom="true"
-            app:menu="@menu/navigation" />
+            android:background="@drawable/boader"
+            android:completionThreshold="1" />
+
+        <!--<EditText-->
+            <!--android:id="@+id/edit_write_msg"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="100dp"-->
+            <!--android:background="@drawable/boader"-->
+            <!--android:layout_alignParentBottom="true" />-->
 
 
 
