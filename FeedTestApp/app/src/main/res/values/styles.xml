@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <declare-styleable name="crop__CropperView">
+        <attr name="crop__grid_color" format="color"/>
+        <attr name="crop__grid_thickness" format="dimension"/>
+        <attr name="crop__grid_opacity" format="float"/>
+        <attr name="crop__padding_color" format="color"/>
+        <attr name="crop__add_padding_to_make_square" format="boolean"/>
+        <attr name="crop__fit_to_center" format="boolean"/>
+    </declare-styleable>
+
 </resources>

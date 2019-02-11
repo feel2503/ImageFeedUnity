@@ -16,11 +16,20 @@
             android:layout_width="match_parent"
             android:layout_height="250dp">
 
-            <ImageView
+            <com.feed.plugin.widget.crop.CropperView
+                android:background="#ff282828"
                 android:id="@+id/img_selimg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="center"/>
+                app:crop__grid_opacity="0.8"
+                app:crop__grid_thickness="0.8dp"
+                app:crop__padding_color="@color/colorAccent"
+                app:crop__grid_color="@color/colorAccent" />
+            <!--<ImageView-->
+                <!--android:id="@+id/img_selimg"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:scaleType="center"/>-->
 
         </RelativeLayout>
 

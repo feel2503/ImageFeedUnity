@@ -13,10 +13,12 @@ import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import com.feed.plugin.adapter.TabPagerAdapter;
+import com.feed.plugin.widget.SwipeViewPager;
 
 import java.util.ArrayList;
 
@@ -29,7 +31,7 @@ public class ImgSelectActivity extends AppCompatActivity{
 
     private TabLayout mTabLayout;
     private TabPagerAdapter mTabpagerAdapter;
-    private ViewPager mViewPager;
+    private SwipeViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,7 @@ public class ImgSelectActivity extends AppCompatActivity{
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.camera));
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        mViewPager = findViewById(R.id.viewPager);
+        mViewPager = (SwipeViewPager)findViewById(R.id.viewPager);
 
         //Creating adapter
         mTabpagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), mTabLayout.getTabCount());
@@ -82,6 +84,11 @@ public class ImgSelectActivity extends AppCompatActivity{
 
     }
 
+
+    public void setPagingEnabled(boolean enabled)
+    {
+        mViewPager.setPagingEnabled(enabled);
+    }
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override

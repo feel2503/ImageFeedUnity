@@ -67,7 +67,7 @@ public class ImgEditActivity extends AppCompatActivity {
 
                 if(mImagList == null || mImagList.size() < 1)
                 {
-                    Toast.makeText(getApplicationContext(), "Select Image", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "이미지를 선택해 주세요.", Toast.LENGTH_LONG).show();
                     return;
                 }
                 Intent intent = new Intent();

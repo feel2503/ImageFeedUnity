@@ -1,4 +1,4 @@
-package com.feed.plugin.widget;
+package com.feed.plugin.widget.hashtag;
 
 import android.content.Context;
 import android.text.Editable;

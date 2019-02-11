@@ -11,4 +11,5 @@ public class ImgSelFragment extends Fragment {
     {
         return mArrImgList;
     }
+
 }

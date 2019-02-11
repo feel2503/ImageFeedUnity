@@ -7,19 +7,24 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.feed.plugin.ImgSelectActivity;
 import com.feed.plugin.R;
 import com.feed.plugin.fragment.gallery.GalleryAdapter;
 import com.feed.plugin.fragment.gallery.GalleryManager;
 import com.feed.plugin.fragment.gallery.GridDividerDecoration;
 import com.feed.plugin.fragment.gallery.OnItemClickListener;
 import com.feed.plugin.fragment.gallery.PhotoVO;
+import com.feed.plugin.widget.crop.CropperView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +35,19 @@ public class GalleryFragment extends ImgSelFragment{
 
     private RelativeLayout mRelImgViewer;
 
-    private ImageView mImgSelImg;
+
     private GalleryManager mGalleryManager;
 
     private RecyclerView recyclerGallery;
     private GalleryAdapter galleryAdapter;
 
     private boolean imgViewState = true;
+
+    private CropperView mImageView;
+    private Bitmap originalBitmap;
+    private Bitmap mBitmap;
+
+    private ImgSelectActivity mParentActivity;
 
     public static GalleryFragment getInstance()
     {
@@ -51,16 +62,51 @@ public class GalleryFragment extends ImgSelFragment{
 
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.fragment_gallery, container, false);
+        mParentActivity = (ImgSelectActivity)getActivity();
         mRelImgViewer = (RelativeLayout)rootView.findViewById(R.id.relative_imgviewer);
-        mImgSelImg = (ImageView)rootView.findViewById(R.id.img_selimg);
+        mImageView = (CropperView)rootView.findViewById(R.id.img_selimg);
+        mImageView.setGridCallback(new CropperView.GridCallback() {
+            @Override
+            public boolean onGestureStarted() {
+                mParentActivity.setPagingEnabled(false);
+                return true;
+            }
+
+            @Override
+            public boolean onGestureCompleted() {
+                mParentActivity.setPagingEnabled(true);
+                return false;
+            }
+        });
 
         recyclerGallery = (RecyclerView) rootView.findViewById(R.id.recycler_gallery);
         ((Button)rootView.findViewById(R.id.btn_change_imgview_state)).setOnClickListener(mOnClickListenr);
         initRecyclerGallery();
+
+
+
+//        recyclerGallery.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if(event.getAction() == MotionEvent.ACTION_DOWN)
+//                {
+//                    mParentActivity.setPagingEnabled(true);
+//                }
+//                else if(event.getAction() == MotionEvent.ACTION_UP)
+//                {
+//                    mParentActivity.setPagingEnabled(false);
+//                }
+//
+//                Log.d("AAAA", "Touch : "+event);
+//                return false;
+//            }
+//        });
+
         return rootView;
     }
 
@@ -87,6 +133,34 @@ public class GalleryFragment extends ImgSelFragment{
         recyclerGallery.addItemDecoration(new GridDividerDecoration(getResources(), R.drawable.divider_recycler_gallery));
     }
 
+    private void loadNewImage(String filePath) {
+        mBitmap = BitmapFactory.decodeFile(filePath);
+        originalBitmap = mBitmap;
+
+        int maxP = Math.max(mBitmap.getWidth(), mBitmap.getHeight());
+        float scale1280 = (float)maxP / 1280;
+
+        if (mImageView.getWidth() != 0) {
+            mImageView.setMaxZoom(mImageView.getWidth() * 2 / 1280f);
+        } else {
+
+            ViewTreeObserver vto = mImageView.getViewTreeObserver();
+            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    mImageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                    mImageView.setMaxZoom(mImageView.getWidth() * 2 / 1280f);
+                    return true;
+                }
+            });
+
+        }
+
+        mBitmap = Bitmap.createScaledBitmap(mBitmap, (int)(mBitmap.getWidth()/scale1280),
+                (int)(mBitmap.getHeight()/scale1280), true);
+
+        mImageView.setImageBitmap(mBitmap);
+    }
     /**
      * 리사이클러뷰 아이템 선택시 호출 되는 리스너
      */
@@ -104,8 +178,7 @@ public class GalleryFragment extends ImgSelFragment{
             }
 
             String imgPath = photoVO.getImgPath();
-            Bitmap bitmap = BitmapFactory.decodeFile(imgPath);
-            mImgSelImg.setImageBitmap(bitmap);
+            loadNewImage(imgPath);
 
             if(mArrImgList == null)
                 mArrImgList = new ArrayList<>();

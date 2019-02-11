@@ -3,16 +3,12 @@ package com.feed.plugin;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.feed.plugin.widget.HashTagSuggestAdapter;
-import com.feed.plugin.widget.HashTagTextView;
+import com.feed.plugin.widget.hashtag.HashTagSuggestAdapter;
+import com.feed.plugin.widget.hashtag.HashTagTextView;
 
 import java.util.ArrayList;
 
