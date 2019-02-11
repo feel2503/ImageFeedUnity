@@ -15,6 +15,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.feed.plugin.adapter.TabPagerAdapter;
@@ -33,9 +35,14 @@ public class ImgSelectActivity extends AppCompatActivity{
     private TabPagerAdapter mTabpagerAdapter;
     private SwipeViewPager mViewPager;
 
+    private TextView mTextTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_imgselect);
 
         boolean isPermission = checkVerify();
@@ -46,6 +53,8 @@ public class ImgSelectActivity extends AppCompatActivity{
 
         findViewById(R.id.btn_next).setOnClickListener(mOnClickListener);
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
+
+        mTextTitle = (TextView)findViewById(R.id.text_title);
     }
 
 
@@ -70,7 +79,20 @@ public class ImgSelectActivity extends AppCompatActivity{
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition());
+                int position = tab.getPosition();
+                mViewPager.setCurrentItem(position);
+                if(position == 0)
+                {
+                    mTextTitle.setText(R.string.gallelry);
+                }
+                else if(position == 1)
+                {
+                    mTextTitle.setText(R.string.stylebook);
+                }
+                else
+                {
+                    mTextTitle.setText(R.string.camera);
+                }
             }
 
             @Override

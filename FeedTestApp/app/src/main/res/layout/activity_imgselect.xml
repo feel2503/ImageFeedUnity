@@ -10,19 +10,10 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="57dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:background="#ffffffff">
-
-        <TextView
-            android:id="@+id/text_gallery_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="#ff000000"
-
-            android:text="Gallery" />
 
         <Button
             android:id="@+id/btn_back"
@@ -31,6 +22,19 @@
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:text="PR"/>
+
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/btn_back"
+            android:layout_marginLeft="20dp"
+            android:textColor="#ff000000"
+            android:textAllCaps="true"
+            android:text="Gallery" />
+
+
 
         <Button
             android:id="@+id/btn_next"

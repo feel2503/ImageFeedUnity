@@ -6,11 +6,43 @@
     android:layout_height="match_parent"
     android:background="#ffffffff">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:textColor="#ff000000"
-        android:text="fragment_stylebook"
-        />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/relative_sty_imgviewer"
+            android:layout_width="match_parent"
+            android:layout_height="250dp">
+
+            <com.feed.plugin.widget.crop.CropperView
+                android:background="#ff282828"
+                android:id="@+id/img_style_selimg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:crop__grid_opacity="0.8"
+                app:crop__grid_thickness="0.8dp"
+                app:crop__padding_color="@color/colorAccent"
+                app:crop__grid_color="@color/colorAccent" />
+
+
+            <Button
+                android:id="@+id/btn_change_style_imgview_state"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:text="UP"/>
+
+        </RelativeLayout>
+
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_style_gallery"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 </RelativeLayout>
