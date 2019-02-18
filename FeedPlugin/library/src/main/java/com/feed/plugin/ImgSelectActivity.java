@@ -21,8 +21,10 @@ import com.feed.plugin.adapter.TabPagerAdapter;
 import java.util.ArrayList;
 
 public class ImgSelectActivity extends AppCompatActivity{
-
     private final int REQEUST_PERFMSSION_CODE = 0x1001;
+    public final static int REQUTST_NETX_ACTIVITY = 0x1002;
+    public final static int RESULT_FINISH_ACTIVIY = RESULT_FIRST_USER + 0x1;
+
 
     private String[] REQUIRED_PERMISSIONS  = {Manifest.permission.CAMERA, // 카메라
             Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};  // 외부 저장소
@@ -99,7 +101,7 @@ public class ImgSelectActivity extends AppCompatActivity{
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), ImgEditActivity.class);
                 intent.putStringArrayListExtra("ImageList", imgList);
-                startActivity(intent);
+                startActivityForResult(intent, REQUTST_NETX_ACTIVITY);
             }
             else if(v.getId() == R.id.btn_back)
             {
@@ -180,5 +182,18 @@ public class ImgSelectActivity extends AppCompatActivity{
         });
 
         builder.create().show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUTST_NETX_ACTIVITY )
+        {
+            if(resultCode == RESULT_FINISH_ACTIVIY)
+            {
+                setResult(RESULT_FINISH_ACTIVIY);
+                finish();
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.feed.plugin.ImgSelectActivity;
@@ -34,6 +35,7 @@ public class GalleryFragment extends ImgSelFragment{
     private static GalleryFragment instance;
 
     private RelativeLayout mRelImgViewer;
+    private LinearLayout.LayoutParams mImgViewLayout;
 
 
     private GalleryManager mGalleryManager;
@@ -68,8 +70,8 @@ public class GalleryFragment extends ImgSelFragment{
     {
         View rootView = inflater.inflate(R.layout.fragment_gallery, container, false);
         mParentActivity = (ImgSelectActivity)getActivity();
-        mRelImgViewer = (RelativeLayout)rootView.findViewById(R.id.relative_imgviewer);
-        mImageView = (CropperView)rootView.findViewById(R.id.img_selimg);
+        mRelImgViewer = (RelativeLayout)rootView.findViewById(R.id.relative_gall_imgviewer);
+        mImageView = (CropperView)rootView.findViewById(R.id.img_gall_selimg);
         mImageView.setGridCallback(new CropperView.GridCallback() {
             @Override
             public boolean onGestureStarted() {
@@ -85,7 +87,7 @@ public class GalleryFragment extends ImgSelFragment{
         });
 
         recyclerGallery = (RecyclerView) rootView.findViewById(R.id.recycler_gallery);
-        ((Button)rootView.findViewById(R.id.btn_change_imgview_state)).setOnClickListener(mOnClickListenr);
+        ((Button)rootView.findViewById(R.id.btn_change_gall_imgview_state)).setOnClickListener(mOnClickListenr);
         initRecyclerGallery();
 
 
@@ -108,6 +110,13 @@ public class GalleryFragment extends ImgSelFragment{
 //        });
 
         return rootView;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(mImgViewLayout == null)
+            mImgViewLayout =  (LinearLayout.LayoutParams)mRelImgViewer.getLayoutParams();
     }
 
     /**
@@ -194,19 +203,30 @@ public class GalleryFragment extends ImgSelFragment{
         }
     };
 
+    private void changeImgViewSize(boolean viewState)
+    {
+
+    }
+
+
     private View.OnClickListener mOnClickListenr = new View.OnClickListener(){
         @Override
         public void onClick(View v){
-            if(v.getId() == R.id.btn_change_imgview_state)
+            if(v.getId() == R.id.btn_change_gall_imgview_state)
             {
                 if(imgViewState)
                 {
-                    mRelImgViewer.setVisibility(View.GONE);
+                    mImgViewLayout.height = (int)getResources().getDimension(R.dimen.view_min);
+                    mRelImgViewer.setLayoutParams(mImgViewLayout);
+                    //mRelImgViewer.setVisibility(View.GONE);
                     imgViewState = false;
                 }
                 else
                 {
-                    mRelImgViewer.setVisibility(View.VISIBLE);
+                    mImgViewLayout.height = (int)getResources().getDimension(R.dimen.view_max);
+                    mRelImgViewer.setLayoutParams(mImgViewLayout);
+
+                    //mRelImgViewer.setVisibility(View.VISIBLE);
                     imgViewState = true;
                 }
             }

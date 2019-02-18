@@ -7,8 +7,11 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -62,6 +65,14 @@ public class CropperImageView extends ImageView {
 
     private boolean initWithFitToCenter = false;
 
+//    //gride
+//    private Paint mGrdiPaint;
+//    private int mGridColor = 0xfffffff;
+//    private int mGridAlpha = 200;
+//    private int mGridStrokeWidth = 3;
+//    private boolean showGrid = false;
+//    private Path mGridPath;
+
     public CropperImageView(Context context) {
         super(context);
         init(context, null);
@@ -106,6 +117,18 @@ public class CropperImageView extends ImageView {
         mScaleDetector = new ScaleGestureDetector(context, mScaleListener);
 
         setScaleType(ScaleType.MATRIX);
+
+
+//        // grid
+//        mGrdiPaint = new Paint();
+//        mGrdiPaint.setColor(mGridColor);
+//        mGrdiPaint.setAntiAlias(true);
+//        mGrdiPaint.setStyle(Paint.Style.STROKE);
+//        mGrdiPaint.setStrokeCap(Paint.Cap.ROUND);
+//        mGrdiPaint.setStrokeWidth(mGridStrokeWidth);
+//        mGrdiPaint.setAlpha(mGridAlpha);
+//
+//        mGridPath = new Path();
     }
 
     // Make Square
@@ -1036,4 +1059,23 @@ public class CropperImageView extends ImageView {
 
         animator.start();
     }
+
+//    @Override
+//    protected void onDraw(Canvas canvas){
+//        super.onDraw(canvas);
+//
+//        int width = canvas.getWidth();
+//        int height = canvas.getHeight();
+//
+//        mGridPath.reset();
+//        mGridPath.moveTo(width / 3, 0);
+//        mGridPath.lineTo(width / 3, height);
+//        mGridPath.moveTo(2 * width / 3, 0);
+//        mGridPath.lineTo(2*width/3, height);
+//        mGridPath.moveTo(0, height/3);
+//        mGridPath.lineTo(width, height/3);
+//        mGridPath.moveTo(0, 2*height/3);
+//        mGridPath.lineTo(width, 2*height/3);
+//        canvas.drawPath(mGridPath, mGrdiPaint);
+//    }
 }

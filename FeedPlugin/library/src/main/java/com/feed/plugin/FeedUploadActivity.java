@@ -42,6 +42,7 @@ public class FeedUploadActivity extends AppCompatActivity {
         }
 
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
+        findViewById(R.id.btn_next).setOnClickListener(mOnClickListener);
 
 
         // hashtag
@@ -66,10 +67,12 @@ public class FeedUploadActivity extends AppCompatActivity {
         public void onClick(View v) {
             if(v.getId() == R.id.btn_next)
             {
-
+                setResult(ImgSelectActivity.RESULT_FINISH_ACTIVIY);
+                finish();
             }
             else if(v.getId() == R.id.btn_back)
             {
+                setResult(ImgSelectActivity.RESULT_FINISH_ACTIVIY);
                 finish();
             }
         }

@@ -72,7 +72,7 @@ public class ImgEditActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), FeedUploadActivity.class);
                 intent.putStringArrayListExtra("ImageList", mImagList);
-                startActivity(intent);
+                startActivityForResult(intent, ImgSelectActivity.REQUTST_NETX_ACTIVITY);
             }
             else if(v.getId() == R.id.btn_back)
             {
@@ -80,4 +80,17 @@ public class ImgEditActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ImgSelectActivity.REQUTST_NETX_ACTIVITY )
+        {
+            if(resultCode == ImgSelectActivity.RESULT_FINISH_ACTIVIY)
+            {
+                setResult(ImgSelectActivity.RESULT_FINISH_ACTIVIY);
+                finish();
+            }
+        }
+    }
 }
