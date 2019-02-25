@@ -43,41 +43,32 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <ImageView
-            android:id="@+id/img_editimg"
+            android:id="@+id/image_preview"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:scaleType="center"/>
+            android:layout_height="360dp"
+            android:scaleType="centerCrop" />
 
-        <RelativeLayout
-            android:id="@+id/rel_edit_layout"
+        <com.feed.plugin.widget.SwipeViewPager
+            android:id="@+id/edit_viewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/img_editimg"
-            android:layout_above="@id/btnavigation">
+            android:layout_height="120dp"
+            android:layout_above="@+id/edit_tabs"
+            android:layout_below="@+id/image_preview"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-            <TextView
-                android:id="@+id/text_editmenu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="filter"/>
-        </RelativeLayout>
-
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/btnavigation"
+        <android.support.design.widget.TabLayout
+            android:id="@+id/edit_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:background="?android:attr/windowBackground"
             android:layout_alignParentBottom="true"
-            app:menu="@menu/navigation" />
-
-
-
+            app:tabGravity="fill"
+            app:tabMode="fixed" />
 
     </RelativeLayout>
 </LinearLayout>
