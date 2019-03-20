@@ -2,7 +2,10 @@ package com.feed.plugin.fragment;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.RectF;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -26,6 +29,8 @@ import com.feed.plugin.fragment.gallery.GridDividerDecoration;
 import com.feed.plugin.fragment.gallery.OnItemClickListener;
 import com.feed.plugin.fragment.gallery.PhotoVO;
 import com.feed.plugin.widget.crop.CropperView;
+import com.feed.plugin.widget.cropimgview.CropImageView;
+import com.feed.plugin.widget.cropimgview.callback.LoadCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,26 +41,34 @@ public class GalleryFragment extends ImgSelFragment{
 
     private RelativeLayout mRelImgViewer;
     private LinearLayout.LayoutParams mImgViewLayout;
-
-
     private GalleryManager mGalleryManager;
-
     private RecyclerView recyclerGallery;
     private GalleryAdapter galleryAdapter;
 
     private boolean imgViewState = true;
 
-    private CropperView mImageView;
-    private Bitmap originalBitmap;
-    private Bitmap mBitmap;
+
+
 
     private ImgSelectActivity mParentActivity;
+
+    private CropImageView mCropView;
+    private RectF mFrameRect = null;
+
+    private Button mBtnViewState;
+    private Button mBtnSelState;
+    private Button mBtnCrop16_9;
+    private Button mBtnCrop3_4;
+    private Button mBtnCrop1_1;
 
     public static GalleryFragment getInstance()
     {
         if(instance == null)
+        {
+            Bundle args = new Bundle();
             instance = new GalleryFragment();
-
+            instance.setArguments(args);
+        }
         return instance;
     }
 
@@ -64,52 +77,44 @@ public class GalleryFragment extends ImgSelFragment{
 
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.fragment_gallery, container, false);
         mParentActivity = (ImgSelectActivity)getActivity();
-        mRelImgViewer = (RelativeLayout)rootView.findViewById(R.id.relative_gall_imgviewer);
-        mImageView = (CropperView)rootView.findViewById(R.id.img_gall_selimg);
-        mImageView.setGridCallback(new CropperView.GridCallback() {
-            @Override
-            public boolean onGestureStarted() {
-                mParentActivity.setPagingEnabled(false);
-                return true;
-            }
+        bindView(rootView);
 
-            @Override
-            public boolean onGestureCompleted() {
-                mParentActivity.setPagingEnabled(true);
-                return false;
-            }
-        });
-
-        recyclerGallery = (RecyclerView) rootView.findViewById(R.id.recycler_gallery);
-        ((Button)rootView.findViewById(R.id.btn_change_gall_imgview_state)).setOnClickListener(mOnClickListenr);
         initRecyclerGallery();
 
-
-
-//        recyclerGallery.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if(event.getAction() == MotionEvent.ACTION_DOWN)
-//                {
-//                    mParentActivity.setPagingEnabled(true);
-//                }
-//                else if(event.getAction() == MotionEvent.ACTION_UP)
-//                {
-//                    mParentActivity.setPagingEnabled(false);
-//                }
-//
-//                Log.d("AAAA", "Touch : "+event);
-//                return false;
-//            }
-//        });
+        //mCropView.setDebug(true);
 
         return rootView;
+    }
+
+    private void bindView(View rootView)
+    {
+        mRelImgViewer = (RelativeLayout)rootView.findViewById(R.id.relative_gall_imgviewer);
+
+        mCropView = (CropImageView) rootView.findViewById(R.id.cropImageView);
+
+        recyclerGallery = (RecyclerView) rootView.findViewById(R.id.recycler_gallery);
+        mBtnViewState = rootView.findViewById(R.id.btn_change_gall_imgview_state);
+        mBtnViewState.setOnClickListener(mOnClickListenr);
+        mBtnSelState = rootView.findViewById(R.id.btn_img_sel_mode);
+        mBtnSelState.setOnClickListener(mOnClickListenr);
+        mBtnCrop16_9 = rootView.findViewById(R.id.btn_crop_16_9);
+        mBtnCrop16_9.setOnClickListener(mOnClickListenr);
+        mBtnCrop3_4 = rootView.findViewById(R.id.btn_crop_3_4);
+        mBtnCrop3_4.setOnClickListener(mOnClickListenr);
+        mBtnCrop1_1 = rootView.findViewById(R.id.btn_crop_1_1);
+        mBtnCrop1_1.setOnClickListener(mOnClickListenr);
     }
 
     @Override
@@ -143,32 +148,35 @@ public class GalleryFragment extends ImgSelFragment{
     }
 
     private void loadNewImage(String filePath) {
-        mBitmap = BitmapFactory.decodeFile(filePath);
-        originalBitmap = mBitmap;
+        mFrameRect = null;
+        filePath = "file://" + filePath;
+        Uri sourceUrk = Uri.parse(filePath);
+        mCropView.load(sourceUrk)
+                .initialFrameRect(mFrameRect)
+                .useThumbnail(true)
+                .execute(mLoadCallback);
 
-        int maxP = Math.max(mBitmap.getWidth(), mBitmap.getHeight());
-        float scale1280 = (float)maxP / 1280;
 
-        if (mImageView.getWidth() != 0) {
-            mImageView.setMaxZoom(mImageView.getWidth() * 2 / 1280f);
-        } else {
-
-            ViewTreeObserver vto = mImageView.getViewTreeObserver();
-            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    mImageView.getViewTreeObserver().removeOnPreDrawListener(this);
-                    mImageView.setMaxZoom(mImageView.getWidth() * 2 / 1280f);
-                    return true;
-                }
-            });
-
-        }
-
-        mBitmap = Bitmap.createScaledBitmap(mBitmap, (int)(mBitmap.getWidth()/scale1280),
-                (int)(mBitmap.getHeight()/scale1280), true);
-
-        mImageView.setImageBitmap(mBitmap);
+//        mBitmap = BitmapFactory.decodeFile(filePath);
+//        originalBitmap = mBitmap;
+//        int maxP = Math.max(mBitmap.getWidth(), mBitmap.getHeight());
+//        float scale1280 = (float)maxP / 1280;
+//        if (mImageView.getWidth() != 0) {
+//            mImageView.setMaxZoom(mImageView.getWidth() * 2 / 1280f);
+//        } else {
+//            ViewTreeObserver vto = mImageView.getViewTreeObserver();
+//            vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+//                @Override
+//                public boolean onPreDraw() {
+//                    mImageView.getViewTreeObserver().removeOnPreDrawListener(this);
+//                    mImageView.setMaxZoom(mImageView.getWidth() * 2 / 1280f);
+//                    return true;
+//                }
+//            });
+//        }
+//        mBitmap = Bitmap.createScaledBitmap(mBitmap, (int)(mBitmap.getWidth()/scale1280),
+//                (int)(mBitmap.getHeight()/scale1280), true);
+//        mImageView.setImageBitmap(mBitmap);
     }
     /**
      * 리사이클러뷰 아이템 선택시 호출 되는 리스너
@@ -230,7 +238,31 @@ public class GalleryFragment extends ImgSelFragment{
                     imgViewState = true;
                 }
             }
+            else if(v.getId() == R.id.btn_crop_16_9)
+            {
+                mCropView.setCropMode(CropImageView.CropMode.RATIO_16_9);
+            }
+            else if(v.getId() == R.id.btn_crop_3_4)
+            {
+                mCropView.setCropMode(CropImageView.CropMode.RATIO_3_4);
+            }
+            else if(v.getId() == R.id.btn_crop_1_1)
+            {
+                mCropView.setCropMode(CropImageView.CropMode.SQUARE);
+            }
+            else if(v.getId() == R.id.btn_img_sel_mode)
+            {
+
+            }
         }
     };
 
+
+    private final LoadCallback mLoadCallback = new LoadCallback() {
+        @Override public void onSuccess() {
+        }
+
+        @Override public void onError(Throwable e) {
+        }
+    };
 }

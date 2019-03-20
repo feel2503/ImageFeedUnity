@@ -14,17 +14,38 @@
         <RelativeLayout
             android:id="@+id/relative_gall_imgviewer"
             android:layout_width="match_parent"
-            android:layout_height="350dp">
+            android:layout_height="400dp">
 
-            <com.feed.plugin.widget.crop.CropperView
-                android:background="#ff282828"
-                android:id="@+id/img_gall_selimg"
+            <!--<com.feed.plugin.widget.crop.CropperView-->
+                <!--android:background="#ff282828"-->
+                <!--android:id="@+id/img_gall_selimg"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--app:crop__grid_opacity="0.8"-->
+                <!--app:crop__grid_thickness="0.8dp"-->
+                <!--app:crop__padding_color="@color/colorAccent"-->
+                <!--app:crop__grid_color="@color/colorAccent" />-->
+
+            <com.feed.plugin.widget.cropimgview.CropImageView
+                android:id="@+id/cropImageView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:crop__grid_opacity="0.8"
-                app:crop__grid_thickness="0.8dp"
-                app:crop__padding_color="@color/colorAccent"
-                app:crop__grid_color="@color/colorAccent" />
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_weight="1"
+                app:scv_background_color="@color/windowBackground"
+                app:scv_crop_mode="fit_image"
+                app:scv_frame_color="@color/colorAccent"
+                app:scv_frame_stroke_weight="1dp"
+                app:scv_guide_color="@color/colorAccent"
+                app:scv_guide_show_mode="show_always"
+                app:scv_guide_stroke_weight="1dp"
+                app:scv_handle_color="@color/colorAccent"
+                app:scv_handle_show_mode="show_always"
+                app:scv_handle_size="14dp"
+                app:scv_min_frame_size="50dp"
+                app:scv_overlay_color="@color/overlay"
+                app:scv_touch_padding="8dp"
+                />
 
             <Button
                 android:id="@+id/btn_change_gall_imgview_state"
@@ -34,6 +55,43 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="10dp"
                 android:text="UP"/>
+
+            <Button
+                android:id="@+id/btn_crop_16_9"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:text="16:9"/>
+
+            <Button
+                android:id="@+id/btn_crop_3_4"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:layout_above="@id/btn_crop_16_9"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:text="3:4"/>
+
+            <Button
+                android:id="@+id/btn_crop_1_1"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:layout_above="@id/btn_crop_3_4"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:text="1:1"/>
+
+            <Button
+                android:id="@+id/btn_img_sel_mode"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="10dp"
+                android:text="mul"/>
 
         </RelativeLayout>
 

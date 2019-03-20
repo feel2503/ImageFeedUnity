@@ -6,4 +6,7 @@
 
     <color name="filter_label_normal">#8A8889</color>
     <color name="filter_label_selected">#221F20</color>
+
+    <color name="overlay">#AA1C1C1C</color>
+    <color name="windowBackground">#1C1C1C</color>
 </resources>
