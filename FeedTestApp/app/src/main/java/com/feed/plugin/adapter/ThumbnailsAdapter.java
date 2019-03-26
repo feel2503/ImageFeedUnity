@@ -10,8 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.feed.plugin.R;
-import com.zomato.photofilters.imageprocessors.Filter;
-import com.zomato.photofilters.utils.ThumbnailItem;
+import com.feed.plugin.adapter.items.ThumbnailItem;
+import com.feed.plugin.android.gpuimage.GPUImageView;
+import com.feed.plugin.android.gpuimage.filter.GPUImageFilter;
 
 import java.util.List;
 
@@ -30,15 +31,11 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView thumbnail;
-
-
+        GPUImageView thumbnail;
         TextView filterName;
 
         public MyViewHolder(View view) {
             super(view);
-
-
         }
     }
 
@@ -54,7 +51,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.thumbnail_list_item, parent, false);
 
         MyViewHolder viewHolder = new MyViewHolder(itemView);
-        viewHolder.thumbnail = (ImageView)itemView.findViewById(R.id.thumbnail);
+        viewHolder.thumbnail = (GPUImageView) itemView.findViewById(R.id.gpuimage_thumbnail);
         viewHolder.filterName = (TextView)itemView.findViewById(R.id.filter_name);
 
         return viewHolder;
@@ -63,8 +60,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final ThumbnailItem thumbnailItem = thumbnailItemList.get(position);
-
-        holder.thumbnail.setImageBitmap(thumbnailItem.image);
+        holder.thumbnail.setImage(thumbnailItem.image);
 
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +70,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
                 notifyDataSetChanged();
             }
         });
+
 
         holder.filterName.setText(thumbnailItem.filterName);
 
@@ -90,6 +87,6 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
     }
 
     public interface ThumbnailsAdapterListener {
-        void onFilterSelected(Filter filter);
+        void onFilterSelected(GPUImageFilter filter);
     }
 }

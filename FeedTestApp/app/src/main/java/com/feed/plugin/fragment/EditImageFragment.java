@@ -110,6 +110,12 @@ public class EditImageFragment extends Fragment implements SeekBar.OnSeekBarChan
 
         void onContrastChanged(float contrast);
 
+        void onColorOverlayChanged();
+
+        void onToneCurveChanged();
+
+        void onVignetteChanged(int alpha);
+
         void onEditStarted();
 
         void onEditCompleted();

@@ -9,7 +9,16 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        externalNativeBuild {
+            cmake { cppFlags "" }
+        }
     }
+
+    externalNativeBuild {
+        cmake { path "src/main/cpp/CMakeLists.txt" }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -39,7 +48,5 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
 
-
-    implementation 'info.androidhive:imagefilters:1.0.7'
 
 }

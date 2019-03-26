@@ -11,6 +11,7 @@
         android:scaleType="fitXY"
         />
 
+
     <RelativeLayout
         android:id="@+id/layout_select"
         android:layout_width="match_parent"

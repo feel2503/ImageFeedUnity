@@ -14,12 +14,14 @@ import android.view.ViewGroup;
 
 import com.feed.plugin.R;
 import com.feed.plugin.adapter.ThumbnailsAdapter;
+import com.feed.plugin.adapter.items.ThumbnailItem;
+import com.feed.plugin.android.gpuimage.GPUImageView;
+import com.feed.plugin.android.gpuimage.filter.GPUImageFilter;
 import com.feed.plugin.util.BitmapUtils;
+import com.feed.plugin.util.FilterUtils;
 import com.feed.plugin.util.SpacesItemDecoration;
-import com.zomato.photofilters.FilterPack;
-import com.zomato.photofilters.imageprocessors.Filter;
-import com.zomato.photofilters.utils.ThumbnailItem;
-import com.zomato.photofilters.utils.ThumbnailsManager;
+import com.feed.plugin.util.ThumbnailsManager;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +31,7 @@ import java.util.List;
 public class FiltersListFragment extends Fragment implements ThumbnailsAdapter.ThumbnailsAdapterListener {
 
     private RecyclerView mRecyclerView;
-
     private ThumbnailsAdapter mAdapter;
-
     private List<ThumbnailItem> thumbnailItemList;
 
     private FiltersListFragmentListener listener;
@@ -107,15 +107,17 @@ public class FiltersListFragment extends Fragment implements ThumbnailsAdapter.T
                 ThumbnailItem thumbnailItem = new ThumbnailItem();
                 thumbnailItem.image = thumbImage;
                 thumbnailItem.filterName = "Normal";
+                //thumbnailItem.gpuImageView = new GPUImageView(getActivity());
+
                 ThumbnailsManager.addThumb(thumbnailItem);
 
-                List<Filter> filters = FilterPack.getFilterPack(getActivity());
-
-                for (Filter filter : filters) {
+                ArrayList<FilterUtils.FilterType> filterTypes = FilterUtils.getFilterTypeList();
+                for(FilterUtils.FilterType type: filterTypes)
+                {
                     ThumbnailItem tI = new ThumbnailItem();
                     tI.image = thumbImage;
-                    tI.filter = filter;
-                    tI.filterName = filter.getName();
+                    tI.filter = FilterUtils.createFilterForType(getActivity(), type);
+                    tI.filterName = FilterUtils.getFilterName(type);
                     ThumbnailsManager.addThumb(tI);
                 }
 
@@ -134,12 +136,12 @@ public class FiltersListFragment extends Fragment implements ThumbnailsAdapter.T
     }
 
     @Override
-    public void onFilterSelected(Filter filter) {
+    public void onFilterSelected(GPUImageFilter filter) {
         if (listener != null)
             listener.onFilterSelected(filter);
     }
 
     public interface FiltersListFragmentListener {
-        void onFilterSelected(Filter filter);
+        void onFilterSelected(GPUImageFilter filter);
     }
 }

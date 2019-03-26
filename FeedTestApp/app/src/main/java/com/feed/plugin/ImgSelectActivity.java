@@ -68,7 +68,7 @@ public class ImgSelectActivity extends AppCompatActivity{
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         mViewPager = (SwipeViewPager)findViewById(R.id.viewPager);
-
+        setPagingEnabled(false);
         //Creating adapter
         mTabpagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), mTabLayout.getTabCount());
         //TabPagerAdapter pagerAdapter = new TabPagerAdapter(getFragmentManager(), mTabLayout.getTabCount());

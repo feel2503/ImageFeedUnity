@@ -104,6 +104,21 @@ public class GalleryFragment extends ImgSelFragment{
 
         mCropView = (CropImageView) rootView.findViewById(R.id.cropImageView);
 
+        mCropView.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent event){
+                if(event.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    mParentActivity.setPagingEnabled(false);
+                }
+                else if(event.getAction() == MotionEvent.ACTION_UP)
+                {
+                    mParentActivity.setPagingEnabled(true);
+                }
+                return false;
+            }
+        });
+
         recyclerGallery = (RecyclerView) rootView.findViewById(R.id.recycler_gallery);
         mBtnViewState = rootView.findViewById(R.id.btn_change_gall_imgview_state);
         mBtnViewState.setOnClickListener(mOnClickListenr);
@@ -145,6 +160,8 @@ public class GalleryFragment extends ImgSelFragment{
         recyclerGallery.setLayoutManager(new GridLayoutManager(getContext(), 4));
         recyclerGallery.setItemAnimator(new DefaultItemAnimator());
         recyclerGallery.addItemDecoration(new GridDividerDecoration(getResources(), R.drawable.divider_recycler_gallery));
+
+
     }
 
     private void loadNewImage(String filePath) {
