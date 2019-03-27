@@ -11,10 +11,13 @@ public class ThumbnailItem{
     public Bitmap image;
     public GPUImageFilter filter;
     public FilterUtils.FilterType filteType;
-    //public GPUImageView gpuImageView;
+
+    public boolean isSelected = false;
 
     public ThumbnailItem() {
         image = null;
         filter = new GPUImageFilter();
     }
+
+
 }

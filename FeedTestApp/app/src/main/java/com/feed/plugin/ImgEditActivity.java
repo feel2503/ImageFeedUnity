@@ -160,6 +160,9 @@ public class ImgEditActivity extends AppCompatActivity {
         @Override
         public void onFilterSelected(GPUImageFilter filter){
 
+            mImgView.setFilter(filter);
+            mImgView.requestRender();
+
 //            // applying the selected filter
 //            filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
 //            // preview filtered image
