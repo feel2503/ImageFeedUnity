@@ -8,43 +8,8 @@
     android:orientation="vertical"
     tools:context=".ImgSelectActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="57dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:background="#ffffffff">
 
-        <Button
-            android:id="@+id/btn_back"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:text="PR"/>
-
-        <TextView
-            android:id="@+id/text_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/btn_back"
-            android:layout_marginLeft="20dp"
-            android:textColor="#ff000000"
-            android:textAllCaps="true"
-            android:text="Gallery" />
-
-
-
-        <Button
-            android:id="@+id/btn_next"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:text="NE"/>
-
-    </RelativeLayout>
+    <include layout="@layout/layout_title"></include>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -60,7 +25,7 @@
             android:id="@+id/tabLayout"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="55.3dp" />
     </RelativeLayout>
 
 

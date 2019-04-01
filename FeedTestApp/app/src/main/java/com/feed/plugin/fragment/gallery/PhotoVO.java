@@ -4,6 +4,7 @@ public class PhotoVO {
 
     private String imgPath;
     private boolean selected;
+    private int selectCount;
 
     public PhotoVO(String imgPath, boolean selected) {
         this.imgPath = imgPath;
@@ -24,5 +25,13 @@ public class PhotoVO {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public int getSelectCount(){
+        return selectCount;
+    }
+
+    public void setSelectCount(int selectCount){
+        this.selectCount = selectCount;
     }
 }

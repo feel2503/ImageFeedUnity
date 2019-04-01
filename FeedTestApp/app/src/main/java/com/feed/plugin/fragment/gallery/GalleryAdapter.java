@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.feed.plugin.R;
@@ -19,6 +20,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoVie
     private Activity mActivity;
     private int itemLayout;
     private List<PhotoVO> mPhotoList;
+
+    private boolean isMultiSelect = false;
 
     private OnItemClickListener onItemClickListener;
 
@@ -39,6 +42,16 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoVie
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+    }
+
+    public void setMultiSelectMode(boolean isMultiSelect)
+    {
+        this.isMultiSelect = isMultiSelect;
+    }
+
+    public boolean getMultiSelect()
+    {
+        return isMultiSelect;
     }
 
     public GalleryAdapter(Activity activity, List<PhotoVO> photoList, int itemLayout) {
@@ -69,11 +82,28 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoVie
                 .into(viewHolder.imgPhoto);
 
         //선택
-        if (photoVO.isSelected()) {
-            viewHolder.layoutSelect.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.layoutSelect.setVisibility(View.INVISIBLE);
+        if(isMultiSelect)
+        {
+            viewHolder.imgSelect.setVisibility(View.VISIBLE);
+            viewHolder.textCount.setVisibility(View.VISIBLE);
+            if(photoVO.isSelected())
+            {
+                viewHolder.imgSelect.setImageResource(R.drawable.ico_select_circle_on);
+                viewHolder.textCount.setText(""+photoVO.getSelectCount());
+            }
+            else
+            {
+                viewHolder.imgSelect.setImageResource(R.drawable.ico_select_circle_default);
+                viewHolder.textCount.setVisibility(View.INVISIBLE);
+            }
+
         }
+        else
+        {
+            viewHolder.imgSelect.setVisibility(View.INVISIBLE);
+            viewHolder.textCount.setVisibility(View.INVISIBLE);
+        }
+
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,13 +126,15 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.PhotoVie
     public static class PhotoViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView imgPhoto;
-        public RelativeLayout layoutSelect;
+        public ImageView imgSelect;
+        public TextView textCount;
 
         public PhotoViewHolder(View itemView) {
             super(itemView);
 
             imgPhoto = (ImageView) itemView.findViewById(R.id.img_photo);
-            layoutSelect = (RelativeLayout) itemView.findViewById(R.id.layout_select);
+            imgSelect = (ImageView) itemView.findViewById(R.id.image_select_state);
+            textCount = (TextView) itemView.findViewById(R.id.text_select_count);
         }
 
     }

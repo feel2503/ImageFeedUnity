@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ToggleButton;
 
 import com.feed.plugin.ImgSelectActivity;
 import com.feed.plugin.R;
@@ -47,16 +48,13 @@ public class GalleryFragment extends ImgSelFragment{
 
     private boolean imgViewState = true;
 
-
-
-
     private ImgSelectActivity mParentActivity;
 
     private CropImageView mCropView;
     private RectF mFrameRect = null;
 
     private Button mBtnViewState;
-    private Button mBtnSelState;
+    private ToggleButton mToggleSelState;
     private Button mBtnCrop16_9;
     private Button mBtnCrop3_4;
     private Button mBtnCrop1_1;
@@ -122,8 +120,8 @@ public class GalleryFragment extends ImgSelFragment{
         recyclerGallery = (RecyclerView) rootView.findViewById(R.id.recycler_gallery);
         mBtnViewState = rootView.findViewById(R.id.btn_change_gall_imgview_state);
         mBtnViewState.setOnClickListener(mOnClickListenr);
-        mBtnSelState = rootView.findViewById(R.id.btn_img_sel_mode);
-        mBtnSelState.setOnClickListener(mOnClickListenr);
+        mToggleSelState = rootView.findViewById(R.id.btn_img_sel_mode);
+        mToggleSelState.setOnClickListener(mOnClickListenr);
         mBtnCrop16_9 = rootView.findViewById(R.id.btn_crop_16_9);
         mBtnCrop16_9.setOnClickListener(mOnClickListenr);
         mBtnCrop3_4 = rootView.findViewById(R.id.btn_crop_3_4);
@@ -160,6 +158,19 @@ public class GalleryFragment extends ImgSelFragment{
         recyclerGallery.setLayoutManager(new GridLayoutManager(getContext(), 4));
         recyclerGallery.setItemAnimator(new DefaultItemAnimator());
         recyclerGallery.addItemDecoration(new GridDividerDecoration(getResources(), R.drawable.divider_recycler_gallery));
+
+
+        // init select image
+        mArrImgList = new ArrayList<>();
+        List<PhotoVO> itemList = galleryAdapter.getmPhotoList();
+        if(itemList.size() > 0)
+        {
+            mArrImgList.add(itemList.get(0).getImgPath());
+            itemList.get(0).setSelected(true);
+            itemList.get(0).setSelectCount(mArrImgList.size());
+            loadNewImage(itemList.get(0).getImgPath());
+        }
+
 
 
     }
@@ -201,26 +212,64 @@ public class GalleryFragment extends ImgSelFragment{
     private OnItemClickListener mOnItemClickListener = new OnItemClickListener() {
 
         @Override
-        public void OnItemClick(GalleryAdapter.PhotoViewHolder photoViewHolder, int position) {
-
+        public void OnItemClick(GalleryAdapter.PhotoViewHolder photoViewHolder, int position)
+        {
             PhotoVO photoVO = galleryAdapter.getmPhotoList().get(position);
-
-            if(photoVO.isSelected()){
-                photoVO.setSelected(false);
-            }else{
-                photoVO.setSelected(true);
-            }
-
             String imgPath = photoVO.getImgPath();
-            loadNewImage(imgPath);
 
             if(mArrImgList == null)
                 mArrImgList = new ArrayList<>();
 
-            if(mArrImgList.size() < 1)
-                mArrImgList.add(imgPath);
+            if(galleryAdapter.getMultiSelect())
+            {
+                if(photoVO.isSelected()){
+                    photoVO.setSelected(false);
+                    photoVO.setSelectCount(-1);
+                    mArrImgList.remove(imgPath);
+                    imgPath = mArrImgList.get(mArrImgList.size()-1);
+                    loadNewImage(imgPath);
+                }
+                else
+                {
+                    if(mArrImgList.size() < 5)
+                    {
+                        photoVO.setSelected(true);
+                        mArrImgList.add(imgPath);
+                        photoVO.setSelectCount(mArrImgList.size());
+
+                        loadNewImage(imgPath);
+                    }
+
+                }
+            }
             else
-                mArrImgList.set(0, imgPath);    // 일단 하나만
+            {
+                if(mArrImgList.size() < 1)
+                    mArrImgList.add(imgPath);
+                else
+                    mArrImgList.set(0, imgPath);    // 일단 하나만
+
+                loadNewImage(imgPath);
+            }
+
+
+
+//            if(photoVO.isSelected()){
+//                photoVO.setSelected(false);
+//            }else{
+//                photoVO.setSelected(true);
+//            }
+//
+//            String imgPath = photoVO.getImgPath();
+//            loadNewImage(imgPath);
+//
+//            if(mArrImgList == null)
+//                mArrImgList = new ArrayList<>();
+//
+//            if(mArrImgList.size() < 1)
+//                mArrImgList.add(imgPath);
+//            else
+//                mArrImgList.set(0, imgPath);    // 일단 하나만
 
             galleryAdapter.getmPhotoList().set(position,photoVO);
             galleryAdapter.notifyDataSetChanged();
@@ -269,7 +318,34 @@ public class GalleryFragment extends ImgSelFragment{
             }
             else if(v.getId() == R.id.btn_img_sel_mode)
             {
+                if(mToggleSelState.isChecked())
+                {
+                    galleryAdapter.setMultiSelectMode(true);
+                }
+                else
+                {
+                    galleryAdapter.setMultiSelectMode(false);
+                    String imgPath = mArrImgList.get(mArrImgList.size()-1);
+                    mArrImgList.clear();
+                    mArrImgList.add(imgPath);
 
+                    List<PhotoVO> itemList = galleryAdapter.getmPhotoList();
+                    for(PhotoVO item : itemList)
+                    {
+                        if(item.getImgPath().equalsIgnoreCase(imgPath))
+                        {
+                            item.setSelected(true);
+                            item.setSelectCount(1);
+                        }
+                        else
+                        {
+                            item.setSelected(false);
+                            item.setSelectCount(-1);
+                        }
+                    }
+
+                }
+                galleryAdapter.notifyDataSetChanged();
             }
         }
     };
