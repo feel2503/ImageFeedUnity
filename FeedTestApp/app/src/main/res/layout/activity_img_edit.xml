@@ -7,39 +7,7 @@
     android:orientation="vertical"
     android:background="#ffffffff">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:background="#ffffffff">
-
-        <TextView
-            android:id="@+id/text_gallery_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="#ff000000"
-
-            android:text="edit" />
-
-        <Button
-            android:id="@+id/btn_back"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:text="PR"/>
-
-        <Button
-            android:id="@+id/btn_next"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:text="NE"/>
-
-    </RelativeLayout>
+    <include layout="@layout/layout_title"></include>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -48,28 +16,111 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.feed.plugin.android.gpuimage.GPUImageView
-            android:id="@+id/gpuimage"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager_gpuimage"
             android:layout_width="match_parent"
-            android:layout_height="360dp"
-            android:layout_gravity="center" />
+            android:layout_height="360dp">
+        </android.support.v4.view.ViewPager>
+
+        <!--<com.feed.plugin.android.gpuimage.GPUImageView-->
+            <!--android:id="@+id/gpuimage"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="360dp"-->
+            <!--android:layout_gravity="center" />-->
 
 
-        <com.feed.plugin.widget.SwipeViewPager
-            android:id="@+id/edit_viewpager"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_above="@+id/edit_tabs"
-            android:layout_below="@+id/gpuimage"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:layout_height="237.5dp"
+            android:layout_alignParentBottom="true">
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/edit_tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            app:tabGravity="fill"
-            app:tabMode="fixed" />
+            <RelativeLayout
+                android:id="@+id/relative_filter_select"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <com.feed.plugin.widget.SwipeViewPager
+                    android:id="@+id/edit_viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@id/edit_tabs"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/edit_tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="55.3dp"
+                    android:layout_alignParentBottom="true"
+                    app:tabGravity="fill"
+                    app:tabMode="fixed" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relative_filter_value"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="22dp"
+                    android:paddingRight="22dp"
+                    android:layout_above="@id/linear_bottom_menu">
+
+                    <com.feed.plugin.widget.thumbseekbar.ThumbTextSeekBar
+                        android:id="@+id/seekbar_filter_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true">
+
+                    </com.feed.plugin.widget.thumbseekbar.ThumbTextSeekBar>
+
+                    <!--<SeekBar-->
+                        <!--android:id="@+id/seekbar_filter_value"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_centerVertical="true"/>-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/text_seekbar_value"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_above="@+id/seekbar_filter_value"-->
+                        <!--android:layout_centerHorizontal="true"-->
+                        <!--android:layout_marginBottom="8.5dp"-->
+                        <!--android:textSize="14.5dp"-->
+                        <!--android:text="85"-->
+                        <!--android:textAppearance="?android:attr/textAppearanceLarge" />-->
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_bottom_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="55.3dp"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/text_cancel"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Cancel"/>
+
+                    <TextView
+                        android:id="@+id/text_done"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Done"/>
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
 
     </RelativeLayout>
 </LinearLayout>

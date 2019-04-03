@@ -16,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,8 @@ public class ImgSelectActivity extends AppCompatActivity{
 
     private TextView mTextTitle;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +59,9 @@ public class ImgSelectActivity extends AppCompatActivity{
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
 
         mTextTitle = (TextView)findViewById(R.id.text_title);
+
+
+
     }
 
 

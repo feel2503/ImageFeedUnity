@@ -59,6 +59,8 @@ public class GalleryFragment extends ImgSelFragment{
     private Button mBtnCrop3_4;
     private Button mBtnCrop1_1;
 
+    private String mCurrentLoadImg;
+
     public static GalleryFragment getInstance()
     {
         if(instance == null)
@@ -177,12 +179,15 @@ public class GalleryFragment extends ImgSelFragment{
 
     private void loadNewImage(String filePath) {
         mFrameRect = null;
+        mCurrentLoadImg = filePath;
         filePath = "file://" + filePath;
         Uri sourceUrk = Uri.parse(filePath);
         mCropView.load(sourceUrk)
                 .initialFrameRect(mFrameRect)
                 .useThumbnail(true)
                 .execute(mLoadCallback);
+
+
 
 
 //        mBitmap = BitmapFactory.decodeFile(filePath);
@@ -223,11 +228,29 @@ public class GalleryFragment extends ImgSelFragment{
             if(galleryAdapter.getMultiSelect())
             {
                 if(photoVO.isSelected()){
-                    photoVO.setSelected(false);
-                    photoVO.setSelectCount(-1);
-                    mArrImgList.remove(imgPath);
-                    imgPath = mArrImgList.get(mArrImgList.size()-1);
-                    loadNewImage(imgPath);
+                    if(mCurrentLoadImg.equalsIgnoreCase(imgPath))
+                    {
+                        photoVO.setSelected(false);
+                        photoVO.setSelectCount(-1);
+                        mArrImgList.remove(imgPath);
+                        imgPath = mArrImgList.get(mArrImgList.size()-1);
+                        for(int i = 0; i < galleryAdapter.getmPhotoList().size(); i++)
+                        {
+                            for(int j = 0; j < mArrImgList.size(); j++)
+                            {
+                                if(galleryAdapter.getmPhotoList().get(i).getImgPath().equalsIgnoreCase(mArrImgList.get(j)))
+                                {
+                                    galleryAdapter.getmPhotoList().get(i).setSelectCount(j+1);
+                                    break;
+                                }
+                            }
+                        }
+                        loadNewImage(imgPath);
+                    }
+                    else
+                    {
+                        loadNewImage(imgPath);
+                    }
                 }
                 else
                 {
@@ -244,10 +267,28 @@ public class GalleryFragment extends ImgSelFragment{
             }
             else
             {
+                List<PhotoVO> itemList = galleryAdapter.getmPhotoList();
                 if(mArrImgList.size() < 1)
+                {
                     mArrImgList.add(imgPath);
+                }
                 else
-                    mArrImgList.set(0, imgPath);    // 일단 하나만
+                {
+                    mArrImgList.set(0, imgPath);
+                    for(PhotoVO item : itemList)
+                    {
+                        if(item.getImgPath().equalsIgnoreCase(imgPath))
+                        {
+                            item.setSelected(true);
+                            item.setSelectCount(mArrImgList.size());
+                        }
+                        else
+                        {
+                            item.setSelected(false);
+                            item.setSelectCount(-1);
+                        }
+                    }
+                }
 
                 loadNewImage(imgPath);
             }
@@ -335,7 +376,7 @@ public class GalleryFragment extends ImgSelFragment{
                         if(item.getImgPath().equalsIgnoreCase(imgPath))
                         {
                             item.setSelected(true);
-                            item.setSelectCount(1);
+                            item.setSelectCount(mArrImgList.size());
                         }
                         else
                         {

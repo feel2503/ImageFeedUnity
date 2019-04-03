@@ -16,24 +16,34 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.feed.plugin.adapter.GpuimageSlideAdapter;
+import com.feed.plugin.adapter.items.GPUImgItem;
+import com.feed.plugin.adapter.items.ThumbnailItem;
 import com.feed.plugin.android.gpuimage.GPUImage;
 import com.feed.plugin.android.gpuimage.GPUImageView;
 import com.feed.plugin.android.gpuimage.filter.GPUImageFilter;
 import com.feed.plugin.fragment.EditImageFragment;
 import com.feed.plugin.fragment.FiltersListFragment;
 import com.feed.plugin.widget.SwipeViewPager;
+import com.feed.plugin.widget.thumbseekbar.ThumbTextSeekBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ImgEditActivity extends AppCompatActivity {
 
-    private GPUImageView mImgView;
+    //private GPUImageView mImgView;
+    private ViewPager mGPUImagePager;
+    private GpuimageSlideAdapter mGPUImageAdapter;
 
     private ArrayList<String> mImagList;
+    private ArrayList<GPUImgItem> mGPUImgList;
+    private GPUImgItem mCurrentGPUImage;
 
     private SwipeViewPager mViewPager;
     private FiltersListFragment filtersListFragment;
@@ -42,6 +52,13 @@ public class ImgEditActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
 
     private Bitmap originalImage;
+
+    private RelativeLayout mRelFilterValue;
+    private RelativeLayout mRelFilterSelect;
+
+    private ThumbTextSeekBar mSeekbarValue;
+//    private SeekBar mSeekbar;
+//    private TextView mTextValue;
 
 
     @Override
@@ -54,9 +71,27 @@ public class ImgEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_img_edit);
 
         mImagList = getIntent().getStringArrayListExtra("ImageList");
-        mImgView = (GPUImageView)findViewById(R.id.gpuimage);
+        //mImgView = (GPUImageView)findViewById(R.id.gpuimage);
+        mGPUImagePager = (ViewPager)findViewById(R.id.viewpager_gpuimage) ;
+        mGPUImageAdapter = new GpuimageSlideAdapter(getApplicationContext());
+        initGPUImageList();
+        mGPUImagePager.setAdapter(mGPUImageAdapter);
+        mGPUImagePager.setOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+            @Override
+            public void onPageScrolled(int i, float v, int i1){
+            }
 
-        loadImage();
+            @Override
+            public void onPageSelected(int i){
+                mCurrentGPUImage = mGPUImgList.get(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i){
+            }
+        });
+
+
 
         findViewById(R.id.btn_next).setOnClickListener(mOnClickListener);
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
@@ -68,6 +103,30 @@ public class ImgEditActivity extends AppCompatActivity {
 
         setupViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setSelectedTabIndicatorHeight(0);
+
+        mRelFilterSelect = (RelativeLayout)findViewById(R.id.relative_filter_select);
+        mRelFilterValue = (RelativeLayout)findViewById(R.id.relative_filter_value);
+
+        mRelFilterValue.setVisibility(View.GONE);
+
+//        mSeekbar = (SeekBar)findViewById(R.id.seekbar_filter_value);
+//        mTextValue = (TextView)findViewById(R.id.text_seekbar_value);
+
+        mSeekbarValue = (ThumbTextSeekBar)findViewById(R.id.seekbar_filter_value);
+        mSeekbarValue.setOnSeekBarChangeListener(mOnSeekbarChangeListener);
+    }
+
+    private void initGPUImageList()
+    {
+        mGPUImgList = new ArrayList<GPUImgItem>();
+        for(String imgPath : mImagList)
+        {
+            GPUImgItem item = new GPUImgItem();
+            item.setImagePath(imgPath);
+            mGPUImgList.add(item);
+        }
+        mGPUImageAdapter.setImages(mGPUImgList);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -88,17 +147,27 @@ public class ImgEditActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-    private void loadImage()
-    {
-        String imgPath = mImagList.get(0);
-        originalImage = BitmapFactory.decodeFile(imgPath);
-        mImgView.setImage(originalImage);
-    }
-
     private void createFilterList()
     {
 
     }
+
+    private SeekBar.OnSeekBarChangeListener mOnSeekbarChangeListener = new SeekBar.OnSeekBarChangeListener(){
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
+            mSeekbarValue.setThumbText(""+seekBar.getProgress());
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar){
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar){
+
+        }
+    };
 
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -159,9 +228,11 @@ public class ImgEditActivity extends AppCompatActivity {
 
         @Override
         public void onFilterSelected(GPUImageFilter filter){
-
-            mImgView.setFilter(filter);
-            mImgView.requestRender();
+            if(mCurrentGPUImage != null)
+            {
+                mCurrentGPUImage.setFilter(filter);
+                mGPUImageAdapter.notifyDataSetChanged();
+            }
 
 //            // applying the selected filter
 //            filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
