@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -29,6 +30,7 @@ import com.feed.plugin.android.gpuimage.GPUImageView;
 import com.feed.plugin.android.gpuimage.filter.GPUImageFilter;
 import com.feed.plugin.fragment.EditImageFragment;
 import com.feed.plugin.fragment.FiltersListFragment;
+import com.feed.plugin.fragment.FiltersListSelectListener;
 import com.feed.plugin.widget.SwipeViewPager;
 import com.feed.plugin.widget.thumbseekbar.ThumbTextSeekBar;
 
@@ -60,7 +62,8 @@ public class ImgEditActivity extends AppCompatActivity {
 //    private SeekBar mSeekbar;
 //    private TextView mTextValue;
 
-
+    private TextView mTextCancel;
+    private TextView mTextDone;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,30 +81,51 @@ public class ImgEditActivity extends AppCompatActivity {
         mGPUImagePager.setAdapter(mGPUImageAdapter);
         mGPUImagePager.setOnPageChangeListener(new ViewPager.OnPageChangeListener(){
             @Override
-            public void onPageScrolled(int i, float v, int i1){
-            }
-
+            public void onPageScrolled(int i, float v, int i1){ }
             @Override
             public void onPageSelected(int i){
                 mCurrentGPUImage = mGPUImgList.get(i);
+                //mGPUImageAdapter.setSelectPos(i);
+                filtersListFragment.updateThumbnail(mImagList.get(i));
             }
-
             @Override
-            public void onPageScrollStateChanged(int i){
-            }
+            public void onPageScrollStateChanged(int i){ }
         });
-
-
 
         findViewById(R.id.btn_next).setOnClickListener(mOnClickListener);
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
 
         mViewPager = (SwipeViewPager)findViewById(R.id.edit_viewpager);
         mViewPager.setPagingEnabled(false);
+        setupViewPager(mViewPager);
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){ }
+            @Override
+            public void onPageSelected(int position){
+                ArrayList<ThumbnailItem> tItems;
+                if(position == 0)
+                {
+                    tItems = filtersListFragment.getThumbnailItemList();
+                }
+                else
+                {
+                    tItems = editImageFragment.getEditItemList();
+                }
+                for(ThumbnailItem item : tItems)
+                {
+                    if(item.isSelected)
+                    {
+                        mCurrentGPUImage.setFilter(item.filter);
+                        mCurrentGPUImage.requestRender();
+                    }
+                }
+            }
+            @Override
+            public void onPageScrollStateChanged(int state){}
+        });
 
         mTabLayout = (TabLayout)findViewById(R.id.edit_tabs);
-
-        setupViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setSelectedTabIndicatorHeight(0);
 
@@ -115,6 +139,11 @@ public class ImgEditActivity extends AppCompatActivity {
 
         mSeekbarValue = (ThumbTextSeekBar)findViewById(R.id.seekbar_filter_value);
         mSeekbarValue.setOnSeekBarChangeListener(mOnSeekbarChangeListener);
+
+        mTextCancel = (TextView)findViewById(R.id.text_cancel);
+        mTextCancel.setOnClickListener(mOnClickListener);
+        mTextDone = (TextView)findViewById(R.id.text_done);
+        mTextDone.setOnClickListener(mOnClickListener);
     }
 
     private void initGPUImageList()
@@ -126,6 +155,7 @@ public class ImgEditActivity extends AppCompatActivity {
             item.setImagePath(imgPath);
             mGPUImgList.add(item);
         }
+        mCurrentGPUImage = mGPUImgList.get(0);
         mGPUImageAdapter.setImages(mGPUImgList);
     }
 
@@ -134,12 +164,14 @@ public class ImgEditActivity extends AppCompatActivity {
 
         // adding filter list fragment
         filtersListFragment = new FiltersListFragment();
-        filtersListFragment.setImageList(mImagList);
+        //filtersListFragment.setImageList(mImagList);
+        filtersListFragment.setImagePath(mImagList.get(0));
         filtersListFragment.setListener(mFilterListListener);
 
         // adding edit image fragment
         editImageFragment = new EditImageFragment();
-        editImageFragment.setListener(mEditImageListenr);
+        editImageFragment.setListener(mFilterListListener);
+
 
         adapter.addFragment(filtersListFragment, "Filters");
         adapter.addFragment(editImageFragment, "Edit");
@@ -155,18 +187,14 @@ public class ImgEditActivity extends AppCompatActivity {
     private SeekBar.OnSeekBarChangeListener mOnSeekbarChangeListener = new SeekBar.OnSeekBarChangeListener(){
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
-            mSeekbarValue.setThumbText(""+seekBar.getProgress());
+            //Log.d("AAAA", "getprogress : "+seekBar.getProgress() + " progress : "+progress);
+            mSeekbarValue.setThumbText(""+progress);
+            mCurrentGPUImage.setFilterValue(progress);
         }
-
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar){
-
-        }
-
+        public void onStartTrackingTouch(SeekBar seekBar){ }
         @Override
-        public void onStopTrackingTouch(SeekBar seekBar){
-
-        }
+        public void onStopTrackingTouch(SeekBar seekBar){ }
     };
 
 
@@ -175,12 +203,6 @@ public class ImgEditActivity extends AppCompatActivity {
         public void onClick(View v) {
             if(v.getId() == R.id.btn_next)
             {
-
-                if(mImagList == null || mImagList.size() < 1)
-                {
-                    Toast.makeText(getApplicationContext(), "이미지를 선택해 주세요.", Toast.LENGTH_LONG).show();
-                    return;
-                }
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), FeedUploadActivity.class);
                 intent.putStringArrayListExtra("ImageList", mImagList);
@@ -189,6 +211,16 @@ public class ImgEditActivity extends AppCompatActivity {
             else if(v.getId() == R.id.btn_back)
             {
                 finish();
+            }
+            else if(v.getId() == R.id.text_cancel)
+            {
+                mRelFilterValue.setVisibility(View.GONE);
+                mRelFilterSelect.setVisibility(View.VISIBLE);
+            }
+            else if(v.getId() == R.id.text_done)
+            {
+                mRelFilterValue.setVisibility(View.GONE);
+                mRelFilterSelect.setVisibility(View.VISIBLE);
             }
         }
     };
@@ -223,76 +255,28 @@ public class ImgEditActivity extends AppCompatActivity {
     }
 
 
-    private FiltersListFragment.FiltersListFragmentListener mFilterListListener = new FiltersListFragment.FiltersListFragmentListener()
+    private FiltersListSelectListener mFilterListListener = new FiltersListSelectListener()
     {
-
         @Override
-        public void onFilterSelected(GPUImageFilter filter){
-            if(mCurrentGPUImage != null)
+        public void onFilterSelected(GPUImageFilter filter, boolean isSecondSelect){
+            if(isSecondSelect)
             {
-                mCurrentGPUImage.setFilter(filter);
-                mGPUImageAdapter.notifyDataSetChanged();
+                mRelFilterValue.setVisibility(View.VISIBLE);
+                mRelFilterSelect.setVisibility(View.GONE);
             }
+            else
+            {
+                mRelFilterValue.setVisibility(View.GONE);
+                mRelFilterSelect.setVisibility(View.VISIBLE);
 
-//            // applying the selected filter
-//            filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
-//            // preview filtered image
-//            mImgView.setImageBitmap(filter.processFilter(filteredImage));
-//
-//            finalImage = filteredImage.copy(Bitmap.Config.ARGB_8888, true);
+                if(mCurrentGPUImage != null)
+                {
+                    mCurrentGPUImage.setFilter(filter);
+                    mCurrentGPUImage.requestRender();
+                }
+            }
         }
     };
 
-    private EditImageFragment.EditImageFragmentListener mEditImageListenr = new EditImageFragment.EditImageFragmentListener()
-    {
 
-        @Override
-        public void onBrightnessChanged(int brightness){
-//            brightnessFinal = brightness;
-//            Filter myFilter = new Filter();
-//            myFilter.addSubFilter(new BrightnessSubFilter(brightness));
-//            mImgView.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
-        }
-
-        @Override
-        public void onSaturationChanged(float saturation){
-//            saturationFinal = saturation;
-//            Filter myFilter = new Filter();
-//            myFilter.addSubFilter(new SaturationSubfilter(saturation));
-//            mImgView.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
-        }
-
-        @Override
-        public void onContrastChanged(float contrast){
-//            contrastFinal = contrast;
-//            Filter myFilter = new Filter();
-//            myFilter.addSubFilter(new ContrastSubFilter(contrast));
-//            mImgView.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
-        }
-
-        @Override
-        public void onColorOverlayChanged(){
-
-        }
-
-        @Override
-        public void onToneCurveChanged(){
-
-        }
-
-        @Override
-        public void onVignetteChanged(int alpha){
-
-        }
-
-        @Override
-        public void onEditStarted(){
-
-        }
-
-        @Override
-        public void onEditCompleted(){
-
-        }
-    };
 }

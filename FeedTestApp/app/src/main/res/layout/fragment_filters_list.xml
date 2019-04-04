@@ -5,25 +5,12 @@
     tools:context="com.feed.plugin.fragment.FiltersListFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+        android:id="@+id/recycler_filter_view"
         android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipChildren="false"
         android:padding="4dp"
         android:scrollbars="none" />
-
-    <RelativeLayout
-        android:id="@+id/relative_SeekBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
-
-        <SeekBar
-            android:id="@+id/seekbar_filter_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </RelativeLayout>
 
 </RelativeLayout>

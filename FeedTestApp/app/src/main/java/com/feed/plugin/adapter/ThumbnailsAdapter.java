@@ -16,6 +16,7 @@ import com.feed.plugin.adapter.items.ThumbnailItem;
 import com.feed.plugin.android.gpuimage.GPUImageView;
 import com.feed.plugin.android.gpuimage.filter.GPUImageFilter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,8 +27,8 @@ import java.util.List;
 
 public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.MyViewHolder> {
 
-    private List<ThumbnailItem> thumbnailItemList;
-    private ThumbnailsAdapterListener listener;
+    private ArrayList<ThumbnailItem> thumbnailItemList;
+    private FilterSelectListener listener;
     private Context mContext;
     private int selectedIndex = 0;
 
@@ -44,10 +45,15 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
     }
 
 
-    public ThumbnailsAdapter(Context context, List<ThumbnailItem> thumbnailItemList, ThumbnailsAdapterListener listener) {
+    public ThumbnailsAdapter(Context context, ArrayList<ThumbnailItem> thumbnailItemList, FilterSelectListener listener) {
         mContext = context;
         this.thumbnailItemList = thumbnailItemList;
         this.listener = listener;
+    }
+
+    public void setThubmnailItemList(ArrayList<ThumbnailItem> thumbnailItemList)
+    {
+        this.thumbnailItemList = thumbnailItemList;
     }
 
     @Override
@@ -110,7 +116,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
         return thumbnailItemList.size();
     }
 
-    public interface ThumbnailsAdapterListener {
-        void onFilterSelected(GPUImageFilter filter, boolean isSecondSelect);
-    }
+//    public interface ThumbnailsAdapterListener {
+//        void onFilterSelected(GPUImageFilter filter, boolean isSecondSelect);
+//    }
 }

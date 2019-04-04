@@ -21,6 +21,9 @@ public class GpuimageSlideAdapter extends PagerAdapter{
     private LayoutInflater inflater;
     private Context context;
 
+    private int selectPos = 0;
+
+
     public GpuimageSlideAdapter(Context context){
         this.context = context;
     }
@@ -28,14 +31,25 @@ public class GpuimageSlideAdapter extends PagerAdapter{
     {
         mImages = images;
     }
+    public void setSelectPos(int pos)
+    {
+        selectPos = pos;
+    }
+//    public int getSelectPos()
+//    {
+//        return selectPos;
+//    }
+
     @Override
     public int getCount() {
         return mImages.size();
     }
 
+
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return view == ((LinearLayout) object);
+        //return view == ((LinearLayout) object);
+        return view == ((GPUImageView) object);
     }
 
     @Override
@@ -44,23 +58,52 @@ public class GpuimageSlideAdapter extends PagerAdapter{
 
         GPUImgItem item = mImages.get(position);
 
-        View v = inflater.inflate(R.layout.slider_gpuimage, container, false);
-        GPUImageView imageView = (GPUImageView)v.findViewById(R.id.slide_gpuimageview);
-
-        imageView.setImage(BitmapFactory.decodeFile(item.getImagePath()));
-        if(item.getFilter() != null)
+        View v = item.getView();
+        if(v == null)
         {
-            imageView.setFilter(item.getFilter());
-            imageView.requestRender();
+            v = inflater.inflate(R.layout.slider_gpuimage, container, false);
+            GPUImageView imageView = (GPUImageView)v.findViewById(R.id.slide_gpuimageview);
+
+            imageView.setImage(BitmapFactory.decodeFile(item.getImagePath()));
+            if(item.getFilter() != null)
+            {
+                imageView.setFilter(item.getFilter());
+                imageView.requestRender();
+            }
+            item.setView(v);
+
+            container.addView(item.getView());
         }
 
-
-        container.addView(v);
         return v;
+
+
+//        container.addView(v);
+//        return v;
     }
+
+//    @Override
+//    public void startUpdate(ViewGroup container){
+//        super.startUpdate(container);
+//
+//
+//        View chView = container.getChildAt(selectPos);
+//        if(chView instanceof GPUImageView)
+//        {
+//            GPUImageView gpuImageView = (GPUImageView)chView;
+//            gpuImageView.requestRender();
+//        }
+//    }
+
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.invalidate();
+    }
+
+
+    public void updateGPUImage()
+    {
+
     }
 }

@@ -16,41 +16,40 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.feed.plugin.R;
+import com.feed.plugin.adapter.FilterSelectListener;
 import com.feed.plugin.adapter.ThumbnailsAdapter;
 import com.feed.plugin.adapter.items.ThumbnailItem;
 import com.feed.plugin.android.gpuimage.GPUImage;
-import com.feed.plugin.android.gpuimage.GPUImageView;
 import com.feed.plugin.android.gpuimage.filter.GPUImageFilter;
-import com.feed.plugin.util.BitmapUtils;
 import com.feed.plugin.util.FilterUtils;
 import com.feed.plugin.util.SpacesItemDecoration;
 
-
 import java.util.ArrayList;
-import java.util.List;
 
 
 
-public class FiltersListFragment extends Fragment implements ThumbnailsAdapter.ThumbnailsAdapterListener {
+public class FiltersListFragment extends Fragment implements FilterSelectListener{
 
     private RecyclerView mRecyclerView;
-    private RelativeLayout mRelativeSeekbar;
     private ThumbnailsAdapter mAdapter;
-    private List<ThumbnailItem> thumbnailItemList;
 
-    private FiltersListFragmentListener listener;
+
+    private ArrayList<ThumbnailItem> thumbnailItemList;
+
+    private FiltersListSelectListener listener;
 
     private ArrayList<String> mImagList;
+    private String mImgPath;
 
     private int maxWidth = 120;
     private int maxHeight = 120;
 
-    public void setListener(FiltersListFragmentListener listener) {
-        this.listener = listener;
-    }
-
     public FiltersListFragment() {
         // Required empty public constructor
+    }
+
+    public void setListener(FiltersListSelectListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -64,8 +63,7 @@ public class FiltersListFragment extends Fragment implements ThumbnailsAdapter.T
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_filters_list, container, false);
 
-        mRecyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
-        mRelativeSeekbar = (RelativeLayout)view.findViewById(R.id.relative_SeekBar);
+        mRecyclerView = (RecyclerView)view.findViewById(R.id.recycler_filter_view);
 
         thumbnailItemList = new ArrayList<>();
         mAdapter = new ThumbnailsAdapter(getActivity(), thumbnailItemList, this);
@@ -81,7 +79,8 @@ public class FiltersListFragment extends Fragment implements ThumbnailsAdapter.T
         //prepareThumbnail(null);
         //initFilterList();
         AsyncCreateFiter async = new AsyncCreateFiter();
-        async.execute();
+        async.execute(mImgPath);
+
 
         return view;
     }
@@ -89,6 +88,25 @@ public class FiltersListFragment extends Fragment implements ThumbnailsAdapter.T
     public void setImageList(ArrayList<String> listImg)
     {
         mImagList = listImg;
+    }
+
+    public ArrayList<ThumbnailItem> getThumbnailItemList(){
+        return thumbnailItemList;
+    }
+
+    public void setThumbnailItemList(ArrayList<ThumbnailItem> thumbnailItemList){
+        this.thumbnailItemList = thumbnailItemList;
+    }
+
+    public void setImagePath(String path)
+    {
+        mImgPath = path;
+    }
+
+    public void updateThumbnail(String path)
+    {
+        AsyncCreateFiter async = new AsyncCreateFiter();
+        async.execute(path);
     }
 
     private Bitmap scaleBitmap(Bitmap bm) {
@@ -119,22 +137,27 @@ public class FiltersListFragment extends Fragment implements ThumbnailsAdapter.T
         return bm;
     }
 
-    class AsyncCreateFiter extends AsyncTask<Void, Void, Void>
+    class AsyncCreateFiter extends AsyncTask<String, Void, ArrayList<ThumbnailItem>>
     {
         @Override
-        protected Void doInBackground(Void... voids){
+        protected ArrayList<ThumbnailItem> doInBackground(String... params)
+        {
+            ArrayList<ThumbnailItem> result = new ArrayList<ThumbnailItem>();
+            String path = params[0];;
+//            if(params != null && params.length > 0)
+//                path = params[0];
 
-            Bitmap bitmap = BitmapFactory.decodeFile(mImagList.get(0));
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
             bitmap = scaleBitmap(bitmap);
 
-            thumbnailItemList.clear();
+            result.clear();
 
             // add normal bitmap first
             ThumbnailItem thumbnailItem = new ThumbnailItem();
             thumbnailItem.image = bitmap;
             thumbnailItem.filterName = "Normal";
 
-            thumbnailItemList.add(thumbnailItem);
+            result.add(thumbnailItem);
 
             GPUImage gpumage = new GPUImage(getActivity());
             //gpumage.setImage(bitmap);
@@ -154,15 +177,17 @@ public class FiltersListFragment extends Fragment implements ThumbnailsAdapter.T
                 ti.filter = filter;
                 ti.filterName = FilterUtils.getFilterName(type);
 
-                thumbnailItemList.add(ti);
+                result.add(ti);
             }
 
-            return null;
+            return result;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid){
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(ArrayList<ThumbnailItem> items){
+            super.onPostExecute(items);
+            mAdapter.setThubmnailItemList(items);
+            thumbnailItemList = items;
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -174,22 +199,24 @@ public class FiltersListFragment extends Fragment implements ThumbnailsAdapter.T
     public void onFilterSelected(GPUImageFilter filter, boolean isSecondSelect) {
         if (listener != null)
         {
-            if(!isSecondSelect)
-            {
-                mRecyclerView.setVisibility(View.VISIBLE);
-                mRelativeSeekbar.setVisibility(View.INVISIBLE);
-                listener.onFilterSelected(filter);
-            }
+            listener.onFilterSelected(filter, isSecondSelect);
 
-            else
-            {
-                mRecyclerView.setVisibility(View.INVISIBLE);
-                mRelativeSeekbar.setVisibility(View.VISIBLE);
-            }
+//            if(!isSecondSelect)
+//            {
+//                mRecyclerView.setVisibility(View.VISIBLE);
+//                mRelativeSeekbar.setVisibility(View.INVISIBLE);
+//                listener.onFilterSelected(filter, isSecondSelect);
+//            }
+//
+//            else
+//            {
+//                mRecyclerView.setVisibility(View.INVISIBLE);
+//                mRelativeSeekbar.setVisibility(View.VISIBLE);
+//            }
         }
     }
 
-    public interface FiltersListFragmentListener {
-        void onFilterSelected(GPUImageFilter filter);
-    }
+//    public interface FiltersListFragmentListener {
+//        void onFilterSelected(GPUImageFilter filter, boolean isSecondSelect);
+//    }
 }
