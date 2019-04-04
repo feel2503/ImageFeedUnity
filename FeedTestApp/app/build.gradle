@@ -28,7 +28,7 @@ android {
 }
 
 repositories {
-    flatDir{
+    flatDir {
         dirs 'libs'
     }
 }
@@ -49,4 +49,5 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
 
 
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 }

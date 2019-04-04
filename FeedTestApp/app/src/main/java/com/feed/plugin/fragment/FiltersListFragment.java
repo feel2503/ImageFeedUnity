@@ -163,22 +163,36 @@ public class FiltersListFragment extends Fragment implements FilterSelectListene
             //gpumage.setImage(bitmap);
 
 
-            ArrayList<FilterUtils.FilterType> filterTypes = FilterUtils.getFilterTypeList();
-            for(FilterUtils.FilterType type: filterTypes)
+            ArrayList<FilterUtils.FilterTypeItem> filterTypesItems = FilterUtils.getFilterTypeList(getActivity());
+            for(FilterUtils.FilterTypeItem item : filterTypesItems)
             {
-                GPUImageFilter filter = FilterUtils.createFilterForType(getActivity(), type);
+                GPUImageFilter filter = FilterUtils.createFilterForType(getActivity(), item.getType());
                 gpumage.setFilter(filter);
-                //gpumage.requestRender();
                 Bitmap filterBitmp = gpumage.getBitmapWithFilterApplied(bitmap);
-                //Bitmap filterBitmp = gpumage.getBitmapWithFilterApplied(bitmap, true);    // 앱 크레쉬 발생
 
                 ThumbnailItem ti = new ThumbnailItem();
                 ti.image = filterBitmp;
                 ti.filter = filter;
-                ti.filterName = FilterUtils.getFilterName(type);
+                ti.filterName = item.getName();
 
                 result.add(ti);
             }
+
+//            for(FilterUtils.FilterType type: filterTypes)
+//            {
+//                GPUImageFilter filter = FilterUtils.createFilterForType(getActivity(), type);
+//                gpumage.setFilter(filter);
+//                //gpumage.requestRender();
+//                Bitmap filterBitmp = gpumage.getBitmapWithFilterApplied(bitmap);
+//                //Bitmap filterBitmp = gpumage.getBitmapWithFilterApplied(bitmap, true);    // 앱 크레쉬 발생
+//
+//                ThumbnailItem ti = new ThumbnailItem();
+//                ti.image = filterBitmp;
+//                ti.filter = filter;
+//                ti.filterName = FilterUtils.getFilterName(type);
+//
+//                result.add(ti);
+//            }
 
             return result;
         }

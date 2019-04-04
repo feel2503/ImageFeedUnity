@@ -137,7 +137,7 @@ public class FilterUtils{
             case HUE:
                 return new GPUImageHueFilter(90.0f);
             case BRIGHTNESS:
-                return new GPUImageBrightnessFilter(1.5f);
+                return new GPUImageBrightnessFilter(0.0f);
             case GRAYSCALE:
                 return new GPUImageGrayscaleFilter();
             case SEPIA:
@@ -312,19 +312,48 @@ public class FilterUtils{
         }
     }
 
-    public static ArrayList<FilterType> getFilterTypeList()
+    public static ArrayList<FilterTypeItem> getFilterTypeList(Context context)
     {
-        ArrayList<FilterType> filterTypes = new ArrayList<>();
-        filterTypes.add(FilterType.CONTRAST);
-        filterTypes.add(FilterType.GRAYSCALE);
-        filterTypes.add(FilterType.SHARPEN);
-        filterTypes.add(FilterType.SEPIA);
-        filterTypes.add(FilterType.THREE_X_THREE_CONVOLUTION);
-        filterTypes.add(FilterType.FILTER_GROUP);
-        filterTypes.add(FilterType.EMBOSS);
-        filterTypes.add(FilterType.POSTERIZE);
-        filterTypes.add(FilterType.GAMMA);
-        filterTypes.add(FilterType.INVERT);
+        ArrayList<FilterTypeItem> filterTypes = new ArrayList<>();
+        filterTypes.add(new FilterTypeItem("Invert", FilterType.INVERT));
+        filterTypes.add(new FilterTypeItem("Pixelation", FilterType.PIXELATION));
+        filterTypes.add(new FilterTypeItem("Hue", FilterType.HUE));
+        filterTypes.add(new FilterTypeItem("Gamma", FilterType.GAMMA));
+        filterTypes.add(new FilterTypeItem("Sepia", FilterType.SEPIA));
+        filterTypes.add(new FilterTypeItem("Grayscale", FilterType.GRAYSCALE));
+        filterTypes.add(new FilterTypeItem("Sobel", FilterType.SOBEL_EDGE_DETECTION));
+        //filterTypes.add(new FilterTypeItem("Threshold", FilterType.THRESHOLD_EDGE_DETECTION));
+        //filterTypes.add(new FilterTypeItem("3x3 Convolution", FilterType.THREE_X_THREE_CONVOLUTION));
+        filterTypes.add(new FilterTypeItem("Emboss", FilterType.EMBOSS));
+        filterTypes.add(new FilterTypeItem("Posterize", FilterType.POSTERIZE));
+        filterTypes.add(new FilterTypeItem("Grouped filters", FilterType.FILTER_GROUP));
+        filterTypes.add(new FilterTypeItem("Saturation", FilterType.SATURATION));
+        filterTypes.add(new FilterTypeItem("Exposure", FilterType.EXPOSURE));
+        filterTypes.add(new FilterTypeItem("Highlight Shadow", FilterType.HIGHLIGHT_SHADOW));
+        filterTypes.add(new FilterTypeItem("Monochrome", FilterType.MONOCHROME));
+        filterTypes.add(new FilterTypeItem("Opacity", FilterType.OPACITY));
+        filterTypes.add(new FilterTypeItem("RGB", FilterType.RGB));
+        filterTypes.add(new FilterTypeItem("White Balance", FilterType.WHITE_BALANCE));
+        filterTypes.add(new FilterTypeItem("Lookup (Amatorka)", FilterType.LOOKUP_AMATORKA));
+        filterTypes.add(new FilterTypeItem("Gaussian Blur", FilterType.GAUSSIAN_BLUR));
+        filterTypes.add(new FilterTypeItem("Crosshatch", FilterType.CROSSHATCH));
+        filterTypes.add(new FilterTypeItem("Box Blur", FilterType.BOX_BLUR));
+        filterTypes.add(new FilterTypeItem("CGA Color Space", FilterType.CGA_COLORSPACE));
+        filterTypes.add(new FilterTypeItem("Dilation", FilterType.DILATION));
+        filterTypes.add(new FilterTypeItem("Kuwahara", FilterType.KUWAHARA));
+        //filterTypes.add(new FilterTypeItem("RGB Dilation", FilterType.RGB_DILATION));
+        //filterTypes.add(new FilterTypeItem("Sketch", FilterType.SKETCH));
+        filterTypes.add(new FilterTypeItem("Toon", FilterType.TOON));
+        filterTypes.add(new FilterTypeItem("Smooth Toon", FilterType.SMOOTH_TOON));
+        filterTypes.add(new FilterTypeItem("Halftone", FilterType.HALFTONE));
+        filterTypes.add(new FilterTypeItem("Bulge Distortion", FilterType.BULGE_DISTORTION));
+        filterTypes.add(new FilterTypeItem("Glass Sphere", FilterType.GLASS_SPHERE));
+        filterTypes.add(new FilterTypeItem("Haze", FilterType.HAZE));
+        filterTypes.add(new FilterTypeItem("Laplacian", FilterType.LAPLACIAN));
+        filterTypes.add(new FilterTypeItem("Swirl", FilterType.SWIRL));
+        filterTypes.add(new FilterTypeItem("False Color", FilterType.FALSE_COLOR));
+        filterTypes.add(new FilterTypeItem("Color Balance", FilterType.COLOR_BALANCE));
+        filterTypes.add(new FilterTypeItem("Levels Min (Mid Adjust)", FilterType.LEVELS_FILTER_MIN));
 
         return filterTypes;
     }
@@ -335,4 +364,32 @@ public class FilterUtils{
     }
 
 
+    public static class FilterTypeItem
+    {
+        FilterType type;
+        String name;
+
+        public FilterTypeItem(final String name, final FilterType filter)
+        {
+            this.name = name;
+            this.type = filter;
+        }
+
+
+        public FilterType getType(){
+            return type;
+        }
+
+        public void setType(FilterType type){
+            this.type = type;
+        }
+
+        public String getName(){
+            return name;
+        }
+
+        public void setName(String name){
+            this.name = name;
+        }
+    }
 }

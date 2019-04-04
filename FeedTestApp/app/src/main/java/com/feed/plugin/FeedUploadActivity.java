@@ -1,5 +1,6 @@
 package com.feed.plugin;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -38,7 +39,7 @@ public class FeedUploadActivity extends AppCompatActivity {
         }
 
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
-
+        mImgView.setOnClickListener(mOnClickListener);
 
         // hashtag
         final HashTagTextView textView = (HashTagTextView) findViewById(R.id.input_form);
@@ -67,6 +68,13 @@ public class FeedUploadActivity extends AppCompatActivity {
             else if(v.getId() == R.id.btn_back)
             {
                 finish();
+            }
+            else if(v.getId() == R.id.img_feedImglist)
+            {
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), ImageViewActivity.class);
+                intent.putStringArrayListExtra("ImageList", mImagList);
+                startActivity(intent);
             }
         }
     };

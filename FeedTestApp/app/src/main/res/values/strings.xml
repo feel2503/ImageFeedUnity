@@ -9,4 +9,29 @@
     <string name="cancel">취소</string>
     <string name="filter">Filter</string>
     <string name="edit">Edit</string>
+
+    <string name="Contrast">Contrast</string>
+    <string name="Invert">Invert</string>
+    <string name="Pixelation">Pixelation</string>
+    <string name="Hue">Hue</string>
+    <string name="Gamma">Gamma</string>
+    <string name="Brightness">Brightness</string>
+    <string name="Sepia">Sepia</string>
+    <string name="Grayscale">Grayscale</string>
+    <string name="Sharpness">Sharpness</string>
+    <string name="SobelEdgeDetection">obel Edge Detection</string>
+    <string name="hresholdEdgeDetection">hreshold Edge Detection</string>
+    <string name="x3Convolution">3x3 Convolution</string>
+    <string name="Emboss">Emboss</string>
+    <string name="Posterize">Posterize</string>
+    <string name="Groupedfilters">Grouped filters</string>
+    <string name="Saturation">Saturation</string>
+    <string name="Exposure">Exposure</string>
+    <string name="HighlightShadow">Highlight Shadow</string>
+    <string name="Monochrome">Monochrome</string>
+    <string name="Opacity">Opacity</string>
+    <string name="RGB">RGB</string>
+    <string name="WhiteBalance">White Balance"</string>
+    <string name="Vignette">Vignette</string>
+
 </resources>
