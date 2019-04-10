@@ -1,27 +1,27 @@
 package com.feed.plugin.fragment;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
+import com.feed.plugin.ImageViewActivity;
 import com.feed.plugin.ImgSelectActivity;
 import com.feed.plugin.R;
 import com.feed.plugin.fragment.gallery.GalleryAdapter;
@@ -29,19 +29,25 @@ import com.feed.plugin.fragment.gallery.GalleryManager;
 import com.feed.plugin.fragment.gallery.GridDividerDecoration;
 import com.feed.plugin.fragment.gallery.OnItemClickListener;
 import com.feed.plugin.fragment.gallery.PhotoVO;
-import com.feed.plugin.widget.crop.CropperView;
 import com.feed.plugin.widget.cropimgview.CropImageView;
+import com.feed.plugin.widget.cropimgview.callback.CropCallback;
 import com.feed.plugin.widget.cropimgview.callback.LoadCallback;
+import com.feed.plugin.widget.cropimgview.callback.SaveCallback;
+import com.feed.plugin.widget.cropimgview.util.CropUtils;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class GalleryFragment extends ImgSelFragment{
 
     private static GalleryFragment instance;
 
-    private RelativeLayout mRelImgViewer;
-    private LinearLayout.LayoutParams mImgViewLayout;
+    private LinearLayout mRelImgViewer;
+
+    private RelativeLayout.LayoutParams mImgViewLayout;
     private GalleryManager mGalleryManager;
     private RecyclerView recyclerGallery;
     private GalleryAdapter galleryAdapter;
@@ -52,6 +58,9 @@ public class GalleryFragment extends ImgSelFragment{
 
     private CropImageView mCropView;
     private RectF mFrameRect = null;
+    private Uri mSourceUri = null;
+    protected ArrayList<String> mArrImgList;
+    protected ArrayList<Uri> mCropImgList;
 
     private Button mBtnViewState;
     private ToggleButton mToggleSelState;
@@ -60,6 +69,9 @@ public class GalleryFragment extends ImgSelFragment{
     private Button mBtnCrop1_1;
 
     private String mCurrentLoadImg;
+
+    private Bitmap.CompressFormat mCompressFormat = Bitmap.CompressFormat.PNG;
+    private int mSavePos = 0;
 
     public static GalleryFragment getInstance()
     {
@@ -100,7 +112,7 @@ public class GalleryFragment extends ImgSelFragment{
 
     private void bindView(View rootView)
     {
-        mRelImgViewer = (RelativeLayout)rootView.findViewById(R.id.relative_gall_imgviewer);
+        mRelImgViewer = (LinearLayout)rootView.findViewById(R.id.gallery_layout);
 
         mCropView = (CropImageView) rootView.findViewById(R.id.cropImageView);
 
@@ -136,7 +148,7 @@ public class GalleryFragment extends ImgSelFragment{
     public void onResume(){
         super.onResume();
         if(mImgViewLayout == null)
-            mImgViewLayout =  (LinearLayout.LayoutParams)mRelImgViewer.getLayoutParams();
+            mImgViewLayout =  (RelativeLayout.LayoutParams)mRelImgViewer.getLayoutParams();
     }
 
     /**
@@ -181,8 +193,9 @@ public class GalleryFragment extends ImgSelFragment{
         mFrameRect = null;
         mCurrentLoadImg = filePath;
         filePath = "file://" + filePath;
-        Uri sourceUrk = Uri.parse(filePath);
-        mCropView.load(sourceUrk)
+        //Uri sourceUri = Uri.parse(filePath);
+        mSourceUri = Uri.parse(filePath);
+        mCropView.load(mSourceUri)
                 .initialFrameRect(mFrameRect)
                 .useThumbnail(true)
                 .execute(mLoadCallback);
@@ -210,6 +223,59 @@ public class GalleryFragment extends ImgSelFragment{
 //        mBitmap = Bitmap.createScaledBitmap(mBitmap, (int)(mBitmap.getWidth()/scale1280),
 //                (int)(mBitmap.getHeight()/scale1280), true);
 //        mImageView.setImageBitmap(mBitmap);
+    }
+
+    public void getCropImgList()
+    {
+        ((ImgSelectActivity)getActivity()).showProgress(getActivity(), true);
+
+        if(mCropImgList == null)
+            mCropImgList = new ArrayList<>();
+
+        String imgPath = mArrImgList.get(mSavePos);
+        imgPath = "file://" + imgPath;
+        Uri uri = Uri.parse(imgPath);
+        mCropImgList.add(uri);
+
+        mCropView.crop(mSourceUri).execute(mCropCallback);
+        mSavePos += 1;
+
+//        //Uri sourceUri = Uri.parse(filePath);
+//        mSourceUri = Uri.parse(imgPath);
+//
+//        mCropView.crop(mSourceUri).execute(mCropCallback);
+//        //return mArrImgList;
+    }
+
+    public Uri createSaveUri() {
+        return createNewUri(getContext(), mCompressFormat);
+    }
+
+    public static Uri createNewUri(Context context, Bitmap.CompressFormat format){
+        long currentTimeMillis = System.currentTimeMillis();
+        Date today = new Date(currentTimeMillis);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String title = dateFormat.format(today);
+        String dirPath = CropUtils.getDirPath(context);
+        String fileName = "crop" + title + "." + CropUtils.getMimeType(format);
+        String path = dirPath + "/" + fileName;
+        File file = new File(path);
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, title);
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/" + CropUtils.getMimeType(format));
+        values.put(MediaStore.Images.Media.DATA, path);
+        long time = currentTimeMillis / 1000;
+        values.put(MediaStore.MediaColumns.DATE_ADDED, time);
+        values.put(MediaStore.MediaColumns.DATE_MODIFIED, time);
+        if(file.exists()){
+            values.put(MediaStore.Images.Media.SIZE, file.length());
+        }
+
+        ContentResolver resolver = context.getContentResolver();
+        Uri uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        return uri;
     }
     /**
      * 리사이클러뷰 아이템 선택시 호출 되는 리스너
@@ -331,14 +397,18 @@ public class GalleryFragment extends ImgSelFragment{
             {
                 if(imgViewState)
                 {
-                    mImgViewLayout.height = (int)getResources().getDimension(R.dimen.view_min);
+                    //mImgViewLayout.height = (int)getResources().getDimension(R.dimen.view_min);
+                    int topMargin = (int)getResources().getDimension(R.dimen.view_min);
+                    mImgViewLayout.topMargin = topMargin;
+                    //mImgViewLayout.topMargin = (int)getResources().getDimension(R.dimen.view_min);
                     mRelImgViewer.setLayoutParams(mImgViewLayout);
                     //mRelImgViewer.setVisibility(View.GONE);
                     imgViewState = false;
                 }
                 else
                 {
-                    mImgViewLayout.height = (int)getResources().getDimension(R.dimen.view_max);
+                    //mImgViewLayout.height = (int)getResources().getDimension(R.dimen.view_max);
+                    mImgViewLayout.topMargin = (int)getResources().getDimension(R.dimen.view_max);
                     mRelImgViewer.setLayoutParams(mImgViewLayout);
 
                     //mRelImgViewer.setVisibility(View.VISIBLE);
@@ -397,6 +467,45 @@ public class GalleryFragment extends ImgSelFragment{
         }
 
         @Override public void onError(Throwable e) {
+        }
+    };
+
+    private final CropCallback mCropCallback = new CropCallback() {
+        @Override public void onSuccess(Bitmap cropped) {
+            mCropView.save(cropped)
+                    .compressFormat(mCompressFormat)
+                    .execute(createSaveUri(), mSaveCallback);
+        }
+
+        @Override public void onError(Throwable e) {
+        }
+    };
+
+    private final SaveCallback mSaveCallback = new SaveCallback() {
+        @Override public void onSuccess(Uri outputUri) {
+            //dismissProgress();
+            if(mArrImgList.size() == mSavePos )
+            {
+                ((ImgSelectActivity)getActivity()).showProgress(getActivity(), false);
+                mSavePos = 0;
+                ((ImgSelectActivity) getActivity()).startResultActivity(mArrImgList);
+            }
+            else
+            {
+                String imgPath = mArrImgList.get(mSavePos);
+                imgPath = "file://" + imgPath;
+                Uri uri = Uri.parse(imgPath);
+                mCropImgList.add(uri);
+
+                mCropView.crop(mSourceUri).execute(mCropCallback);
+                mSavePos += 1;
+            }
+
+
+        }
+
+        @Override public void onError(Throwable e) {
+            //dismissProgress();
         }
     };
 }

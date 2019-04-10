@@ -13,6 +13,7 @@ public class ThumbnailItem{
     public FilterUtils.FilterType filteType;
 
     public boolean isSelected = false;
+    public boolean isSetted = false;
 
     public ThumbnailItem() {
         image = null;

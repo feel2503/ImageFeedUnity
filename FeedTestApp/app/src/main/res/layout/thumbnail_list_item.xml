@@ -19,10 +19,22 @@
         <!--android:layout_height="@dimen/thumbnail_size"-->
         <!--android:layout_gravity="center" />-->
 
-    <ImageView
-        android:id="@+id/gpuimage_thumbnail"
+    <RelativeLayout
         android:layout_width="@dimen/thumbnail_size"
         android:layout_height="@dimen/thumbnail_size"
-        android:layout_gravity="center" />
+        android:layout_gravity="center">
+        <ImageView
+            android:id="@+id/gpuimage_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.feed.plugin.widget.FilterValueView
+            android:id="@+id/filtervalue_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80ffffff"/>
+
+    </RelativeLayout>
+
 
 </LinearLayout>

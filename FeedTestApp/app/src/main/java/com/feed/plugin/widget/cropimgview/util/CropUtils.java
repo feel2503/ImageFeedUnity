@@ -557,4 +557,40 @@ import static android.graphics.Bitmap.createBitmap;
     ContentResolver resolver = context.getContentResolver();
     resolver.update(uri, values, null, null);
   }
+
+  public static String getMimeType(Bitmap.CompressFormat format) {
+    switch (format) {
+      case JPEG:
+        return "jpeg";
+      case PNG:
+        return "png";
+    }
+    return "png";
+  }
+
+  public static String getDirPath(Context context)
+  {
+    //String path = context.getExternalFilesDir(null).getPath();
+    //return path;
+
+    return getDirPath();
+  }
+
+  public static String getDirPath() {
+    String dirPath = "";
+    File imageDir = null;
+    File extStorageDir = Environment.getExternalStorageDirectory();
+    if (extStorageDir.canWrite()) {
+      imageDir = new File(extStorageDir.getPath() + "/simplecropview");
+    }
+    if (imageDir != null) {
+      if (!imageDir.exists()) {
+        imageDir.mkdirs();
+      }
+      if (imageDir.canWrite()) {
+        dirPath = imageDir.getPath();
+      }
+    }
+    return dirPath;
+  }
 }

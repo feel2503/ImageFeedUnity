@@ -1,5 +1,6 @@
 package com.feed.plugin;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -39,6 +40,7 @@ import java.util.List;
 
 public class ImgEditActivity extends AppCompatActivity {
 
+    private int REQUEST_NOTICE = 0x1001;
     //private GPUImageView mImgView;
     private ViewPager mGPUImagePager;
     private GpuimageSlideAdapter mGPUImageAdapter;
@@ -184,6 +186,31 @@ public class ImgEditActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed(){
+        //super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), NoticeDialog.class);
+        startActivityForResult(intent, REQUEST_NOTICE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_NOTICE)
+        {
+            if(resultCode == Activity.RESULT_OK)
+            {
+                // remove filter
+                finish();
+            }
+            else
+            {
+
+            }
+        }
+    }
+
+
     private SeekBar.OnSeekBarChangeListener mOnSeekbarChangeListener = new SeekBar.OnSeekBarChangeListener(){
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
@@ -210,7 +237,9 @@ public class ImgEditActivity extends AppCompatActivity {
             }
             else if(v.getId() == R.id.btn_back)
             {
-                finish();
+                Intent intent = new Intent(getApplicationContext(), NoticeDialog.class);
+                startActivityForResult(intent, REQUEST_NOTICE);
+                //finish();
             }
             else if(v.getId() == R.id.text_cancel)
             {

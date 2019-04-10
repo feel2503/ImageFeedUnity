@@ -15,6 +15,7 @@ import com.feed.plugin.R;
 import com.feed.plugin.adapter.items.ThumbnailItem;
 import com.feed.plugin.android.gpuimage.GPUImageView;
 import com.feed.plugin.android.gpuimage.filter.GPUImageFilter;
+import com.feed.plugin.widget.FilterValueView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
         //GPUImageView thumbnail;
         ImageView thumbnail;
         TextView filterName;
-        Bitmap bitmap;
+        FilterValueView filterValueView;
 
         public MyViewHolder(View view) {
             super(view);
@@ -64,6 +65,8 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
         //viewHolder.thumbnail = (GPUImageView) itemView.findViewById(R.id.gpuimage_thumbnail);
         viewHolder.thumbnail = (ImageView) itemView.findViewById(R.id.gpuimage_thumbnail);
         viewHolder.filterName = (TextView)itemView.findViewById(R.id.filter_name);
+        viewHolder.filterValueView = (FilterValueView)itemView.findViewById(R.id.filtervalue_view);
+
 
         return viewHolder;
     }
@@ -82,6 +85,11 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
             holder.filterName.setTextColor(ContextCompat.getColor(mContext, R.color.filter_label_normal));
             thumbnailItem.isSelected = false;
         }
+
+        if(thumbnailItem.isSetted)
+            holder.filterValueView.setVisibility(View.VISIBLE);
+        else
+            holder.filterValueView.setVisibility(View.INVISIBLE);
 
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override

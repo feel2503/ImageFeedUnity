@@ -6,10 +6,9 @@
     android:layout_height="match_parent"
     android:background="#ffffffff">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:id="@+id/relative_gall_imgviewer"
@@ -48,15 +47,6 @@
                 />
 
             <Button
-                android:id="@+id/btn_change_gall_imgview_state"
-                android:layout_width="14.5dp"
-                android:layout_height="17dp"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/button_arrow_up"/>
-
-            <Button
                 android:id="@+id/btn_crop_16_9"
                 android:layout_width="36.5dp"
                 android:layout_height="20dp"
@@ -83,25 +73,50 @@
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/button_1_1"/>
 
-            <ToggleButton
-                android:id="@+id/btn_img_sel_mode"
-                android:layout_width="21dp"
-                android:layout_height="21dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="19dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:button="@drawable/toggle_img_select_mode"
-                android:background="@null"  />
-
         </RelativeLayout>
 
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_gallery"
+        <LinearLayout
+            android:id="@+id/gallery_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"/>
-    </LinearLayout>
+            android:background="#00ffffff"
+            android:layout_marginTop="320dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
+
+                <Button
+                    android:id="@+id/btn_change_gall_imgview_state"
+                    android:layout_width="20dp"
+                    android:layout_height="27dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/button_arrow_up"/>
+
+                <ToggleButton
+                    android:id="@+id/btn_img_sel_mode"
+                    android:layout_width="21dp"
+                    android:layout_height="21dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="19dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:button="@drawable/toggle_img_select_mode"
+                    android:background="@null"  />
+            </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_gallery"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffffff"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

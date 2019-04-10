@@ -1,7 +1,9 @@
 package com.feed.plugin;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,7 +41,7 @@ public class ImgSelectActivity extends AppCompatActivity{
 
     private TextView mTextTitle;
 
-
+    protected ProgressDialog mProgress = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,8 @@ public class ImgSelectActivity extends AppCompatActivity{
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_imgselect);
+
+        mProgress = new ProgressDialog(this);
 
         boolean isPermission = checkVerify();
         if(isPermission)
@@ -125,17 +129,19 @@ public class ImgSelectActivity extends AppCompatActivity{
             if(v.getId() == R.id.btn_next)
             {
                 mTabpagerAdapter.getItem(mViewPager.getCurrentItem());
-                ArrayList<String> imgList = mTabpagerAdapter.getItem(mViewPager.getCurrentItem()).getImgList();
+                mTabpagerAdapter.getItem(mViewPager.getCurrentItem()).getCropImgList();
 
-                if(imgList == null || imgList.size() < 1)
-                {
-                    Toast.makeText(getApplicationContext(), "이미지를 선택해 주세요.", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), ImgEditActivity.class);
-                intent.putStringArrayListExtra("ImageList", imgList);
-                startActivity(intent);
+//                ArrayList<String> imgList = mTabpagerAdapter.getItem(mViewPager.getCurrentItem()).getCropImgList();
+//
+//                if(imgList == null || imgList.size() < 1)
+//                {
+//                    Toast.makeText(getApplicationContext(), "이미지를 선택해 주세요.", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//                Intent intent = new Intent();
+//                intent.setClass(getApplicationContext(), ImgEditActivity.class);
+//                intent.putStringArrayListExtra("ImageList", imgList);
+//                startActivity(intent);
             }
             else if(v.getId() == R.id.btn_back)
             {
@@ -143,6 +149,13 @@ public class ImgSelectActivity extends AppCompatActivity{
             }
         }
     };
+
+    public void startResultActivity(ArrayList<String> imgList) {
+        Intent intent = new Intent();
+        intent.setClass(getApplicationContext(), ImgEditActivity.class);
+        intent.putStringArrayListExtra("ImageList", imgList);
+        startActivity(intent);
+    }
 
 
     public boolean checkVerify()
@@ -217,4 +230,35 @@ public class ImgSelectActivity extends AppCompatActivity{
 
         builder.create().show();
     }
+
+
+    public void showProgress(final Activity act, final boolean bShow)
+    {
+        act.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                mProgress.setMessage("Saving...");
+                try
+                {
+                    if (bShow)
+                    {
+                        mProgress.show();
+                    }
+                    else
+                    {
+                        mProgress.dismiss();
+                    }
+                }
+                catch (Exception e)
+                {
+                    // TODO: handle exception
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
 }
