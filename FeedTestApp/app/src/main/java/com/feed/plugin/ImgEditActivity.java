@@ -48,6 +48,7 @@ public class ImgEditActivity extends AppCompatActivity {
     private ArrayList<String> mImagList;
     private ArrayList<GPUImgItem> mGPUImgList;
     private GPUImgItem mCurrentGPUImage;
+    private ThumbnailItem mCurrentThumbnailItem;
 
     private SwipeViewPager mViewPager;
     private FiltersListFragment filtersListFragment;
@@ -245,11 +246,14 @@ public class ImgEditActivity extends AppCompatActivity {
             {
                 mRelFilterValue.setVisibility(View.GONE);
                 mRelFilterSelect.setVisibility(View.VISIBLE);
+                mCurrentThumbnailItem.isSetted = false;
             }
             else if(v.getId() == R.id.text_done)
             {
                 mRelFilterValue.setVisibility(View.GONE);
                 mRelFilterSelect.setVisibility(View.VISIBLE);
+
+                mCurrentThumbnailItem.isSetted = true;
             }
         }
     };
@@ -302,6 +306,15 @@ public class ImgEditActivity extends AppCompatActivity {
                 {
                     mCurrentGPUImage.setFilter(filter);
                     mCurrentGPUImage.requestRender();
+
+                    ArrayList<ThumbnailItem> tItems = filtersListFragment.getThumbnailItemList();;
+                    for(ThumbnailItem item : tItems)
+                    {
+                        if(item.filter == filter)
+                        {
+                            mCurrentThumbnailItem = item;
+                        }
+                    }
                 }
             }
         }
