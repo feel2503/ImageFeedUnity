@@ -41,6 +41,8 @@ import com.feed.plugin.widget.cropimgview.callback.LoadCallback;
 import com.feed.plugin.widget.cropimgview.callback.SaveCallback;
 import com.feed.plugin.widget.cropimgview.util.CropUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -155,7 +157,14 @@ public class CropImageView extends ImageView{
     private static final int ZOOM = 3;
     private int mode = NONE;
 
+    private int maxWidth = 1080;
+    private int maxHeight = 1080;
 
+    private int maxWidth_3_4 = 1080;
+    private int maxHeight_3_4 = 1440;
+
+    private int maxWidth_16_9 = 1080;
+    private int maxHeight_16_9 = 608;
     // Constructor /////////////////////////////////////////////////////////////////////////////////
 
     public CropImageView(Context context){
@@ -1484,6 +1493,65 @@ public class CropImageView extends ImageView{
         return cropped;
     }
 
+    private Bitmap getScalCroppedBitmapFromUri() throws IOException{
+        Bitmap cropped = null;
+        InputStream is = null;
+        try{
+            is = getContext().getContentResolver().openInputStream(mSourceUri);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            Bitmap bitmap = BitmapFactory.decodeStream(is, null, options);
+
+            int originalImageWidth = bitmap.getWidth();
+            int originalImageHeight = bitmap.getHeight();
+            if (originalImageWidth > originalImageHeight) {
+                // landscape
+                float ratio = (float) originalImageWidth / maxWidth;
+                originalImageWidth = maxWidth;
+                originalImageHeight = (int)(originalImageHeight / ratio);
+            } else if (originalImageHeight > originalImageWidth) {
+                // portrait
+                float ratio = (float) originalImageHeight / maxHeight;
+                originalImageHeight = maxHeight;
+                originalImageWidth = (int)(originalImageWidth / ratio);
+            } else {
+                // square
+                originalImageHeight = maxHeight;
+                originalImageWidth = maxWidth;
+            }
+
+            bitmap = Bitmap.createScaledBitmap(bitmap, originalImageWidth, originalImageHeight, true);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+            byte[] bitmapdata = bos.toByteArray();
+            ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
+
+            BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(bs, false);
+
+            Rect cropRect = calcCropRect(originalImageWidth, originalImageHeight);
+            if(mAngle != 0){
+                Matrix matrix = new Matrix();
+                matrix.setRotate(-mAngle);
+                RectF rotated = new RectF();
+                matrix.mapRect(rotated, new RectF(cropRect));
+                rotated.offset(rotated.left < 0 ? originalImageWidth : 0,
+                        rotated.top < 0 ? originalImageHeight : 0);
+                cropRect = new Rect((int) rotated.left, (int) rotated.top, (int) rotated.right,
+                        (int) rotated.bottom);
+            }
+            cropped = decoder.decodeRegion(cropRect, new BitmapFactory.Options());
+            if(mAngle != 0){
+                Bitmap rotated = getRotatedBitmap(cropped);
+                if(cropped != getBitmap() && cropped != rotated){
+                    cropped.recycle();
+                }
+                cropped = rotated;
+            }
+        }finally{
+            CropUtils.closeQuietly(is);
+        }
+        return cropped;
+    }
+
     private Rect calcCropRect(int originalImageWidth, int originalImageHeight){
         float scaleToOriginal =
                 getRotatedWidth(mAngle, originalImageWidth, originalImageHeight) / mImageRect.width();
@@ -1789,7 +1857,8 @@ public class CropImageView extends ImageView{
         mExifRotation = CropUtils.getExifOrientation(getContext(), mSourceUri);
         int maxSize = CropUtils.getMaxSize();
         int requestSize = Math.max(mViewWidth, mViewHeight);
-        if(requestSize == 0) requestSize = maxSize;
+        if(requestSize == 0)
+            requestSize = maxSize;
 
         final Bitmap sampledBitmap =
                 CropUtils.decodeSampledBitmapFromUri(getContext(), mSourceUri, requestSize);
@@ -1998,7 +2067,8 @@ public class CropImageView extends ImageView{
                 try{
                     mIsCropping.set(true);
 
-                    if(sourceUri != null) mSourceUri = sourceUri;
+                    if(sourceUri != null)
+                        mSourceUri = sourceUri;
 
                     final Bitmap cropped = cropImage();
 
@@ -2140,7 +2210,8 @@ public class CropImageView extends ImageView{
         }
         // Use file for getCroppedBitmap
         else{
-            cropped = getCroppedBitmapFromUri();
+            //cropped = getCroppedBitmapFromUri();
+            cropped = getScalCroppedBitmapFromUri();
             if(mCropMode == CropMode.CIRCLE){
                 Bitmap circle = getCircularBitmap(cropped);
                 if(cropped != getBitmap()){

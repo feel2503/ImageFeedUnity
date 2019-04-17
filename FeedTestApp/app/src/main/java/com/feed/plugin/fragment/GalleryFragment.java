@@ -60,7 +60,7 @@ public class GalleryFragment extends ImgSelFragment{
     private RectF mFrameRect = null;
     private Uri mSourceUri = null;
     protected ArrayList<String> mArrImgList;
-    protected ArrayList<Uri> mCropImgList;
+    protected ArrayList<String> mCropImgList;
 
     private Button mBtnViewState;
     private ToggleButton mToggleSelState;
@@ -193,11 +193,13 @@ public class GalleryFragment extends ImgSelFragment{
         mFrameRect = null;
         mCurrentLoadImg = filePath;
         filePath = "file://" + filePath;
-        //Uri sourceUri = Uri.parse(filePath);
-        mSourceUri = Uri.parse(filePath);
-        mCropView.load(mSourceUri)
+        Uri sourceUri = Uri.parse(filePath);
+        //mSourceUri = Uri.parse(filePath);
+        //mCropView.load(mSourceUri)
+        mCropView.load(sourceUri)
                 .initialFrameRect(mFrameRect)
-                .useThumbnail(true)
+                //.useThumbnail(true)
+                .useThumbnail(false)
                 .execute(mLoadCallback);
 
 
@@ -235,9 +237,9 @@ public class GalleryFragment extends ImgSelFragment{
         String imgPath = mArrImgList.get(mSavePos);
         imgPath = "file://" + imgPath;
         Uri uri = Uri.parse(imgPath);
-        mCropImgList.add(uri);
 
-        mCropView.crop(mSourceUri).execute(mCropCallback);
+        //mCropView.crop(mSourceUri).execute(mCropCallback);
+        mCropView.crop(uri).execute(mCropCallback);
         mSavePos += 1;
 
 //        //Uri sourceUri = Uri.parse(filePath);
@@ -259,23 +261,27 @@ public class GalleryFragment extends ImgSelFragment{
         String dirPath = CropUtils.getDirPath(context);
         String fileName = "crop" + title + "." + CropUtils.getMimeType(format);
         String path = dirPath + "/" + fileName;
-        File file = new File(path);
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE, title);
-        values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/" + CropUtils.getMimeType(format));
-        values.put(MediaStore.Images.Media.DATA, path);
-        long time = currentTimeMillis / 1000;
-        values.put(MediaStore.MediaColumns.DATE_ADDED, time);
-        values.put(MediaStore.MediaColumns.DATE_MODIFIED, time);
-        if(file.exists()){
-            values.put(MediaStore.Images.Media.SIZE, file.length());
-        }
 
-        ContentResolver resolver = context.getContentResolver();
-        Uri uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+//        File file = new File(path);
+//        ContentValues values = new ContentValues();
+//        values.put(MediaStore.Images.Media.TITLE, title);
+//        values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+//        values.put(MediaStore.Images.Media.MIME_TYPE, "image/" + CropUtils.getMimeType(format));
+//        values.put(MediaStore.Images.Media.DATA, path);
+//        long time = currentTimeMillis / 1000;
+//        values.put(MediaStore.MediaColumns.DATE_ADDED, time);
+//        values.put(MediaStore.MediaColumns.DATE_MODIFIED, time);
+//        if(file.exists()){
+//            values.put(MediaStore.Images.Media.SIZE, file.length());
+//        }
+//        ContentResolver resolver = context.getContentResolver();
+//        Uri uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+//        return uri;
 
-        return uri;
+        path = "file://" + path;
+        Uri newUri = Uri.parse(path);
+        return newUri;
+
     }
     /**
      * 리사이클러뷰 아이템 선택시 호출 되는 리스너
@@ -483,21 +489,28 @@ public class GalleryFragment extends ImgSelFragment{
 
     private final SaveCallback mSaveCallback = new SaveCallback() {
         @Override public void onSuccess(Uri outputUri) {
+            String uriStr = outputUri.toString();
+            if(uriStr.startsWith("file"))
+                uriStr = uriStr.substring(7);
+            mCropImgList.add(uriStr);
             //dismissProgress();
+
             if(mArrImgList.size() == mSavePos )
             {
                 ((ImgSelectActivity)getActivity()).showProgress(getActivity(), false);
                 mSavePos = 0;
-                ((ImgSelectActivity) getActivity()).startResultActivity(mArrImgList);
+                //((ImgSelectActivity) getActivity()).startResultActivity(mArrImgList);
+                ((ImgSelectActivity) getActivity()).startResultActivity(mCropImgList);
+
             }
             else
             {
                 String imgPath = mArrImgList.get(mSavePos);
                 imgPath = "file://" + imgPath;
                 Uri uri = Uri.parse(imgPath);
-                mCropImgList.add(uri);
 
-                mCropView.crop(mSourceUri).execute(mCropCallback);
+                //mCropView.crop(mSourceUri).execute(mCropCallback);
+                mCropView.crop(uri).execute(mCropCallback);
                 mSavePos += 1;
             }
 

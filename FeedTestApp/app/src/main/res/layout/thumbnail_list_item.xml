@@ -26,12 +26,16 @@
         <ImageView
             android:id="@+id/gpuimage_thumbnail"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"/>
 
-        <com.feed.plugin.widget.FilterValueView
+        <ImageView
             android:id="@+id/filtervalue_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ico_filter_control_bar"
+            android:scaleType="center"
             android:background="#80ffffff"/>
 
     </RelativeLayout>

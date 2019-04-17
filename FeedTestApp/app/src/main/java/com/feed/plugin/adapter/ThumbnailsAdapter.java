@@ -38,7 +38,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
         //GPUImageView thumbnail;
         ImageView thumbnail;
         TextView filterName;
-        FilterValueView filterValueView;
+        ImageView filterValueView;
 
         public MyViewHolder(View view) {
             super(view);
@@ -65,7 +65,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
         //viewHolder.thumbnail = (GPUImageView) itemView.findViewById(R.id.gpuimage_thumbnail);
         viewHolder.thumbnail = (ImageView) itemView.findViewById(R.id.gpuimage_thumbnail);
         viewHolder.filterName = (TextView)itemView.findViewById(R.id.filter_name);
-        viewHolder.filterValueView = (FilterValueView)itemView.findViewById(R.id.filtervalue_view);
+        viewHolder.filterValueView = (ImageView)itemView.findViewById(R.id.filtervalue_view);
 
 
         return viewHolder;

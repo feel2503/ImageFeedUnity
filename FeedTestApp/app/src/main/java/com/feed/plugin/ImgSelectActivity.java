@@ -63,12 +63,7 @@ public class ImgSelectActivity extends AppCompatActivity{
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
 
         mTextTitle = (TextView)findViewById(R.id.text_title);
-
-
-
     }
-
-
 
     private void initTab()
     {
@@ -155,6 +150,7 @@ public class ImgSelectActivity extends AppCompatActivity{
         intent.setClass(getApplicationContext(), ImgEditActivity.class);
         intent.putStringArrayListExtra("ImageList", imgList);
         startActivity(intent);
+        imgList.clear();
     }
 
 

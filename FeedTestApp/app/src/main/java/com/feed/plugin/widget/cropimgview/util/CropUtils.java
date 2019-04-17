@@ -19,6 +19,7 @@ import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.Closeable;
 import java.io.File;
@@ -593,4 +594,6 @@ import static android.graphics.Bitmap.createBitmap;
     }
     return dirPath;
   }
+
+
 }
