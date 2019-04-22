@@ -69,7 +69,7 @@ public class ImgSelectActivity extends AppCompatActivity{
     {
         mTabLayout = (TabLayout)findViewById(R.id.tabLayout);
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.gallelry));
-        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.stylebook));
+//        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.stylebook));
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.camera));
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
@@ -91,10 +91,10 @@ public class ImgSelectActivity extends AppCompatActivity{
                 {
                     mTextTitle.setText(R.string.gallelry);
                 }
-                else if(position == 1)
-                {
-                    mTextTitle.setText(R.string.stylebook);
-                }
+//                else if(position == 1)
+//                {
+//                    mTextTitle.setText(R.string.stylebook);
+//                }
                 else
                 {
                     mTextTitle.setText(R.string.camera);

@@ -28,10 +28,15 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter{
             case 0:
                 return GalleryFragment.getInstance();
             case 1:
-                return StyleBookFragment.getInstance();
-            case 2:
                 CameraFragment mainTabFragment3 = new CameraFragment();
                 return mainTabFragment3;
+
+
+//            case 1:
+//                return StyleBookFragment.getInstance();
+//            case 2:
+//                CameraFragment mainTabFragment3 = new CameraFragment();
+//                return mainTabFragment3;
 
             default:
                 return null;

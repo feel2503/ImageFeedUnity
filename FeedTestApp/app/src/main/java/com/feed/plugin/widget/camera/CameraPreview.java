@@ -15,6 +15,7 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -24,6 +25,9 @@ import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
 import android.widget.Toast;
+
+import com.feed.plugin.ImgSelectActivity;
+import com.feed.plugin.widget.cropimgview.util.CropUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -49,6 +53,11 @@ public class CameraPreview extends Thread {
     private HandlerThread mBackgroundThread;
     private Handler mBackgroundHandler;
 
+    private CameraManager mCameraManager;
+    private String mCameraID = "0";
+
+    private String imgName = "/camera_pic.jpg";
+
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
     static {
@@ -61,6 +70,8 @@ public class CameraPreview extends Thread {
     public CameraPreview(Context context, TextureView textureView) {
         mContext = context;
         mTextureView = textureView;
+
+        mCameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
     }
 
     private String getBackFacingCameraId(CameraManager cManager) {
@@ -68,7 +79,8 @@ public class CameraPreview extends Thread {
             for (final String cameraId : cManager.getCameraIdList()) {
                 CameraCharacteristics characteristics = cManager.getCameraCharacteristics(cameraId);
                 int cOrientation = characteristics.get(CameraCharacteristics.LENS_FACING);
-                if (cOrientation == CameraCharacteristics.LENS_FACING_BACK) return cameraId;
+                if (cOrientation == CameraCharacteristics.LENS_FACING_BACK)
+                    return cameraId;
             }
         } catch (CameraAccessException e) {
             e.printStackTrace();
@@ -76,16 +88,33 @@ public class CameraPreview extends Thread {
         return null;
     }
 
-    public void openCamera() {
-        CameraManager manager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
+    public String getmCameraID(){
+        return mCameraID;
+    }
+
+    public void setmCameraID(String mCameraID){
+        this.mCameraID = mCameraID;
+    }
+
+    public void openCamera()
+    {
+        openCamera(mCameraID);
+    }
+
+    public void openCamera(String cameraID)
+    {
+        //CameraManager manager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
         Log.e(TAG, "openCamera E");
         try {
-            String cameraId = getBackFacingCameraId(manager);
-            CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
+            //String cameraId = getBackFacingCameraId(mCameraManager);
+            //mCameraID = getBackFacingCameraId(mCameraManager);
+            mCameraID = cameraID;
+
+            CameraCharacteristics characteristics = mCameraManager.getCameraCharacteristics(mCameraID);
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             mPreviewSize = map.getOutputSizes(SurfaceTexture.class)[0];
 
-            manager.openCamera(cameraId, mStateCallback, null);
+            mCameraManager.openCamera(mCameraID, mStateCallback, null);
 
 //            int permissionCamera = ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA);
 //            if(permissionCamera == PackageManager.PERMISSION_DENIED) {
@@ -93,10 +122,16 @@ public class CameraPreview extends Thread {
 //            } else {
 //                manager.openCamera(cameraId, mStateCallback, null);
 //            }
+
+
+
         } catch (CameraAccessException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
+        startBackgroundThread();
+
         Log.e(TAG, "openCamera X");
     }
 
@@ -107,7 +142,8 @@ public class CameraPreview extends Thread {
                                               int width, int height) {
             // TODO Auto-generated method stub
             Log.e(TAG, "onSurfaceTextureAvailable, width="+width+",height="+height);
-            openCamera();
+            String cameraId = getBackFacingCameraId(mCameraManager);
+            openCamera(cameraId);
         }
 
         @Override
@@ -126,6 +162,7 @@ public class CameraPreview extends Thread {
         @Override
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
             // TODO Auto-generated method stub
+            Log.e(TAG, "onSurfaceTextureUpdated");
         }
     };
 
@@ -265,15 +302,69 @@ public class CameraPreview extends Thread {
         stopBackgroundThread();
     }
 
-    public void takePicture()
+//    public void switchFlash() {
+//        try {
+//            if (cameraId.equals("0")) {
+//                if (isFlashSupported) {
+//                    if (isTorchOn) {
+//                        mPreviewBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
+//                        mPreviewSession.setRepeatingRequest(mPreviewBuilder.build(), null, null);
+//                        flashButton.setImageResource(R.drawable.ic_flash_off);
+//                        isTorchOn = false;
+//                    } else {
+//                        mPreviewBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
+//                        mPreviewSession.setRepeatingRequest(mPreviewBuilder.build(), null, null);
+//                        flashButton.setImageResource(R.drawable.ic_flash_on);
+//                        isTorchOn = true;
+//                    }
+//                }
+//            }
+//        } catch (CameraAccessException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public void setupFlashButton() {
+//        if (cameraId.equals(CAMERA_BACK) && isFlashSupported) {
+//            flashButton.setVisibility(View.VISIBLE);
+//
+//            if (isTorchOn) {
+//                flashButton.setImageResource(R.drawable.ic_flash_off);
+//            } else {
+//                flashButton.setImageResource(R.drawable.ic_flash_on);
+//            }
+//
+//        } else {
+//            flashButton.setVisibility(View.GONE);
+//        }
+//    }
+
+    public void flashMode(boolean isFlshOn)
+    {
+        try{
+            mPreviewBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
+            mPreviewSession.setRepeatingRequest(mPreviewBuilder.build(), null, null);
+            //mPreviewBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_SINGLE);
+//            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+//                mCameraManager.setTorchMode(mCameraID, true);
+//                //mPreviewBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
+//            }
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void takePicture(final Activity parentActivity)
     {
         if(mCameraDevice == null) {
             Log.e(TAG, "cameraDevice is null");
             return;
         }
-        CameraManager manager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
+        //CameraManager manager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
         try {
-            CameraCharacteristics characteristics = manager.getCameraCharacteristics(mCameraDevice.getId());
+            CameraCharacteristics characteristics = mCameraManager.getCameraCharacteristics(mCameraDevice.getId());
             Size[] jpegSizes = null;
             if (characteristics != null) {
                 jpegSizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP).getOutputSizes(ImageFormat.JPEG);
@@ -294,7 +385,8 @@ public class CameraPreview extends Thread {
             // Orientation
             int rotation = ((Activity)mContext).getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
-            final File file = new File(Environment.getExternalStorageDirectory()+"/pic.jpg");
+            String dirPath = CropUtils.getDirPath();
+            final File file = new File(dirPath + imgName);
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader reader) {
@@ -334,8 +426,13 @@ public class CameraPreview extends Thread {
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
                     Toast.makeText(mContext, "Saved:" + file, Toast.LENGTH_SHORT).show();
-                    //createCameraPreview();
-                    startPreview();
+
+                    String filePath = CropUtils.getDirPath() + imgName;
+                    ArrayList<String> arrImg = new ArrayList<String>();
+                    arrImg.add(filePath);
+
+                    ((ImgSelectActivity)parentActivity).startResultActivity(arrImg);
+
                 }
             };
 
