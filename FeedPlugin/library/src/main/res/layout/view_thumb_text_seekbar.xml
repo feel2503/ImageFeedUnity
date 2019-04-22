@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.feed.plugin.widget.thumbseekbar.ThumbTextView
+        android:id="@+id/tvThumb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textSize="14.5dp" />
+
+    <SeekBar
+        android:id="@+id/sbProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:minHeight="20dp" />
+
+</merge>
+
+    <!--android:layout_marginLeft="-16dp"-->
+    <!--android:layout_marginRight="-16dp"-->

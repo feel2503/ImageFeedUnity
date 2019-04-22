@@ -1,8 +1,27 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="AppTheme_NoTitle" parent="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+
+    <declare-styleable name="crop__CropperView">
+        <attr name="crop__grid_color" format="color"/>
+        <attr name="crop__grid_thickness" format="dimension"/>
+        <attr name="crop__grid_opacity" format="float"/>
+        <attr name="crop__padding_color" format="color"/>
+        <attr name="crop__add_padding_to_make_square" format="boolean"/>
+        <attr name="crop__fit_to_center" format="boolean"/>
+    </declare-styleable>
 
 </resources>

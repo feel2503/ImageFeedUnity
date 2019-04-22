@@ -1,18 +1,15 @@
 package com.feed.plugin;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.feed.plugin.widget.HashTagSuggestAdapter;
-import com.feed.plugin.widget.HashTagTextView;
+import com.feed.plugin.widget.hashtag.HashTagSuggestAdapter;
+import com.feed.plugin.widget.hashtag.HashTagTextView;
 
 import java.util.ArrayList;
 
@@ -42,8 +39,7 @@ public class FeedUploadActivity extends AppCompatActivity {
         }
 
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
-        findViewById(R.id.btn_next).setOnClickListener(mOnClickListener);
-
+        mImgView.setOnClickListener(mOnClickListener);
 
         // hashtag
         final HashTagTextView textView = (HashTagTextView) findViewById(R.id.input_form);
@@ -67,13 +63,18 @@ public class FeedUploadActivity extends AppCompatActivity {
         public void onClick(View v) {
             if(v.getId() == R.id.btn_next)
             {
-                setResult(ImgSelectActivity.RESULT_FINISH_ACTIVIY);
-                finish();
+
             }
             else if(v.getId() == R.id.btn_back)
             {
-                setResult(ImgSelectActivity.RESULT_FINISH_ACTIVIY);
                 finish();
+            }
+            else if(v.getId() == R.id.img_feedImglist)
+            {
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), ImageViewActivity.class);
+                intent.putStringArrayListExtra("ImageList", mImagList);
+                startActivity(intent);
             }
         }
     };

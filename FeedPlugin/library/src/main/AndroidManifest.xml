@@ -13,12 +13,23 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".ImgEditActivity"
-            android:theme="@style/Theme.AppCompat.Light" />
+        <activity
+            android:name=".ImgEditActivity"
+            android:theme="@style/AppTheme_NoTitle" />
+        <activity
+            android:name=".FeedUploadActivity"
+            android:theme="@style/AppTheme_NoTitle"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ImageViewActivity"
+            android:theme="@style/AppTheme_NoTitle" />
 
-        <activity android:name=".FeedUploadActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.AppCompat.Light" />
+        <activity android:name=".NoticeDialog"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Dialog" />
+
+
     </application>
 
 </manifest>

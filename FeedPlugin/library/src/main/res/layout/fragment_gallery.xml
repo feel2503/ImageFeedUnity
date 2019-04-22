@@ -6,39 +6,117 @@
     android:layout_height="match_parent"
     android:background="#ffffffff">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <RelativeLayout
-            android:id="@+id/relative_imgviewer"
+            android:id="@+id/relative_gall_imgviewer"
             android:layout_width="match_parent"
-            android:layout_height="250dp">
+            android:layout_height="360dp">
 
-            <ImageView
-                android:id="@+id/img_selimg"
+            <!--<com.feed.plugin.widget.crop.CropperView-->
+                <!--android:background="#ff282828"-->
+                <!--android:id="@+id/img_gall_selimg"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--app:crop__grid_opacity="0.8"-->
+                <!--app:crop__grid_thickness="0.8dp"-->
+                <!--app:crop__padding_color="@color/colorAccent"-->
+                <!--app:crop__grid_color="@color/colorAccent" />-->
+
+            <com.feed.plugin.widget.cropimgview.CropImageView
+                android:id="@+id/cropImageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_weight="1"
+                app:scv_background_color="@color/windowBackground"
+                app:scv_crop_mode="fit_image"
+                app:scv_frame_color="@color/colorAccent"
+                app:scv_frame_stroke_weight="1dp"
+                app:scv_guide_color="@color/colorAccent"
+                app:scv_guide_show_mode="show_always"
+                app:scv_guide_stroke_weight="1dp"
+                app:scv_handle_color="@color/colorAccent"
+                app:scv_handle_show_mode="show_always"
+                app:scv_handle_size="14dp"
+                app:scv_min_frame_size="50dp"
+                app:scv_overlay_color="@color/overlay"
+                app:scv_touch_padding="8dp"
+                />
+
+            <Button
+                android:id="@+id/btn_crop_16_9"
+                android:layout_width="36.5dp"
+                android:layout_height="20dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/button_16_9"/>
+
+            <Button
+                android:id="@+id/btn_crop_3_4"
+                android:layout_width="20dp"
+                android:layout_height="29.5dp"
+                android:layout_above="@id/btn_crop_16_9"
+                android:layout_marginBottom="10.5dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/button_4_3"/>
+
+            <Button
+                android:id="@+id/btn_crop_1_1"
+                android:layout_width="20dp"
+                android:layout_height="29dp"
+                android:layout_above="@id/btn_crop_3_4"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/button_1_1"/>
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/gallery_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00ffffff"
+            android:layout_marginTop="320dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp">
+
+                <Button
+                    android:id="@+id/btn_change_gall_imgview_state"
+                    android:layout_width="20dp"
+                    android:layout_height="27dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/button_arrow_up"/>
+
+                <ToggleButton
+                    android:id="@+id/btn_img_sel_mode"
+                    android:layout_width="21dp"
+                    android:layout_height="21dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="19dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:button="@drawable/toggle_img_select_mode"
+                    android:background="@null"  />
+            </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_gallery"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="center"/>
+                android:background="#ffffffff"
+                />
 
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="30dp">
-            <Button
-                android:id="@+id/btn_change_imgview_state"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:layout_centerHorizontal="true"
-                android:text="UP"/>
-        </RelativeLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_gallery"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

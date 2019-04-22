@@ -66,9 +66,13 @@ public class GridDividerDecoration extends RecyclerView.ItemDecoration {
                     (RecyclerView.LayoutParams) child.getLayoutParams();
             final int left = child.getRight() + params.rightMargin + mInsets;
             final int right = left + mDivider.getIntrinsicWidth();
-            mDivider.setBounds(left, top, right, bottom);
+
+            //mDivider.setBounds(left, top, right, bottom);
+            mDivider.setBounds(left, top, left, bottom+10);
+
             mDivider.draw(c);
         }
+
     }
 
     @Override

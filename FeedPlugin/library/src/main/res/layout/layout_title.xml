@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="42.5dp"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:background="#ffffffff">
@@ -11,17 +11,26 @@
         android:id="@+id/text_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/btn_back"
+        android:layout_marginLeft="16dp"
         android:textColor="#ff000000"
-
-        android:text="Hello World!" />
+        android:text="" />
 
     <Button
         android:id="@+id/btn_back"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="17.5dp"
+        android:layout_height="17.5dp"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:text="nextAct"/>
+        android:background="@drawable/button_arrow_back"/>
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="17.5dp"
+        android:layout_height="17.5dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/button_arrow_next"/>
 
 </RelativeLayout>

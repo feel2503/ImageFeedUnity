@@ -1,7 +1,9 @@
 package com.feed.plugin;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,30 +15,43 @@ import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.feed.plugin.adapter.TabPagerAdapter;
+import com.feed.plugin.widget.SwipeViewPager;
 
 import java.util.ArrayList;
 
 public class ImgSelectActivity extends AppCompatActivity{
-    private final int REQEUST_PERFMSSION_CODE = 0x1001;
-    public final static int REQUTST_NETX_ACTIVITY = 0x1002;
-    public final static int RESULT_FINISH_ACTIVIY = RESULT_FIRST_USER + 0x1;
 
+    private final int REQEUST_PERFMSSION_CODE = 0x1001;
 
     private String[] REQUIRED_PERMISSIONS  = {Manifest.permission.CAMERA, // 카메라
             Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};  // 외부 저장소
 
     private TabLayout mTabLayout;
     private TabPagerAdapter mTabpagerAdapter;
-    private ViewPager mViewPager;
+    private SwipeViewPager mViewPager;
+
+    private TextView mTextTitle;
+
+    protected ProgressDialog mProgress = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_imgselect);
+
+        mProgress = new ProgressDialog(this);
 
         boolean isPermission = checkVerify();
         if(isPermission)
@@ -46,20 +61,20 @@ public class ImgSelectActivity extends AppCompatActivity{
 
         findViewById(R.id.btn_next).setOnClickListener(mOnClickListener);
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
+
+        mTextTitle = (TextView)findViewById(R.id.text_title);
     }
-
-
 
     private void initTab()
     {
         mTabLayout = (TabLayout)findViewById(R.id.tabLayout);
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.gallelry));
-        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.stylebook));
+//        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.stylebook));
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.camera));
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        mViewPager = findViewById(R.id.viewPager);
-
+        mViewPager = (SwipeViewPager)findViewById(R.id.viewPager);
+        setPagingEnabled(false);
         //Creating adapter
         mTabpagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), mTabLayout.getTabCount());
         //TabPagerAdapter pagerAdapter = new TabPagerAdapter(getFragmentManager(), mTabLayout.getTabCount());
@@ -70,7 +85,20 @@ public class ImgSelectActivity extends AppCompatActivity{
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition());
+                int position = tab.getPosition();
+                mViewPager.setCurrentItem(position);
+                if(position == 0)
+                {
+                    mTextTitle.setText(R.string.gallelry);
+                }
+//                else if(position == 1)
+//                {
+//                    mTextTitle.setText(R.string.stylebook);
+//                }
+                else
+                {
+                    mTextTitle.setText(R.string.camera);
+                }
             }
 
             @Override
@@ -85,23 +113,30 @@ public class ImgSelectActivity extends AppCompatActivity{
     }
 
 
+    public void setPagingEnabled(boolean enabled)
+    {
+        mViewPager.setPagingEnabled(enabled);
+    }
+
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if(v.getId() == R.id.btn_next)
             {
                 mTabpagerAdapter.getItem(mViewPager.getCurrentItem());
-                ArrayList<String> imgList = mTabpagerAdapter.getItem(mViewPager.getCurrentItem()).getImgList();
+                mTabpagerAdapter.getItem(mViewPager.getCurrentItem()).getCropImgList();
 
-                if(imgList == null || imgList.size() < 1)
-                {
-                    Toast.makeText(getApplicationContext(), "이미지를 선택해 주세요.", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), ImgEditActivity.class);
-                intent.putStringArrayListExtra("ImageList", imgList);
-                startActivityForResult(intent, REQUTST_NETX_ACTIVITY);
+//                ArrayList<String> imgList = mTabpagerAdapter.getItem(mViewPager.getCurrentItem()).getCropImgList();
+//
+//                if(imgList == null || imgList.size() < 1)
+//                {
+//                    Toast.makeText(getApplicationContext(), "이미지를 선택해 주세요.", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//                Intent intent = new Intent();
+//                intent.setClass(getApplicationContext(), ImgEditActivity.class);
+//                intent.putStringArrayListExtra("ImageList", imgList);
+//                startActivity(intent);
             }
             else if(v.getId() == R.id.btn_back)
             {
@@ -109,6 +144,14 @@ public class ImgSelectActivity extends AppCompatActivity{
             }
         }
     };
+
+    public void startResultActivity(ArrayList<String> imgList) {
+        Intent intent = new Intent();
+        intent.setClass(getApplicationContext(), ImgEditActivity.class);
+        intent.putStringArrayListExtra("ImageList", imgList);
+        startActivity(intent);
+        imgList.clear();
+    }
 
 
     public boolean checkVerify()
@@ -184,16 +227,34 @@ public class ImgSelectActivity extends AppCompatActivity{
         builder.create().show();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUTST_NETX_ACTIVITY )
+
+    public void showProgress(final Activity act, final boolean bShow)
+    {
+        act.runOnUiThread(new Runnable()
         {
-            if(resultCode == RESULT_FINISH_ACTIVIY)
+            @Override
+            public void run()
             {
-                setResult(RESULT_FINISH_ACTIVIY);
-                finish();
+                mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                mProgress.setMessage("Saving...");
+                try
+                {
+                    if (bShow)
+                    {
+                        mProgress.show();
+                    }
+                    else
+                    {
+                        mProgress.dismiss();
+                    }
+                }
+                catch (Exception e)
+                {
+                    // TODO: handle exception
+                    e.printStackTrace();
+                }
             }
-        }
+        });
     }
+
 }

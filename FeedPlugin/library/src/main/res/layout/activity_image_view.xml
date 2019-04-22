@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffffff"
+    tools:context=".ImageViewActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="42.5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="#ffffffff">
+
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/btn_back"
+            android:layout_marginLeft="16dp"
+            android:textColor="#ff000000"
+            android:text="New post" />
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="17.5dp"
+            android:layout_height="17.5dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/button_arrow_back"/>
+
+
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager_image_view"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="360dp">
+    </android.support.v4.view.ViewPager>
+
+</RelativeLayout>
