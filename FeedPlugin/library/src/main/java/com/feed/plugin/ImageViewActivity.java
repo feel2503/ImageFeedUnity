@@ -1,11 +1,13 @@
 package com.feed.plugin;
 
-import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.WindowManager;
 
+import com.feed.plugin.adapter.GpuimageSlideAdapter;
 import com.feed.plugin.adapter.ImageViewSlideAdapter;
+import com.feed.plugin.adapter.items.GPUImgItem;
 
 import java.util.ArrayList;
 

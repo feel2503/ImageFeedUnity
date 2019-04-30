@@ -85,10 +85,20 @@ public class GPUImgItem{
         return filterValue;
     }
 
+
+
     public void requestRender()
     {
         if(gpuImageView != null && gpuImageView instanceof GPUImageView)
             ((GPUImageView) gpuImageView).requestRender();
+    }
+
+
+    public void saveGpuImage(final String folderName, final String fileName,
+                             final GPUImageView.OnPictureSavedListener listener)
+    {
+        if(gpuImageView != null && gpuImageView instanceof GPUImageView)
+            ((GPUImageView) gpuImageView).saveToPictures(folderName, fileName, listener);
     }
 
     private float range(int percentage, float start, float end)
