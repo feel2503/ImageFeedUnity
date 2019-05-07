@@ -7,6 +7,8 @@ import android.widget.Toast;
 public class BridgeCls {
     private static BridgeCls mInstance;
     private Context mContext;
+    public static String EXTRA_EDITIMG_PATH = "android.feed.EXTRA_EDITIMG_PATH";
+    public static String EXTRA_FEEDIMG_PATH = "android.feed.EXTRA_FEEDIMG_PATH";
 
     public static BridgeCls instance()
     {
@@ -29,6 +31,20 @@ public class BridgeCls {
     public void startGalleryActivity(Context context)
     {
         Intent intent = new Intent(context, ImgSelectActivity.class);
+        context.startActivity(intent);
+    }
+
+    public void startEditActivity(Context context, String imgUrl)
+    {
+        Intent intent = new Intent(context, ImgEditActivity.class);
+        intent.putExtra(EXTRA_EDITIMG_PATH, imgUrl);
+        context.startActivity(intent);
+    }
+
+    public void startFeedActivity(Context context, String imgUrl)
+    {
+        Intent intent = new Intent(context, FeedUploadActivity.class);
+        intent.putExtra(EXTRA_FEEDIMG_PATH, imgUrl);
         context.startActivity(intent);
     }
 }

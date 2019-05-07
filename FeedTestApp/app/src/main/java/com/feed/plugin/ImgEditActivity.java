@@ -39,6 +39,7 @@ import com.feed.plugin.fragment.FiltersListSelectListener;
 import com.feed.plugin.util.FilterValue;
 import com.feed.plugin.widget.SwipeViewPager;
 import com.feed.plugin.widget.thumbseekbar.ThumbTextSeekBar;
+import com.unity3d.player.UnityPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +79,7 @@ public class ImgEditActivity extends AppCompatActivity {
     private FilterValue mTempEditFilter = new FilterValue();
     private int mCurrentFilterState = 0;
 
+    private boolean isCallByUnity = false;
     protected ProgressDialog mProgress = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +92,18 @@ public class ImgEditActivity extends AppCompatActivity {
 
         mProgress = new ProgressDialog(this);
 
-        mImagList = getIntent().getStringArrayListExtra("ImageList");
+        String editImgPath = getIntent().getStringExtra(BridgeCls.EXTRA_EDITIMG_PATH);
+        if(editImgPath != null)
+        {
+            isCallByUnity = true;
+            mImagList = new ArrayList<>();
+            mImagList.add(editImgPath);
+        }
+        else
+        {
+            mImagList = getIntent().getStringArrayListExtra("ImageList");
+        }
+
         //mImgView = (GPUImageView)findViewById(R.id.gpuimage);
         mGPUImagePager = (ViewPager)findViewById(R.id.viewpager_gpuimage) ;
         mGPUImageAdapter = new GpuimageSlideAdapter(getApplicationContext());
@@ -284,15 +297,23 @@ public class ImgEditActivity extends AppCompatActivity {
                     String fullpath = gpuimg.getImagePath();
                     int idx = fullpath.lastIndexOf("/");
                     String path = fullpath.substring(0, idx);
-                    String name = fullpath.substring(idx+1, fullpath.length());
+                    String name = "filter_" + fullpath.substring(idx+1, fullpath.length());
+                    //String name = fullpath.substring(idx+1, fullpath.length());
                     gpuimg.saveGpuImage(path, name, pictureSavedListener);
                     gpuimg.getImagePath();
                 }
 
-                Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), FeedUploadActivity.class);
-                intent.putStringArrayListExtra("ImageList", mImagList);
-                startActivity(intent);
+                if(isCallByUnity)
+                {
+                    //UnityPlayer.UnitySendMessage();
+                }
+                else
+                {
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), FeedUploadActivity.class);
+                    intent.putStringArrayListExtra("ImageList", mImagList);
+                    startActivity(intent);
+                }
 
             }
             else if(v.getId() == R.id.btn_back)
@@ -395,7 +416,11 @@ public class ImgEditActivity extends AppCompatActivity {
     {
         @Override
         public void onPictureSaved(Uri uri){
+            String path = uri.getPath();
+            if(path != null)
+            {
 
+            }
         }
     };
 
