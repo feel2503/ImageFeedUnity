@@ -109,7 +109,7 @@ public class ImgEditActivity extends AppCompatActivity {
         mGPUImageAdapter = new GpuimageSlideAdapter(getApplicationContext());
         initGPUImageList();
         mGPUImagePager.setAdapter(mGPUImageAdapter);
-        mGPUImagePager.setOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+        mGPUImagePager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
             @Override
             public void onPageScrolled(int i, float v, int i1){ }
             @Override
@@ -345,6 +345,57 @@ public class ImgEditActivity extends AppCompatActivity {
                         ce.printStackTrace();
                     }
                     mTempEditFilter.setFilter(null);
+                }
+            }
+        }
+    };
+
+    private FiltersListSelectListener mEditFilterListListener = new FiltersListSelectListener(){
+        @Override
+        public void onFilterSelected(GPUImageFilter filter, boolean isSecondSelect){
+            if(isSecondSelect)
+            {
+                mRelFilterValue.setVisibility(View.VISIBLE);
+                mRelFilterSelect.setVisibility(View.GONE);
+            }
+            else
+            {
+                if(mArrEditFilter.size() > 0)
+                {
+                    for(FilterValue filtvalue : mArrEditFilter)
+                    {
+                        GPUImageFilter filt = filtvalue.getFilter();
+                        Class csass = filt.getClass();
+                        if(filtvalue.getFilter().getClass().getName().equalsIgnoreCase(filter.getClass().getName()) )
+                        {
+                            mTempEditFilter = filtvalue;
+                            break;
+                        }
+                    }
+                }
+                if(mTempEditFilter.getFilter() == null)
+                {
+                    FilterValue fv = new FilterValue();
+                    fv.setFilter(filter);
+                    mArrEditFilter.add(fv);
+                    mTempEditFilter.setFilter(filter);
+                }
+            }
+            mRelFilterValue.setVisibility(View.GONE);
+            mRelFilterSelect.setVisibility(View.VISIBLE);
+
+            if(mCurrentGPUImage != null)
+            {
+                mCurrentGPUImage.setFilter(filter);
+                mCurrentGPUImage.requestRender();
+
+                ArrayList<ThumbnailItem> tItems = filtersListFragment.getThumbnailItemList();;
+                for(ThumbnailItem item : tItems)
+                {
+                    if(item.filter == filter)
+                    {
+                        mCurrentThumbnailItem = item;
+                    }
                 }
             }
         }

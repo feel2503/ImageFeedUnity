@@ -147,7 +147,8 @@ public class ImgSelectActivity extends AppCompatActivity{
 
     public void startResultActivity(ArrayList<String> imgList) {
         Intent intent = new Intent();
-        intent.setClass(getApplicationContext(), ImgEditActivity.class);
+        //intent.setClass(getApplicationContext(), ImgEditActivity.class);
+        intent.setClass(getApplicationContext(), ImgFilterActivity.class);
         intent.putStringArrayListExtra("ImageList", imgList);
         startActivity(intent);
         imgList.clear();
