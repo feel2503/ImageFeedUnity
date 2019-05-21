@@ -86,6 +86,15 @@ public class GPUImgItem{
     }
 
 
+    public GPUImage getGPUImage()
+    {
+        GPUImage gpuimg = null;
+        if(gpuImageView != null && gpuImageView instanceof GPUImageView)
+        {
+            gpuimg = ((GPUImageView) gpuImageView).getGPUImage();
+        }
+        return gpuimg;
+    }
 
     public void requestRender()
     {

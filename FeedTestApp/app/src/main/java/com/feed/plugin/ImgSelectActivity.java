@@ -202,8 +202,8 @@ public class ImgSelectActivity extends AppCompatActivity{
 
     public void showRequestAgainDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(ImgSelectActivity.this);
-        builder.setMessage("이 권한은 꼭 필요한 권한이므로, 설정에서 활성화 부탁드립니다.");
-        builder.setPositiveButton("설정", new DialogInterface.OnClickListener() {
+        builder.setMessage(getString(R.string.requestpermission));
+        builder.setPositiveButton(getString(R.string.setting), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try{
@@ -218,7 +218,7 @@ public class ImgSelectActivity extends AppCompatActivity{
                 }
             }
         });
-        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
@@ -237,7 +237,7 @@ public class ImgSelectActivity extends AppCompatActivity{
             public void run()
             {
                 mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                mProgress.setMessage("Saving...");
+                mProgress.setMessage(getString(R.string.saving));
                 try
                 {
                     if (bShow)
