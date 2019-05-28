@@ -13,6 +13,8 @@ public class ThumbTextSeekBar extends LinearLayout{
     public SeekBar seekBar;
     private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener;
 
+    private boolean mIsCenterValue = false;
+
     public ThumbTextSeekBar(Context context) {
         super(context);
         init();
@@ -22,6 +24,7 @@ public class ThumbTextSeekBar extends LinearLayout{
         super(context, attrs);
         init();
     }
+
 
     private void init() {
         LayoutInflater.from(getContext()).inflate(R.layout.view_thumb_text_seekbar, this);
@@ -45,6 +48,7 @@ public class ThumbTextSeekBar extends LinearLayout{
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (onSeekBarChangeListener != null)
                     onSeekBarChangeListener.onProgressChanged(seekBar, progress, fromUser);
+
                 tvThumb.attachToSeekBar(seekBar);
             }
         });
@@ -55,9 +59,48 @@ public class ThumbTextSeekBar extends LinearLayout{
         this.onSeekBarChangeListener = l;
     }
 
-    public void setThumbText(String text) {
-        tvThumb.setText(text);
+    public void initProgressValue(boolean isCenter)
+    {
+        mIsCenterValue = isCenter;
+        if(isCenter)
+        {
+            setProgress(50);
+        }
+        else
+        {
+            setProgress(100);
+        }
+
+        tvThumb.post( new Runnable() {
+            @Override
+            public void run() {
+                // your layout is now drawn completely , use it here.
+                tvThumb.attachToSeekBar(seekBar);
+            }
+        });
     }
+
+    public void setThumbText(String text) {
+        if(mIsCenterValue)
+        {
+            try{
+                int textValue = Integer.valueOf(text);
+                int value = textValue - 50;
+                String setValue = ""+value;
+                tvThumb.setText(setValue);
+            }catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+
+        }
+        else
+        {
+            tvThumb.setText(text);
+        }
+
+    }
+
 
     public void setProgress(int progress) {
         if (progress == seekBar.getProgress() && progress == 0) {

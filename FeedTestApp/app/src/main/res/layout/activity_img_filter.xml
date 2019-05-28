@@ -62,14 +62,13 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingLeft="22dp"
-                    android:paddingRight="22dp"
                     android:layout_above="@id/linear_bottom_menu">
 
                     <com.feed.plugin.widget.thumbseekbar.ThumbTextSeekBar
                         android:id="@+id/seekbar_filter_value"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+
                         android:layout_centerVertical="true">
 
                     </com.feed.plugin.widget.thumbseekbar.ThumbTextSeekBar>

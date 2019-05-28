@@ -166,7 +166,8 @@ public class GalleryFragment extends ImgSelFragment{
      */
     private void initRecyclerGallery() {
 
-        galleryAdapter = new GalleryAdapter(getActivity(), initGalleryPathList(), R.layout.item_photo);
+        //galleryAdapter = new GalleryAdapter(getActivity(), initGalleryPathList(), R.layout.item_photo);
+        galleryAdapter = new GalleryAdapter(getActivity(), initGalleryPathList(), R.layout.gallery_item_photo);
         galleryAdapter.setOnItemClickListener(mOnItemClickListener);
         recyclerGallery.setAdapter(galleryAdapter);
         recyclerGallery.setLayoutManager(new GridLayoutManager(getContext(), 4));

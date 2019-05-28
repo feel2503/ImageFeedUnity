@@ -19,16 +19,25 @@ public class ThumbTextView extends TextView{
         super(context, attrs);
     }
 
-    public void attachToSeekBar(SeekBar seekBar){
+    public void attachToSeekBar(SeekBar seekBar)
+    {
         String content = getText().toString();
         if(TextUtils.isEmpty(content) || seekBar == null)
+        {
             return;
+        }
+
         float contentWidth = this.getPaint().measureText(content);
-        int realWidth = width - seekBar.getPaddingLeft() - seekBar.getPaddingRight();
-        int maxLimit = (int) (width - contentWidth - seekBar.getPaddingRight());
-        int minLimit = seekBar.getPaddingLeft();
+        int realWidth = width - seekBar.getPaddingLeft() - seekBar.getPaddingRight() + (int)(contentWidth/2);
+        int maxLimit = (int) (width - contentWidth - seekBar.getPaddingRight()) + (int)(contentWidth/2);
+        int minLimit = seekBar.getPaddingLeft() / 2;
+        //int minLimit = 0;
+
         float percent = (float) (1.0 * seekBar.getProgress() / seekBar.getMax());
-        int left = minLimit + (int) (realWidth * percent - contentWidth / 2.0);
+
+        int left = minLimit + (int) (realWidth * percent);
+        //int left = minLimit + (int) (realWidth * percent - (contentWidth / 2.0));
+        //int left = minLimit + (int) (realWidth * percent - contentWidth );
         left = left <= minLimit ? minLimit : left >= maxLimit ? maxLimit : left;
         lp.setMargins(left, 0, 0, 0);
         setLayoutParams(lp);

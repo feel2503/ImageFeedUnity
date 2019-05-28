@@ -24,8 +24,11 @@ import com.feed.plugin.adapter.items.GPUImgItem;
 import com.feed.plugin.adapter.items.ThumbnailItem;
 import com.feed.plugin.android.gpuimage.GPUImage;
 import com.feed.plugin.android.gpuimage.GPUImageView;
+import com.feed.plugin.android.gpuimage.filter.GPUImageBrightnessFilter;
+import com.feed.plugin.android.gpuimage.filter.GPUImageContrastFilter;
 import com.feed.plugin.android.gpuimage.filter.GPUImageFilter;
 import com.feed.plugin.android.gpuimage.filter.GPUImageFilterGroup;
+import com.feed.plugin.android.gpuimage.filter.GPUImageSaturationFilter;
 import com.feed.plugin.fragment.EditImageFragment;
 import com.feed.plugin.fragment.FiltersListFragment;
 import com.feed.plugin.fragment.FiltersListSelectListener;
@@ -281,7 +284,15 @@ public class ImgFilterActivity extends AppCompatActivity{
 
         @Override
         public void onPageSelected(int position){
-
+            ArrayList<ThumbnailItem> tItems;
+            if(position == 0)
+            {
+                tItems = mFiltersListFragment.getThumbnailItemList();
+            }
+            else
+            {
+                tItems = mEditImageFragment.getEditItemList();
+            }
         }
 
         @Override
@@ -370,11 +381,22 @@ public class ImgFilterActivity extends AppCompatActivity{
 
                 filters.add(groupFilter);
 
-                for(GPUImgItem gpuimg : mGPUImgList)
+                if(groupFilter.getFilters().size() < 1)
                 {
-                    Bitmap source = BitmapFactory.decodeFile(gpuimg.getImagePath());
-                    GPUImage.getBitmapForMultipleFilters(source, filters, mReponseListener);
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), FeedUploadActivity.class);
+                    intent.putStringArrayListExtra("ImageList", mImagList);
+                    startActivity(intent);
                 }
+                else
+                {
+                    for(GPUImgItem gpuimg : mGPUImgList)
+                    {
+                        Bitmap source = BitmapFactory.decodeFile(gpuimg.getImagePath());
+                        GPUImage.getBitmapForMultipleFilters(source, filters, mReponseListener);
+                    }
+                }
+
 //                GPUImage simg = new GPUImage(getApplicationContext());
 //                Bitmap source = BitmapFactory.decodeFile(mGPUImgList.get(0).getImagePath());
 //                GPUImage.getBitmapForMultipleFilters(source, filters, replist);
@@ -469,9 +491,28 @@ public class ImgFilterActivity extends AppCompatActivity{
                     item.setFilter(mCurrentEditFilter.getFilter());
                     mArrEditFilter.add(item);
                     //mArrEditFilter.add(mCurrentEditFilter);
+
+                    ArrayList<ThumbnailItem> tItems = mEditImageFragment.getEditItemList();
+                    for(ThumbnailItem titem : tItems)
+                    {
+                        if(titem.filter == mCurrentEditFilter.getFilter())
+                            titem.isSetted = true;
+                    }
+                }
+                else
+                {
+                    ArrayList<ThumbnailItem> tItems = mFiltersListFragment.getThumbnailItemList();;
+                    for(ThumbnailItem item : tItems)
+                    {
+                        if(item.filter == mCurrentTransFilter.getFilter())
+                            item.isSetted = true;
+                        else
+                            item.isSetted = false;
+                    }
                 }
                 mRelFilterValue.setVisibility(View.GONE);
                 mRelFilterSelect.setVisibility(View.VISIBLE);
+
             }
         }
     };
@@ -485,6 +526,7 @@ public class ImgFilterActivity extends AppCompatActivity{
             {
                 mRelFilterValue.setVisibility(View.VISIBLE);
                 mRelFilterSelect.setVisibility(View.GONE);
+                mSeekbarValue.initProgressValue(false);
             }
             else
             {
@@ -506,6 +548,8 @@ public class ImgFilterActivity extends AppCompatActivity{
 
                     mCurrentGPUImage.setFilter(groupFilter);
                     mCurrentGPUImage.requestRender();
+
+
                 }
             }
         }
@@ -520,6 +564,15 @@ public class ImgFilterActivity extends AppCompatActivity{
             {
                 mRelFilterValue.setVisibility(View.VISIBLE);
                 mRelFilterSelect.setVisibility(View.GONE);
+
+                if(filter instanceof GPUImageBrightnessFilter || filter instanceof GPUImageContrastFilter || filter instanceof GPUImageSaturationFilter)
+                {
+                    mSeekbarValue.initProgressValue(true);
+                }
+                else
+                {
+                    mSeekbarValue.initProgressValue(false);
+                }
             }
             else
             {

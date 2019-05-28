@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="88dp"
-    android:layout_height="88dp"
-    android:layout_marginBottom="4.8dp"
+<com.feed.plugin.fragment.gallery.SquareLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:layout_weight="1"
+    android:layout_margin="1dp"
     >
 
     <ImageView
@@ -10,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
+        android:adjustViewBounds="true"
         />
 
     <RelativeLayout
@@ -40,4 +44,4 @@
 
 
 
-</RelativeLayout>
+</com.feed.plugin.fragment.gallery.SquareLayout>
