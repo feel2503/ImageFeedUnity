@@ -29,6 +29,7 @@ public class EditImageAdapter extends RecyclerView.Adapter<EditImageAdapter.MyVi
         ImageView thumbnail;
         TextView filterName;
         Bitmap bitmap;
+        View seleteState;
 
         public MyViewHolder(View view) {
             super(view);
@@ -52,7 +53,7 @@ public class EditImageAdapter extends RecyclerView.Adapter<EditImageAdapter.MyVi
         //viewHolder.thumbnail = (GPUImageView) itemView.findViewById(R.id.gpuimage_thumbnail);
         viewHolder.thumbnail = (ImageView) itemView.findViewById(R.id.gpuimage_thumbnail);
         viewHolder.filterName = (TextView)itemView.findViewById(R.id.filter_name);
-
+        viewHolder.seleteState = (View)itemView.findViewById(R.id.view_filter_selete);
         return viewHolder;
     }
 
@@ -70,6 +71,11 @@ public class EditImageAdapter extends RecyclerView.Adapter<EditImageAdapter.MyVi
             holder.filterName.setTextColor(ContextCompat.getColor(mContext, R.color.filter_label_normal));
             thumbnailItem.isSelected = false;
         }
+
+        if(thumbnailItem.isSetted)
+            holder.seleteState.setVisibility(View.VISIBLE);
+        else
+            holder.seleteState.setVisibility(View.INVISIBLE);
 
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override

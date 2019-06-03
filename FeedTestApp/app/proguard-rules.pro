@@ -28,5 +28,6 @@
 
 -keep interface android.support.v7.app.** { *; }
 
+-keep class com.feed.plugin.** { *; }
 
 

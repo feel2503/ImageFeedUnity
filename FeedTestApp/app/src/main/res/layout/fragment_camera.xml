@@ -6,13 +6,31 @@
     android:layout_height="match_parent"
     android:background="#ffffffff">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/relative_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <Button
+                android:id="@+id/button_main_capture"
+                android:layout_width="62dp"
+                android:layout_height="62dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="13dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/button_camera_shutter"/>
+        </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="480dp">
+            android:layout_height="match_parent"
+            android:layout_above="@id/relative_button">
 
             <TextureView
                 android:id="@+id/texture_camera_preview"
@@ -22,8 +40,8 @@
 
             <Button
                 android:id="@+id/btn_camera_rotate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="15dp"
@@ -32,8 +50,8 @@
 
             <ToggleButton
                 android:id="@+id/btn_camera_flash_mode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="32dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="19dp"
                 android:layout_alignParentRight="true"
@@ -48,19 +66,8 @@
 
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <Button
-                android:id="@+id/button_main_capture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/button_camera_shutter"/>
-        </RelativeLayout>
 
 
-    </LinearLayout>
+
+    </RelativeLayout>
 </RelativeLayout>

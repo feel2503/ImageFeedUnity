@@ -273,8 +273,11 @@ public class CameraPreview extends Thread {
 
         try {
             mPreviewSession.setRepeatingRequest(mPreviewBuilder.build(), null, mBackgroundHandler);
-        } catch (CameraAccessException e) {
+        } catch (CameraAccessException ce) {
             // TODO Auto-generated catch block
+            ce.printStackTrace();
+        } catch(Exception e)
+        {
             e.printStackTrace();
         }
     }
@@ -350,6 +353,7 @@ public class CameraPreview extends Thread {
     public void flashMode(boolean isFlshOn)
     {
         try{
+            //mPreviewBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_SINGLE);
             mPreviewBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
             mPreviewSession.setRepeatingRequest(mPreviewBuilder.build(), null, null);
             //mPreviewBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_SINGLE);

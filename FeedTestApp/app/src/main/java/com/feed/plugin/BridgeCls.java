@@ -36,7 +36,7 @@ public class BridgeCls {
 
     public void startEditActivity(Context context, String imgUrl)
     {
-        Intent intent = new Intent(context, ImgEditActivity.class);
+        Intent intent = new Intent(context, ImgFilterActivity.class);
         intent.putExtra(EXTRA_EDITIMG_PATH, imgUrl);
         context.startActivity(intent);
     }
