@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.feed.plugin.fragment.CameraFragment;
+import com.feed.plugin.fragment.CameraViewFragment;
 import com.feed.plugin.fragment.GalleryFragment;
 import com.feed.plugin.fragment.ImgSelFragment;
 import com.feed.plugin.fragment.StyleBookFragment;
@@ -15,6 +16,7 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter{
     private GalleryFragment mGalleryFragment;
     private StyleBookFragment mStyleBookFragment;
     private CameraFragment mCameraFragment;
+
 
 
     public TabPagerAdapter(FragmentManager fm, int tabCount) {
@@ -28,7 +30,8 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter{
             case 0:
                 return GalleryFragment.getInstance();
             case 1:
-                CameraFragment mainTabFragment3 = new CameraFragment();
+                //CameraFragment mainTabFragment3 = new CameraFragment();
+                CameraViewFragment mainTabFragment3 = new CameraViewFragment();
                 return mainTabFragment3;
 
 
