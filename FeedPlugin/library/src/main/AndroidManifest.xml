@@ -17,6 +17,9 @@
             android:name=".ImgEditActivity"
             android:theme="@style/AppTheme_NoTitle" />
         <activity
+            android:name=".ImgFilterActivity"
+            android:theme="@style/AppTheme_NoTitle" />
+        <activity
             android:name=".FeedUploadActivity"
             android:theme="@style/AppTheme_NoTitle"
             android:windowSoftInputMode="adjustResize" />

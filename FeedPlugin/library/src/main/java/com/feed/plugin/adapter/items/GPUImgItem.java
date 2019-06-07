@@ -6,7 +6,6 @@ import com.feed.plugin.android.gpuimage.GPUImage;
 import com.feed.plugin.android.gpuimage.GPUImageView;
 import com.feed.plugin.android.gpuimage.filter.GPUImage3x3ConvolutionFilter;
 import com.feed.plugin.android.gpuimage.filter.GPUImage3x3TextureSamplingFilter;
-import com.feed.plugin.android.gpuimage.filter.GPUImageAddBlendFilter;
 import com.feed.plugin.android.gpuimage.filter.GPUImageBilateralBlurFilter;
 import com.feed.plugin.android.gpuimage.filter.GPUImageBrightnessFilter;
 import com.feed.plugin.android.gpuimage.filter.GPUImageBulgeDistortionFilter;
@@ -85,10 +84,31 @@ public class GPUImgItem{
         return filterValue;
     }
 
+
+    public GPUImage getGPUImage()
+    {
+        GPUImage gpuimg = null;
+        if(gpuImageView != null && gpuImageView instanceof GPUImageView)
+        {
+            gpuimg = ((GPUImageView) gpuImageView).getGPUImage();
+        }
+        return gpuimg;
+    }
+
     public void requestRender()
     {
         if(gpuImageView != null && gpuImageView instanceof GPUImageView)
             ((GPUImageView) gpuImageView).requestRender();
+    }
+
+
+
+
+    public void saveGpuImage(final String folderName, final String fileName,
+                             final GPUImageView.OnPictureSavedListener listener)
+    {
+        if(gpuImageView != null && gpuImageView instanceof GPUImageView)
+            ((GPUImageView) gpuImageView).saveToPictures(folderName, fileName, listener);
     }
 
     private float range(int percentage, float start, float end)

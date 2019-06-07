@@ -4,33 +4,24 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Filter;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.feed.plugin.adapter.GpuimageSlideAdapter;
 import com.feed.plugin.adapter.items.GPUImgItem;
 import com.feed.plugin.adapter.items.ThumbnailItem;
-import com.feed.plugin.android.gpuimage.GPUImage;
 import com.feed.plugin.android.gpuimage.GPUImageView;
 import com.feed.plugin.android.gpuimage.filter.GPUImageFilter;
 import com.feed.plugin.fragment.EditImageFragment;
@@ -39,12 +30,11 @@ import com.feed.plugin.fragment.FiltersListSelectListener;
 import com.feed.plugin.util.FilterValue;
 import com.feed.plugin.widget.SwipeViewPager;
 import com.feed.plugin.widget.thumbseekbar.ThumbTextSeekBar;
-import com.unity3d.player.UnityPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImgEditActivity extends AppCompatActivity {
+public class ImgEditActivity extends AppCompatActivity{
 
     private int REQUEST_NOTICE = 0x1001;
     //private GPUImageView mImgView;

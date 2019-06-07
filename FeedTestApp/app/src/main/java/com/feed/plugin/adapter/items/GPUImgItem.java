@@ -6,7 +6,6 @@ import com.feed.plugin.android.gpuimage.GPUImage;
 import com.feed.plugin.android.gpuimage.GPUImageView;
 import com.feed.plugin.android.gpuimage.filter.GPUImage3x3ConvolutionFilter;
 import com.feed.plugin.android.gpuimage.filter.GPUImage3x3TextureSamplingFilter;
-import com.feed.plugin.android.gpuimage.filter.GPUImageAddBlendFilter;
 import com.feed.plugin.android.gpuimage.filter.GPUImageBilateralBlurFilter;
 import com.feed.plugin.android.gpuimage.filter.GPUImageBrightnessFilter;
 import com.feed.plugin.android.gpuimage.filter.GPUImageBulgeDistortionFilter;

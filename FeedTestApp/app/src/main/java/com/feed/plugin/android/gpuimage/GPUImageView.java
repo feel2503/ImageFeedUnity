@@ -26,7 +26,6 @@ import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
@@ -36,14 +35,14 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
+import com.feed.plugin.R;
+import com.feed.plugin.android.gpuimage.filter.GPUImageFilter;
+import com.feed.plugin.android.gpuimage.util.Rotation;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.concurrent.Semaphore;
-
-import com.feed.plugin.R;
-import com.feed.plugin.android.gpuimage.filter.GPUImageFilter;
-import com.feed.plugin.android.gpuimage.util.Rotation;
 
 import static com.feed.plugin.android.gpuimage.GPUImage.SURFACE_TYPE_SURFACE_VIEW;
 import static com.feed.plugin.android.gpuimage.GPUImage.SURFACE_TYPE_TEXTURE_VIEW;
@@ -472,7 +471,7 @@ public class GPUImageView extends FrameLayout{
         }
     }
 
-    private class GPUImageGLTextureView extends GLTextureView {
+    private class GPUImageGLTextureView extends GLTextureView{
         public GPUImageGLTextureView(Context context) {
             super(context);
         }

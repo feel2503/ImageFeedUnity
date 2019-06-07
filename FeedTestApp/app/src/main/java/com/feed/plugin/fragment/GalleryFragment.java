@@ -1,13 +1,10 @@
 package com.feed.plugin.fragment;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
-import com.feed.plugin.ImageViewActivity;
 import com.feed.plugin.ImgSelectActivity;
 import com.feed.plugin.R;
 import com.feed.plugin.fragment.gallery.GalleryAdapter;
@@ -35,7 +31,6 @@ import com.feed.plugin.widget.cropimgview.callback.LoadCallback;
 import com.feed.plugin.widget.cropimgview.callback.SaveCallback;
 import com.feed.plugin.widget.cropimgview.util.CropUtils;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

@@ -3,7 +3,6 @@ package com.feed.plugin.widget.camera;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.ImageFormat;
-import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -11,24 +10,18 @@ import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CameraMetadata;
-import android.hardware.camera2.CaptureFailure;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.TotalCaptureResult;
-import android.hardware.camera2.params.MeteringRectangle;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
-import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
-import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.TextureView;
-import android.view.View;
 import android.widget.Toast;
 
 import com.feed.plugin.ImgSelectActivity;
@@ -273,8 +266,11 @@ public class CameraPreview extends Thread {
 
         try {
             mPreviewSession.setRepeatingRequest(mPreviewBuilder.build(), null, mBackgroundHandler);
-        } catch (CameraAccessException e) {
+        } catch (CameraAccessException ce) {
             // TODO Auto-generated catch block
+            ce.printStackTrace();
+        } catch(Exception e)
+        {
             e.printStackTrace();
         }
     }
@@ -350,6 +346,7 @@ public class CameraPreview extends Thread {
     public void flashMode(boolean isFlshOn)
     {
         try{
+            //mPreviewBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_SINGLE);
             mPreviewBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
             mPreviewSession.setRepeatingRequest(mPreviewBuilder.build(), null, null);
             //mPreviewBuilder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_SINGLE);

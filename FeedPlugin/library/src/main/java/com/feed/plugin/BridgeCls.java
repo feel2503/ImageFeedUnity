@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-public class BridgeCls {
+public class BridgeCls{
     private static BridgeCls mInstance;
     private Context mContext;
     public static String EXTRA_EDITIMG_PATH = "android.feed.EXTRA_EDITIMG_PATH";
@@ -36,7 +36,7 @@ public class BridgeCls {
 
     public void startEditActivity(Context context, String imgUrl)
     {
-        Intent intent = new Intent(context, ImgEditActivity.class);
+        Intent intent = new Intent(context, ImgFilterActivity.class);
         intent.putExtra(EXTRA_EDITIMG_PATH, imgUrl);
         context.startActivity(intent);
     }

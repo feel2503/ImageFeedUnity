@@ -34,4 +34,7 @@
     <string name="WhiteBalance">White Balance"</string>
     <string name="Vignette">Vignette</string>
 
+    <string name="saving">Saving...</string>
+
+
 </resources>

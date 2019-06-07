@@ -13,15 +13,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.feed.plugin.adapter.TabPagerAdapter;
 import com.feed.plugin.widget.SwipeViewPager;
@@ -147,7 +142,8 @@ public class ImgSelectActivity extends AppCompatActivity{
 
     public void startResultActivity(ArrayList<String> imgList) {
         Intent intent = new Intent();
-        intent.setClass(getApplicationContext(), ImgEditActivity.class);
+        //intent.setClass(getApplicationContext(), ImgEditActivity.class);
+        intent.setClass(getApplicationContext(), ImgFilterActivity.class);
         intent.putStringArrayListExtra("ImageList", imgList);
         startActivity(intent);
         imgList.clear();
@@ -201,8 +197,8 @@ public class ImgSelectActivity extends AppCompatActivity{
 
     public void showRequestAgainDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(ImgSelectActivity.this);
-        builder.setMessage("이 권한은 꼭 필요한 권한이므로, 설정에서 활성화 부탁드립니다.");
-        builder.setPositiveButton("설정", new DialogInterface.OnClickListener() {
+        builder.setMessage(getString(R.string.requestpermission));
+        builder.setPositiveButton(getString(R.string.setting), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try{
@@ -217,7 +213,7 @@ public class ImgSelectActivity extends AppCompatActivity{
                 }
             }
         });
-        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
@@ -236,7 +232,7 @@ public class ImgSelectActivity extends AppCompatActivity{
             public void run()
             {
                 mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                mProgress.setMessage("Saving...");
+                mProgress.setMessage(getString(R.string.saving));
                 try
                 {
                     if (bShow)
