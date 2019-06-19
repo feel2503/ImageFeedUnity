@@ -4,9 +4,9 @@
     <string name="gallelry">Gallery</string>
     <string name="stylebook">Style Book</string>
     <string name="camera">Camera</string>
-    <string name="requestpermission">이 권한은 꼭 필요한 권한이므로, 설정에서 활성화 부탁드립니다.</string>
-    <string name="setting">설정</string>
-    <string name="cancel">취소</string>
+    <string name="requestpermission">This is a required permission. Please enable this permission in Settings.</string>
+    <string name="setting">Setting</string>
+    <string name="cancel">Cancel</string>
     <string name="filter">Filter</string>
     <string name="edit">Edit</string>
 
@@ -36,5 +36,11 @@
 
     <string name="saving">Saving...</string>
 
+    <string name="share">Share</string>
+    <string name="skip">Skip</string>
+    <string name="face_photo">Face Photo</string>
+    <string name="face_gallery">Face Gallery</string>
+    <string name="ok">OK</string>
 
+    <string name="select_image">Please select image.</string>
 </resources>

@@ -25,6 +25,7 @@ import android.view.TextureView;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -415,7 +416,18 @@ class Camera2 extends CameraViewImpl{
     }
 
     private void prepareImageReader() {
-        Size largest = mPictureSizes.sizes(mAspectRatio).last();
+        //Size largest = mPictureSizes.sizes(mAspectRatio).last();
+        Size largest = mPictureSizes.sizes(mAspectRatio).first();
+        Iterator it = mPictureSizes.sizes(mAspectRatio).iterator();
+        while (it.hasNext()) {
+            // Get employee name and age
+            Size size = (Size) it.next();
+            if(size.getHeight() > 960)
+            {
+                largest = size;
+                break;
+            }
+        }
         mImageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(),
                 ImageFormat.JPEG, /* maxImages */ 2);
         mImageReader.setOnImageAvailableListener(mOnImageAvailableListener, null);

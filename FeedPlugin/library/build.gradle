@@ -63,7 +63,7 @@ dependencies {
 
 task releaseDeploy {
     doLast {
-        def name_prefix = "${project.name}_${AppVersionCode}_${buildDate}_${revisionHash}"
+        def name_prefix = "${project.name}_Release"
         def mapping_suffix = "_mapping.zip"
         def mapping_name = "${name_prefix}${mapping_suffix}"
         def mapping_dest = "build/distributions/${mapping_name}"

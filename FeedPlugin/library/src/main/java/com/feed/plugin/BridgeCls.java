@@ -47,4 +47,17 @@ public class BridgeCls{
         intent.putExtra(EXTRA_FEEDIMG_PATH, imgUrl);
         context.startActivity(intent);
     }
+
+    public void startFacePhotoActivity(Context context)
+    {
+        Intent intent = new Intent(context, FacePhotoActivity.class);
+        context.startActivity(intent);
+    }
+
+    public void startProfileActivity(Context context)
+    {
+        Intent intent = new Intent(context, ProfileActivity.class);
+        context.startActivity(intent);
+    }
+
 }

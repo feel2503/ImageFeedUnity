@@ -15,6 +15,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.feed.plugin.ImgSelectActivity;
+import com.feed.plugin.ProfileActivity;
 import com.feed.plugin.R;
 import com.feed.plugin.widget.camera.CameraView;
 import com.feed.plugin.widget.cropimgview.util.CropUtils;
@@ -197,7 +198,16 @@ public class CameraViewFragment extends ImgSelFragment
                     ArrayList<String> arrImg = new ArrayList<String>();
                     arrImg.add(filePath);
 
-                    ((ImgSelectActivity)getActivity()).startResultActivity(arrImg);
+                    //((ImgSelectActivity)getActivity()).startResultActivity(arrImg);
+                    if(getActivity() instanceof ImgSelectActivity)
+                    {
+                        ((ImgSelectActivity)getActivity()).startResultActivity(arrImg);
+                    }
+                    else if(getActivity() instanceof ProfileActivity)
+                    {
+                        ((ProfileActivity)getActivity()).startResultActivity(arrImg);
+                    }
+
                 }
             });
         }

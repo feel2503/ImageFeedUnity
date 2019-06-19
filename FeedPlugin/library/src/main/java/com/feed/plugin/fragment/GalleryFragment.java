@@ -405,6 +405,7 @@ public class GalleryFragment extends ImgSelFragment{
                     //mImgViewLayout.topMargin = (int)getResources().getDimension(R.dimen.view_min);
                     mRelImgViewer.setLayoutParams(mImgViewLayout);
                     //mRelImgViewer.setVisibility(View.GONE);
+                    mBtnViewState.setBackgroundResource(R.drawable.btn_gallery_slide_down);
                     imgViewState = false;
                 }
                 else
@@ -414,6 +415,7 @@ public class GalleryFragment extends ImgSelFragment{
                     mRelImgViewer.setLayoutParams(mImgViewLayout);
 
                     //mRelImgViewer.setVisibility(View.VISIBLE);
+                    mBtnViewState.setBackgroundResource(R.drawable.btn_gallery_slide);
                     imgViewState = true;
                 }
             }
