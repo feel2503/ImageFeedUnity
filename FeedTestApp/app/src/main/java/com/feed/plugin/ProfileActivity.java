@@ -25,7 +25,9 @@ import com.feed.plugin.widget.SwipeViewPager;
 import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity{
-    private final int REQEUST_PERFMSSION_CODE = 0x1001;
+    private int REQEUST_PERFMSSION_CODE = 0x1001;
+    private int REQUEST_IMAGE_FILTER = 0x1002;
+
     private String[] REQUIRED_PERMISSIONS  = {Manifest.permission.CAMERA, // 카메라
             Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};  // 외부 저장소
 
@@ -129,6 +131,18 @@ public class ProfileActivity extends AppCompatActivity{
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == REQUEST_IMAGE_FILTER)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                finish();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     public void setPagingEnabled(boolean enabled)
     {
         mViewPager.setPagingEnabled(enabled);
@@ -138,8 +152,9 @@ public class ProfileActivity extends AppCompatActivity{
         Intent intent = new Intent();
         //intent.setClass(getApplicationContext(), ImgEditActivity.class);
         intent.setClass(getApplicationContext(), ImgFilterActivity.class);
-        intent.putStringArrayListExtra("ImageList", imgList);
-        startActivity(intent);
+        intent.putStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST, imgList);
+        intent.putExtra(BridgeCls.EXTRA_ACTIVITY_MODE, BridgeCls.ACTIVITY_MODE_PROFILE);
+        startActivityForResult(intent, REQUEST_IMAGE_FILTER);
         imgList.clear();
     }
 

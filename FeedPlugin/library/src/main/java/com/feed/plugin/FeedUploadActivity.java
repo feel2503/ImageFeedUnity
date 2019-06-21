@@ -27,7 +27,7 @@ public class FeedUploadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed_upload);
 
-        mImagList = getIntent().getStringArrayListExtra("ImageList");
+        mImagList = getIntent().getStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST);
 
         mImgView = (ImageView)findViewById(R.id.img_feedImglist);
 
@@ -39,6 +39,7 @@ public class FeedUploadActivity extends AppCompatActivity {
         }
 
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
+        findViewById(R.id.text_share).setOnClickListener(mOnClickListener);
         mImgView.setOnClickListener(mOnClickListener);
 
         // hashtag
@@ -61,19 +62,21 @@ public class FeedUploadActivity extends AppCompatActivity {
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(v.getId() == R.id.btn_next)
+            if(v.getId() == R.id.text_share)
             {
-
+                setResult(RESULT_OK);
+                finish();
             }
             else if(v.getId() == R.id.btn_back)
             {
+                setResult(RESULT_CANCELED);
                 finish();
             }
             else if(v.getId() == R.id.img_feedImglist)
             {
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), ImageViewActivity.class);
-                intent.putStringArrayListExtra("ImageList", mImagList);
+                intent.putStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST, mImagList);
                 startActivity(intent);
             }
         }

@@ -23,7 +23,7 @@ public class ImageViewActivity extends AppCompatActivity{
 
         setContentView(R.layout.activity_image_view);
 
-        mImagList = getIntent().getStringArrayListExtra("ImageList");
+        mImagList = getIntent().getStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST);
 
         mImagePager = (ViewPager)findViewById(R.id.viewpager_image_view) ;
         mImageAdapter = new ImageViewSlideAdapter(getApplicationContext());

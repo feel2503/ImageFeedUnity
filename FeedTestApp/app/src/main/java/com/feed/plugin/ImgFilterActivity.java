@@ -46,11 +46,13 @@ import java.util.List;
 public class ImgFilterActivity extends AppCompatActivity{
 
     private int REQUEST_NOTICE = 0x1001;
+    private int REQUEST_FEED_UPLOAD = 0x1002;
+
     private int FILTER_STATE_TRANS_FILTER = 0;
     private int FILTER_STATE_EDIT_FILTER = 1;
     private int mCurrentFilterState = FILTER_STATE_TRANS_FILTER;
 
-    private boolean isCallByUnity = false;
+    //private boolean isCallByUnity = false;
     private ArrayList<String> mImagList;
     private ArrayList<String> mFilterImgList;
 
@@ -84,6 +86,7 @@ public class ImgFilterActivity extends AppCompatActivity{
 
     protected ProgressDialog mProgress = null;
 
+    private String mStrActivitMode;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -96,18 +99,13 @@ public class ImgFilterActivity extends AppCompatActivity{
         findViewById(R.id.btn_next).setOnClickListener(mOnClickListener);
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
 
-        String editImgPath = getIntent().getStringExtra(BridgeCls.EXTRA_EDITIMG_PATH);
+        String editImgPath = getIntent().getStringExtra(BridgeCls.EXTRA_EDITIMG_LIST);
 
-        if(editImgPath != null)
-        {
-            isCallByUnity = true;
-            mImagList = new ArrayList<>();
-            mImagList.add(editImgPath);
-        }
-        else
-        {
-            mImagList = getIntent().getStringArrayListExtra("ImageList");
-        }
+        Intent intent = getIntent();
+
+        mImagList = intent.getStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST);
+        mStrActivitMode = intent.getStringExtra(BridgeCls.EXTRA_ACTIVITY_MODE);
+
 
         // gpuimageviewer init
         mGPUImagePager = (ViewPager)findViewById(R.id.viewpager_gpuimage) ;
@@ -173,6 +171,14 @@ public class ImgFilterActivity extends AppCompatActivity{
             else
             {
 
+            }
+        }
+        else if(requestCode == REQUEST_FEED_UPLOAD)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                setResult(RESULT_OK);
+                finish();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -350,20 +356,32 @@ public class ImgFilterActivity extends AppCompatActivity{
             {
                 mSavedImgCount= 0;
 
-                if(isCallByUnity)
+                if(mStrActivitMode == null || mStrActivitMode.length() < 1)
+                {
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), FeedUploadActivity.class);
+                    intent.putStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST, mFilterImgList);
+                    startActivityForResult(intent, REQUEST_FEED_UPLOAD);
+                }
+                else if(mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_PROFILE))
                 {
                     UnityPlayer.UnitySendMessage("Manager","AndroidToUnity",imgUrl);
                     //UnityPlayer.UnitySendMessage("게임 오브젝트 이름","함수 이름","String 인자");
 
+                    BridgeCls.mStrProfilePath = imgUrl;
+                    setResult(RESULT_OK);
                     finish();
                 }
-                else
+                else if(mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_FILTER))
                 {
-                    Intent intent = new Intent();
-                    intent.setClass(getApplicationContext(), FeedUploadActivity.class);
-                    intent.putStringArrayListExtra("ImageList", mFilterImgList);
-                    startActivity(intent);
+                    UnityPlayer.UnitySendMessage("Manager","AndroidToUnity",imgUrl);
+                    //UnityPlayer.UnitySendMessage("게임 오브젝트 이름","함수 이름","String 인자");
+
+                    BridgeCls.mStrFilterPath = imgUrl;
+                    setResult(RESULT_OK);
+                    finish();
                 }
+
             }
         }
     };
@@ -685,10 +703,36 @@ public class ImgFilterActivity extends AppCompatActivity{
 
             if(groupFilter.getFilters().size() < 1)
             {
-                Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), FeedUploadActivity.class);
-                intent.putStringArrayListExtra("ImageList", mImagList);
-                startActivity(intent);
+                if(mStrActivitMode == null || mStrActivitMode.length() < 1)
+                {
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), FeedUploadActivity.class);
+                    intent.putStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST, mImagList);
+                    startActivityForResult(intent, REQUEST_FEED_UPLOAD);
+                }
+                else if(mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_PROFILE))
+                {
+                    UnityPlayer.UnitySendMessage("Manager","AndroidToUnity",mImagList.get(0));
+                    //UnityPlayer.UnitySendMessage("게임 오브젝트 이름","함수 이름","String 인자");
+
+                    BridgeCls.mStrProfilePath = mImagList.get(0);
+                    setResult(RESULT_OK);
+                    finish();
+                }
+                else if(mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_FILTER))
+                {
+                    UnityPlayer.UnitySendMessage("Manager","AndroidToUnity",mImagList.get(0));
+                    //UnityPlayer.UnitySendMessage("게임 오브젝트 이름","함수 이름","String 인자");
+
+                    BridgeCls.mStrFilterPath = mImagList.get(0);
+                    setResult(RESULT_OK);
+                    finish();
+                }
+
+//                Intent intent = new Intent();
+//                intent.setClass(getApplicationContext(), FeedUploadActivity.class);
+//                intent.putStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST, mImagList);
+//                startActivityForResult(intent, REQUEST_FEED_UPLOAD);
             }
             else
             {

@@ -82,7 +82,7 @@ public class ImgEditActivity extends AppCompatActivity{
 
         mProgress = new ProgressDialog(this);
 
-        String editImgPath = getIntent().getStringExtra(BridgeCls.EXTRA_EDITIMG_PATH);
+        String editImgPath = getIntent().getStringExtra(BridgeCls.EXTRA_EDITIMG_LIST);
         if(editImgPath != null)
         {
             isCallByUnity = true;
@@ -91,7 +91,7 @@ public class ImgEditActivity extends AppCompatActivity{
         }
         else
         {
-            mImagList = getIntent().getStringArrayListExtra("ImageList");
+            mImagList = getIntent().getStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST);
         }
 
         //mImgView = (GPUImageView)findViewById(R.id.gpuimage);
@@ -301,7 +301,7 @@ public class ImgEditActivity extends AppCompatActivity{
                 {
                     Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), FeedUploadActivity.class);
-                    intent.putStringArrayListExtra("ImageList", mImagList);
+                    intent.putStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST, mImagList);
                     startActivity(intent);
                 }
 
@@ -501,7 +501,7 @@ public class ImgEditActivity extends AppCompatActivity{
 
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), FeedUploadActivity.class);
-            intent.putStringArrayListExtra("ImageList", mImagList);
+            intent.putStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST, mImagList);
             startActivity(intent);
         }
     };

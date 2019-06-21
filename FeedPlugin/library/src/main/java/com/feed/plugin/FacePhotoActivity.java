@@ -96,6 +96,18 @@ public class FacePhotoActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_GALLERY_SELECT)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                finish();
+            }
+        }
+    }
+
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -201,6 +213,8 @@ public class FacePhotoActivity extends AppCompatActivity{
                     Log.d("AAAA", "---------- picurl : "+filePath);
                     Log.d("AAAA", "---------- picurl : "+filePath);
                     UnityPlayer.UnitySendMessage("AndroidManager", "CallByFacePhoto", filePath);
+
+                    BridgeCls.mStrFacePath = filePath;
 
 //                    Intent msgIntent = new Intent();
 //                    msgIntent.setClass(getApplicationContext(), UnityExtActivity.class);

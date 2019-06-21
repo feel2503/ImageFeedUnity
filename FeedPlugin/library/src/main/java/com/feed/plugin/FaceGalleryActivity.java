@@ -71,6 +71,7 @@ public class FaceGalleryActivity extends AppCompatActivity{
         public void onClick(View v){
             if(v.getId() == R.id.btn_back)
             {
+                setResult(RESULT_CANCELED);
                 finish();
             }
             else if(v.getId() == R.id.text_ok)
@@ -80,7 +81,10 @@ public class FaceGalleryActivity extends AppCompatActivity{
                     Log.d("AAAA", "---------- mSelectImgPath : "+mSelectImgPath);
                     Log.d("AAAA", "---------- mSelectImgPath : "+mSelectImgPath);
                     UnityPlayer.UnitySendMessage("AndroidManager","CallByFacePhoto", mSelectImgPath);
-                    //finish();
+
+                    BridgeCls.mStrFacePath = mSelectImgPath;
+                    setResult(RESULT_OK);
+                    finish();
                 }
                 else
                 {

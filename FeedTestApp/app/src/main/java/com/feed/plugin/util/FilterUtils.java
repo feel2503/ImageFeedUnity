@@ -322,8 +322,6 @@ public class FilterUtils{
         filterTypes.add(new FilterTypeItem("Sepia", FilterType.SEPIA));
         filterTypes.add(new FilterTypeItem("Grayscale", FilterType.GRAYSCALE));
         filterTypes.add(new FilterTypeItem("Sobel", FilterType.SOBEL_EDGE_DETECTION));
-        //filterTypes.add(new FilterTypeItem("Threshold", FilterType.THRESHOLD_EDGE_DETECTION));
-        //filterTypes.add(new FilterTypeItem("3x3 Convolution", FilterType.THREE_X_THREE_CONVOLUTION));
         filterTypes.add(new FilterTypeItem("Emboss", FilterType.EMBOSS));
         filterTypes.add(new FilterTypeItem("Posterize", FilterType.POSTERIZE));
         filterTypes.add(new FilterTypeItem("Grouped filters", FilterType.FILTER_GROUP));
@@ -341,8 +339,6 @@ public class FilterUtils{
         filterTypes.add(new FilterTypeItem("CGA Color Space", FilterType.CGA_COLORSPACE));
         filterTypes.add(new FilterTypeItem("Dilation", FilterType.DILATION));
         filterTypes.add(new FilterTypeItem("Kuwahara", FilterType.KUWAHARA));
-        //filterTypes.add(new FilterTypeItem("RGB Dilation", FilterType.RGB_DILATION));
-        //filterTypes.add(new FilterTypeItem("Sketch", FilterType.SKETCH));
         filterTypes.add(new FilterTypeItem("Toon", FilterType.TOON));
         filterTypes.add(new FilterTypeItem("Smooth Toon", FilterType.SMOOTH_TOON));
         filterTypes.add(new FilterTypeItem("Halftone", FilterType.HALFTONE));
