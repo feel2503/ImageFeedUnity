@@ -31,7 +31,7 @@
 
         <activity android:name=".NoticeDialog"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             android:theme="@android:style/Theme.Dialog" />
 
 

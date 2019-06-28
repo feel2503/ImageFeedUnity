@@ -1,6 +1,7 @@
 package com.feed.plugin;
 
 import android.app.Activity;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +26,15 @@ public class NoticeDialog extends Activity{
         findViewById(R.id.text_no).setOnClickListener(mOnClickListener);
     }
 
+
+    @Override
+    public void setRequestedOrientation(int requestedOrientation){
+        //
+        if (Build.VERSION.SDK_INT != Build.VERSION_CODES.O) {
+            super.setRequestedOrientation(requestedOrientation);
+        }
+
+    }
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener(){
         @Override

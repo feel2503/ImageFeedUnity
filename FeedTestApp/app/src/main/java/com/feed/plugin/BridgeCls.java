@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.unity3d.player.UnityPlayer;
+
+import java.io.File;
 import java.util.ArrayList;
 
 public class BridgeCls{
@@ -57,6 +60,10 @@ public class BridgeCls{
         }
         else
         {
+            File file = new File(imgUrl);
+            if(!file.exists())
+                return;
+
             imgList = new ArrayList<>();
             imgList.add(imgUrl);
         }
@@ -77,12 +84,16 @@ public class BridgeCls{
         }
         else
         {
+            File file = new File(imgUrl);
+            if(!file.exists())
+                return;
+
             imgList = new ArrayList<>();
             imgList.add(imgUrl);
         }
 
         Intent intent = new Intent(context, FeedUploadActivity.class);
-        intent.putExtra(EXTRA_FEEDIMG_PATH, imgUrl);
+        intent.putExtra(EXTRA_EDITIMG_LIST, imgList);
         context.startActivity(intent);
     }
 
@@ -98,4 +109,12 @@ public class BridgeCls{
         context.startActivity(intent);
     }
 
+
+    public void requestFilterImg(Context context)
+    {
+
+        UnityPlayer.UnitySendMessage("AndroidManager", "CallByFacePhoto", "------- requestFilterImg ------");
+        UnityPlayer.UnitySendMessage("AndroidManager", "CallByFacePhoto", "------- requestFilterImg ------");
+
+    }
 }

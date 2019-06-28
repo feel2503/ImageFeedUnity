@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
@@ -154,8 +155,17 @@ public class ImgFilterActivity extends AppCompatActivity{
     @Override
     public void onBackPressed(){
         //super.onBackPressed();
-        Intent intent = new Intent(getApplicationContext(), NoticeDialog.class);
-        startActivityForResult(intent, REQUEST_NOTICE);
+        if(mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_FILTER))
+        {
+            super.onBackPressed();
+            return;
+        }
+        else
+        {
+            Intent intent = new Intent(getApplicationContext(), NoticeDialog.class);
+            startActivityForResult(intent, REQUEST_NOTICE);
+        }
+
     }
 
     @Override
@@ -241,6 +251,9 @@ public class ImgFilterActivity extends AppCompatActivity{
 
             if(mCurrentFilterState == FILTER_STATE_TRANS_FILTER)
             {
+                if(mCurrentTransFilter == null)
+                    return;
+
                 //mCurrentTransFilter.setValue(progress);
                 mCurrentTransFilter.setFilterValue(progress);
                 groupFilter.addFilter(mCurrentTransFilter.getFilter());
@@ -365,7 +378,7 @@ public class ImgFilterActivity extends AppCompatActivity{
                 }
                 else if(mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_PROFILE))
                 {
-                    UnityPlayer.UnitySendMessage("Manager","AndroidToUnity",imgUrl);
+                    UnityPlayer.UnitySendMessage("FeedModule","SetProfilePath",imgUrl);
                     //UnityPlayer.UnitySendMessage("게임 오브젝트 이름","함수 이름","String 인자");
 
                     BridgeCls.mStrProfilePath = imgUrl;
@@ -374,9 +387,7 @@ public class ImgFilterActivity extends AppCompatActivity{
                 }
                 else if(mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_FILTER))
                 {
-                    UnityPlayer.UnitySendMessage("Manager","AndroidToUnity",imgUrl);
-                    //UnityPlayer.UnitySendMessage("게임 오브젝트 이름","함수 이름","String 인자");
-
+                    UnityPlayer.UnitySendMessage("FeedModule","SetFilterImagePath",imgUrl);
                     BridgeCls.mStrFilterPath = imgUrl;
                     setResult(RESULT_OK);
                     finish();
@@ -436,6 +447,12 @@ public class ImgFilterActivity extends AppCompatActivity{
             }
             else if(v.getId() == R.id.btn_back)
             {
+                if(mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_FILTER))
+                {
+                    finish();
+                    return;
+                }
+
                 Intent intent = new Intent(getApplicationContext(), NoticeDialog.class);
                 startActivityForResult(intent, REQUEST_NOTICE);
             }
@@ -712,8 +729,10 @@ public class ImgFilterActivity extends AppCompatActivity{
                 }
                 else if(mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_PROFILE))
                 {
-                    UnityPlayer.UnitySendMessage("Manager","AndroidToUnity",mImagList.get(0));
+                    //UnityPlayer.UnitySendMessage("FeedModule","AndroidToUnity",mImagList.get(0));
                     //UnityPlayer.UnitySendMessage("게임 오브젝트 이름","함수 이름","String 인자");
+
+                    UnityPlayer.UnitySendMessage("FeedModule","SetProfilePath",mImagList.get(0));
 
                     BridgeCls.mStrProfilePath = mImagList.get(0);
                     setResult(RESULT_OK);
@@ -721,8 +740,9 @@ public class ImgFilterActivity extends AppCompatActivity{
                 }
                 else if(mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_FILTER))
                 {
-                    UnityPlayer.UnitySendMessage("Manager","AndroidToUnity",mImagList.get(0));
                     //UnityPlayer.UnitySendMessage("게임 오브젝트 이름","함수 이름","String 인자");
+                    //UnityPlayer.UnitySendMessage("게임 오브젝트 이름","함수 이름","String 인자");
+                    UnityPlayer.UnitySendMessage("FeedModule","SetFilterImagePath",mImagList.get(0));
 
                     BridgeCls.mStrFilterPath = mImagList.get(0);
                     setResult(RESULT_OK);

@@ -212,7 +212,7 @@ public class FacePhotoActivity extends AppCompatActivity{
 
                     Log.d("AAAA", "---------- picurl : "+filePath);
                     Log.d("AAAA", "---------- picurl : "+filePath);
-                    UnityPlayer.UnitySendMessage("AndroidManager", "CallByFacePhoto", filePath);
+                    UnityPlayer.UnitySendMessage("FeedModule", "SetFacePhotoPath", filePath);
 
                     BridgeCls.mStrFacePath = filePath;
 

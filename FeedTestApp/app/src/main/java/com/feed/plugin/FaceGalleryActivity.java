@@ -79,10 +79,10 @@ public class FaceGalleryActivity extends AppCompatActivity{
                 if(mSelectImgPath != null && mSelectImgPath.length() > 0)
                 {
                     Log.d("AAAA", "---------- mSelectImgPath : "+mSelectImgPath);
-                    Log.d("AAAA", "---------- mSelectImgPath : "+mSelectImgPath);
-                    UnityPlayer.UnitySendMessage("AndroidManager","CallByFacePhoto", mSelectImgPath);
+                    UnityPlayer.UnitySendMessage("FeedModule","SetFacePhotoPath", mSelectImgPath);
 
                     BridgeCls.mStrFacePath = mSelectImgPath;
+
                     setResult(RESULT_OK);
                     finish();
                 }
