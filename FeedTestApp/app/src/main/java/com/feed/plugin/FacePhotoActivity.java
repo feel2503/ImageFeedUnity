@@ -64,6 +64,7 @@ public class FacePhotoActivity extends AppCompatActivity{
         mBtnGallery.setOnClickListener(mOnClickListener);
 
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
+        findViewById(R.id.text_share).setOnClickListener(mOnClickListener);
 
     }
 
@@ -94,6 +95,12 @@ public class FacePhotoActivity extends AppCompatActivity{
             }
             mBackgroundHandler = null;
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        UnityPlayer.UnitySendMessage("FeedModule", "SetFacePhotoPath", "BACK");
     }
 
     @Override
@@ -133,6 +140,12 @@ public class FacePhotoActivity extends AppCompatActivity{
             }
             else if(v.getId() == R.id.btn_back)
             {
+                UnityPlayer.UnitySendMessage("FeedModule", "SetFacePhotoPath", "BACK");
+                finish();
+            }
+            else if(v.getId() == R.id.text_share)
+            {
+                UnityPlayer.UnitySendMessage("FeedModule", "SetFacePhotoPath", "SKIP");
                 finish();
             }
         }
@@ -182,13 +195,13 @@ public class FacePhotoActivity extends AppCompatActivity{
 
         @Override
         public void onPictureTaken(CameraView cameraView, final byte[] data) {
-            Toast.makeText(cameraView.getContext(), "onPictureTaken", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(cameraView.getContext(), "onPictureTaken", Toast.LENGTH_SHORT).show();
             getBackgroundHandler().post(new Runnable() {
                 @Override
                 public void run() {
                     // This demo app saves the taken picture to a constant file.
                     //File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),"picture.jpg");
-                    String filePath = CropUtils.getDirPath() + "/"+"facephoto.jpg";
+                    String filePath = CropUtils.getDirPath(getApplicationContext()) + "/"+"facephoto.jpg";
                     final File file = new File(filePath);
                     if(file.exists())
                         file.delete();

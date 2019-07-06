@@ -41,6 +41,12 @@ public class EditImageFragment extends Fragment implements FilterSelectListener{
         return mAdapter.getEditItemList();
     }
 
+    public void initSelected()
+    {
+        mAdapter.initSelected();
+        mAdapter.notifyDataSetChanged();
+    }
+
     public void setEditItemList(ArrayList<ThumbnailItem> editItemList){
         mAdapter.setEditItemList(editItemList);
     }

@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +68,8 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
     private Bitmap.CompressFormat mCompressFormat = Bitmap.CompressFormat.PNG;
     private int mSavePos = 0;
 
+    private int PROFILE_SCALE_SIZE = 512;
+
     Handler mHandler = new Handler()
     {
         @Override
@@ -108,15 +111,36 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
 
         mImageView = (CookieCutterImageView)rootView.findViewById(R.id.img_selimg);
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        ViewGroup.LayoutParams params = mImageView.getLayoutParams();
+        params.height = width;
+        mImageView.setLayoutParams(params);
+
+        LinearLayout galleryLayout = (LinearLayout)rootView.findViewById(R.id.gallery_layout);
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams)galleryLayout.getLayoutParams();
+        lp.setMargins(0, width, 0, 0);
+        galleryLayout.setLayoutParams(lp);
+
+
+
         initRecyclerGallery();
 
         mHandler.sendEmptyMessageDelayed(1, 200);
         return rootView;
     }
 
-    /**
-     * 갤러리 아미지 데이터 초기화
-     */
+    @Override
+    public void onResume(){
+        super.onResume();
+
+
+    }
+
+
     private List<PhotoVO> initGalleryPathList() {
 
         mGalleryManager = new GalleryManager(getContext());
@@ -124,9 +148,6 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
         return mGalleryManager.getAllPhotoPathList();
     }
 
-    /**
-     * 갤러리 리사이클러뷰 초기화
-     */
     private void initRecyclerGallery() {
 
         //galleryAdapter = new GalleryAdapter(getActivity(), initGalleryPathList(), R.layout.item_photo);
@@ -207,30 +228,12 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
         String fileName = "crop" + title + "." + CropUtils.getMimeType(format);
         String path = dirPath + "/" + fileName;
 
-//        File file = new File(path);
-//        ContentValues values = new ContentValues();
-//        values.put(MediaStore.Images.Media.TITLE, title);
-//        values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
-//        values.put(MediaStore.Images.Media.MIME_TYPE, "image/" + CropUtils.getMimeType(format));
-//        values.put(MediaStore.Images.Media.DATA, path);
-//        long time = currentTimeMillis / 1000;
-//        values.put(MediaStore.MediaColumns.DATE_ADDED, time);
-//        values.put(MediaStore.MediaColumns.DATE_MODIFIED, time);
-//        if(file.exists()){
-//            values.put(MediaStore.Images.Media.SIZE, file.length());
-//        }
-//        ContentResolver resolver = context.getContentResolver();
-//        Uri uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-//        return uri;
-
         path = "file://" + path;
         Uri newUri = Uri.parse(path);
         return newUri;
 
     }
-    /**
-     * 리사이클러뷰 아이템 선택시 호출 되는 리스너
-     */
+
     private OnItemClickListener mOnItemClickListener = new OnItemClickListener() {
 
         @Override
@@ -256,7 +259,7 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
             if(mArrImgList.size() < 1)
                 mArrImgList.add(imgPath);
             else
-                mArrImgList.set(0, imgPath);    // 일단 하나만
+                mArrImgList.set(0, imgPath);
 
             galleryAdapter.getmPhotoList().set(position,photoVO);
             galleryAdapter.notifyDataSetChanged();
@@ -270,15 +273,19 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
         @Override
         protected Void doInBackground(final Void... params) {
             Bitmap image = mImageView.getCroppedBitmap();
+
+            // scale
+            image = CropUtils.getScaledBitmap(image, PROFILE_SCALE_SIZE, PROFILE_SCALE_SIZE);
+
             File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            String filePath = CropUtils.getDirPath();
+            String filePath = CropUtils.getDirPath(getContext());
             String savePath = filePath + "/" + profileImageName;
 
             File file = new File(savePath);
             try {
                 file.getParentFile().mkdirs();
                 FileOutputStream out = new FileOutputStream(file);
-                image.compress(Bitmap.CompressFormat.JPEG, 80, out);
+                image.compress(Bitmap.CompressFormat.JPEG, 100, out);
                 out.flush();
                 out.close();
                 mCropImgList.add(savePath);

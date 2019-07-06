@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffffffff">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="42.5dp"
+        android:background="#ffffffff">
+
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="42.5dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/button_arrow_back"
+            android:scaleType="center"
+            android:background="#ffffff"/>
+
+        <!--<TextView-->
+            <!--android:id="@+id/text_share"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:padding="10dp"-->
+            <!--android:gravity="center"-->
+            <!--android:text="@string/skip" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/text_title"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:gravity="center"-->
+            <!--android:textColor="#ff000000"-->
+            <!--android:textSize="14dp"-->
+            <!--android:textAllCaps="true"-->
+            <!--android:text="@string/face_photo"/>-->
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/relative_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <Button
+                android:id="@+id/button_main_capture"
+                android:layout_width="62dp"
+                android:layout_height="62dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="13dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/button_camera_shutter"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <Button
+                        android:id="@+id/btn_camera_rotate"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/button_camera_rotate"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+
+
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/relative_button">
+
+            <com.feed.plugin.widget.camera.CameraView
+                android:id="@+id/camera_preview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+
+
+            <ToggleButton
+                android:id="@+id/btn_camera_flash_mode"
+                android:layout_width="20dp"
+                android:layout_height="32dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_alignParentRight="true"
+                android:button="@drawable/toggle_camera_flash_mode"
+                android:background="@null"
+                android:textOn=""
+                android:textOff=""/>
+
+
+        </RelativeLayout>
+
+
+
+
+
+
+    </RelativeLayout>
+</LinearLayout>

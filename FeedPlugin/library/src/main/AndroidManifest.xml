@@ -53,6 +53,14 @@
             android:name=".ProfileActivity"
             android:theme="@style/AppTheme_NoTitle" />
 
+        <activity android:name=".ProfileGalleryActivity"
+            android:theme="@style/AppTheme_NoTitle" >
+        </activity>
+
+        <activity android:name=".ProfilePhotoActivity"
+            android:theme="@style/AppTheme_NoTitle" >
+        </activity>
+
     </application>
 
 </manifest>

@@ -571,10 +571,10 @@ import static android.graphics.Bitmap.createBitmap;
 
   public static String getDirPath(Context context)
   {
-    //String path = context.getExternalFilesDir(null).getPath();
-    //return path;
+    String path = context.getExternalFilesDir(null).getPath();
+    return path;
 
-    return getDirPath();
+    //return getDirPath();
   }
 
   public static String getDirPath() {
@@ -594,6 +594,8 @@ import static android.graphics.Bitmap.createBitmap;
     }
     return dirPath;
   }
+
+
 
 
 }

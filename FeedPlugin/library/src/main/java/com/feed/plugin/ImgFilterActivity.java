@@ -8,6 +8,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -88,6 +90,47 @@ public class ImgFilterActivity extends AppCompatActivity{
     protected ProgressDialog mProgress = null;
 
     private String mStrActivitMode;
+
+
+
+    Handler mHandler = new Handler()
+    {
+        @Override
+        public void dispatchMessage(Message msg){
+            super.dispatchMessage(msg);
+            // gpuimageviewer init
+            mGPUImagePager = (ViewPager)findViewById(R.id.viewpager_gpuimage) ;
+            mGPUImageAdapter = new GpuimageSlideAdapter(getApplicationContext());
+            initGPUImageList();
+            mGPUImagePager.setAdapter(mGPUImageAdapter);
+            mGPUImagePager.addOnPageChangeListener(mOnViewChangeListener);
+
+
+            mFiltersListFragment.initSelected();
+            mEditImageFragment.initSelected();
+            mViewPager.setCurrentItem(0);
+
+            mCurrentTransFilter = null;
+            mCurrentEditFilter = new GPUImgItem();
+
+//            mGPUImagePager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+//                @Override
+//                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){ }
+//
+//                @Override
+//                public void onPageSelected(int position)
+//                {
+//                    mCurrentGPUImage = mGPUImgList.get(position);
+//                    mFiltersListFragment.updateThumbnail(mImagList.get(position));
+//                }
+//
+//                @Override
+//                public void onPageScrollStateChanged(int state){ }
+//            });
+
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -113,20 +156,22 @@ public class ImgFilterActivity extends AppCompatActivity{
         mGPUImageAdapter = new GpuimageSlideAdapter(getApplicationContext());
         initGPUImageList();
         mGPUImagePager.setAdapter(mGPUImageAdapter);
-        mGPUImagePager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){ }
+        mGPUImagePager.addOnPageChangeListener(mPageChangeListener);
 
-            @Override
-            public void onPageSelected(int position)
-            {
-                mCurrentGPUImage = mGPUImgList.get(position);
-                mFiltersListFragment.updateThumbnail(mImagList.get(position));
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state){ }
-        });
+//        mGPUImagePager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){ }
+//
+//            @Override
+//            public void onPageSelected(int position)
+//            {
+//                mCurrentGPUImage = mGPUImgList.get(position);
+//                mFiltersListFragment.updateThumbnail(mImagList.get(position));
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state){ }
+//        });
 
         // filterlist init
         setupViewPager();
@@ -147,15 +192,19 @@ public class ImgFilterActivity extends AppCompatActivity{
         mTextCancel.setOnClickListener(mOnClickListener);
         mTextDone = (TextView)findViewById(R.id.text_done);
         mTextDone.setOnClickListener(mOnClickListener);
+    }
 
 
+    @Override
+    protected void onResume(){
+        super.onResume();
 
     }
 
     @Override
     public void onBackPressed(){
         //super.onBackPressed();
-        if(mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_FILTER))
+        if(mStrActivitMode != null && mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_FILTER))
         {
             super.onBackPressed();
             return;
@@ -190,6 +239,11 @@ public class ImgFilterActivity extends AppCompatActivity{
                 setResult(RESULT_OK);
                 finish();
             }
+            else if(resultCode == RESULT_CANCELED)
+            {
+                mHandler.sendEmptyMessageDelayed(1, 200);
+                //mCurrentGPUImage.requestRender();
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -207,9 +261,11 @@ public class ImgFilterActivity extends AppCompatActivity{
         mGPUImageAdapter.setImages(mGPUImgList);
     }
 
-    private void setupViewPager() {
+    private void setupViewPager()
+    {
         mViewPager = (SwipeViewPager)findViewById(R.id.edit_viewpager);
         mViewPager.setPagingEnabled(false);
+        mViewPager.addOnPageChangeListener(mOnViewChangeListener);
 
         mEditPagerAdapter = new EditViewPagerAdapter(getSupportFragmentManager());
 
@@ -228,7 +284,7 @@ public class ImgFilterActivity extends AppCompatActivity{
 
         mViewPager.setAdapter(mEditPagerAdapter);
 
-        mViewPager.addOnPageChangeListener(mOnViewChangeListener);
+
     }
 
     private void deleteImgFiles()
@@ -242,6 +298,24 @@ public class ImgFilterActivity extends AppCompatActivity{
             }
         }
     }
+
+    private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener(){
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){
+
+        }
+
+        @Override
+        public void onPageSelected(int position){
+            mCurrentGPUImage = mGPUImgList.get(position);
+            mFiltersListFragment.updateThumbnail(mImagList.get(position));
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state){
+
+        }
+    };
 
     private SeekBar.OnSeekBarChangeListener mOnSeekbarChangeListener = new SeekBar.OnSeekBarChangeListener(){
         @Override
@@ -358,7 +432,7 @@ public class ImgFilterActivity extends AppCompatActivity{
                 }
             }
 
-            showProgress(ImgFilterActivity.this, false);
+
 
             if(mFilterImgList == null)
                 mFilterImgList = new ArrayList<String>();
@@ -371,6 +445,8 @@ public class ImgFilterActivity extends AppCompatActivity{
 
                 if(mStrActivitMode == null || mStrActivitMode.length() < 1)
                 {
+                    showProgress(ImgFilterActivity.this, false);
+
                     Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), FeedUploadActivity.class);
                     intent.putStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST, mFilterImgList);
@@ -378,8 +454,9 @@ public class ImgFilterActivity extends AppCompatActivity{
                 }
                 else if(mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_PROFILE))
                 {
+                    showProgress(ImgFilterActivity.this, false);
+
                     UnityPlayer.UnitySendMessage("FeedModule","SetProfilePath",imgUrl);
-                    //UnityPlayer.UnitySendMessage("게임 오브젝트 이름","함수 이름","String 인자");
 
                     BridgeCls.mStrProfilePath = imgUrl;
                     setResult(RESULT_OK);
@@ -387,6 +464,8 @@ public class ImgFilterActivity extends AppCompatActivity{
                 }
                 else if(mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_FILTER))
                 {
+                    showProgress(ImgFilterActivity.this, false);
+
                     UnityPlayer.UnitySendMessage("FeedModule","SetFilterImagePath",imgUrl);
                     BridgeCls.mStrFilterPath = imgUrl;
                     setResult(RESULT_OK);
@@ -407,47 +486,10 @@ public class ImgFilterActivity extends AppCompatActivity{
                 AsyncSetFilter async = new AsyncSetFilter();
                 async.execute();
 
-//                ArrayList<GPUImageFilter> filters = new ArrayList<GPUImageFilter>();
-//
-//                GPUImageFilterGroup groupFilter = new GPUImageFilterGroup();
-//                if(mCurrentTransFilter != null)
-//                {
-//                    //filters.add(mCurrentTransFilter.getFilter());
-//
-//                    groupFilter.addFilter(mCurrentTransFilter.getFilter());
-//                }
-//                if(mArrEditFilter != null && mArrEditFilter.size() > 0)
-//                {
-//                    for(GPUImgItem efilter : mArrEditFilter)
-//                    {
-//                        groupFilter.addFilter(efilter.getFilter());
-//
-//                        //filters.add(efilter.getFilter());
-//                    }
-//                }
-//
-//                filters.add(groupFilter);
-//
-//                if(groupFilter.getFilters().size() < 1)
-//                {
-//                    Intent intent = new Intent();
-//                    intent.setClass(getApplicationContext(), FeedUploadActivity.class);
-//                    intent.putStringArrayListExtra("ImageList", mImagList);
-//                    startActivity(intent);
-//                }
-//                else
-//                {
-//                    for(GPUImgItem gpuimg : mGPUImgList)
-//                    {
-//                        Bitmap source = BitmapFactory.decodeFile(gpuimg.getImagePath());
-//                        GPUImage.getBitmapForMultipleFilters(source, filters, mReponseListener);
-//                    }
-//                }
-
             }
             else if(v.getId() == R.id.btn_back)
             {
-                if(mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_FILTER))
+                if(mStrActivitMode != null && mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_FILTER))
                 {
                     finish();
                     return;
@@ -693,8 +735,8 @@ public class ImgFilterActivity extends AppCompatActivity{
         });
     }
 
-    private class AsyncSetFilter extends AsyncTask<Void, Void, Boolean>{
-
+    private class AsyncSetFilter extends AsyncTask<Void, Void, Boolean>
+    {
         @Override
         protected Boolean doInBackground(Void... voids){
             ArrayList<GPUImageFilter> filters = new ArrayList<GPUImageFilter>();
@@ -722,6 +764,8 @@ public class ImgFilterActivity extends AppCompatActivity{
             {
                 if(mStrActivitMode == null || mStrActivitMode.length() < 1)
                 {
+                    showProgress(ImgFilterActivity.this, false);
+
                     Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), FeedUploadActivity.class);
                     intent.putStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST, mImagList);
@@ -729,8 +773,7 @@ public class ImgFilterActivity extends AppCompatActivity{
                 }
                 else if(mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_PROFILE))
                 {
-                    //UnityPlayer.UnitySendMessage("FeedModule","AndroidToUnity",mImagList.get(0));
-                    //UnityPlayer.UnitySendMessage("게임 오브젝트 이름","함수 이름","String 인자");
+                    showProgress(ImgFilterActivity.this, false);
 
                     UnityPlayer.UnitySendMessage("FeedModule","SetProfilePath",mImagList.get(0));
 
@@ -740,8 +783,8 @@ public class ImgFilterActivity extends AppCompatActivity{
                 }
                 else if(mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_FILTER))
                 {
-                    //UnityPlayer.UnitySendMessage("게임 오브젝트 이름","함수 이름","String 인자");
-                    //UnityPlayer.UnitySendMessage("게임 오브젝트 이름","함수 이름","String 인자");
+                    showProgress(ImgFilterActivity.this, false);
+
                     UnityPlayer.UnitySendMessage("FeedModule","SetFilterImagePath",mImagList.get(0));
 
                     BridgeCls.mStrFilterPath = mImagList.get(0);

@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 
 import com.feed.plugin.R;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +22,9 @@ import java.util.regex.Pattern;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<HashTagSuggestWithAPIAdapter.HashTag>{
@@ -29,6 +33,8 @@ public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<HashTagSuggestWit
 
     private LayoutInflater inflater;
     private CursorPositionListener listener;
+
+    private String baseUrl = "http://34.85.93.94/";
 
     public HashTagSuggestWithAPIAdapter(Context context, int resource, List<HashTag> objects) {
         super(context, resource, objects);
@@ -98,7 +104,7 @@ public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<HashTagSuggestWit
         public HashTagFilter() {
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("YOUR_BASE_URL")
+                    .baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
@@ -130,9 +136,15 @@ public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<HashTagSuggestWit
                         end = m.end();
 
                         String keyword = constraint.subSequence(m.start() + 1, m.end()).toString();
-                        Call<SuggestResponse> call = service.listHashTags(keyword);
+                        RequestCommand reqCmd = new RequestCommand(keyword, 0, 20);
+                        RequestBody reqBody = new RequestBody("9a9429f39e7b2e4e2797474d037f02c778347657", 12, reqCmd);
+
+                        Call<SuggestResponse> call = service.listHashTags(reqBody);
                         try {
-                            suggests = call.execute().body().results;
+                            //suggests = call.execute().body().results;
+                            //ArrayList<String> result = call.execute().body().command.tags;
+                            ResultCommand cmd = call.execute().body().command;
+                            int a = 0;
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -157,16 +169,55 @@ public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<HashTagSuggestWit
     }
 
     public interface SuggestService {
-        @GET("YOUR_PATH")
-        Call<SuggestResponse> listHashTags(@Query("keyword") String keyword);
+        @POST("game/people/search")
+        Call<SuggestResponse> listHashTags(@Body RequestBody body);
     }
 
     public class SuggestResponse {
+        @Expose
+        @SerializedName("accessToken")
+        public String accessToken;
 
-        private ArrayList<HashTag> results;
+        @Expose
+        @SerializedName("accountId")
+        public int accountId;
+
+        @Expose
+        @SerializedName("version")
+        public int version;
+
+        @Expose
+        @SerializedName("serverTimestamp")
+        public long serverTimestamp;
+
+        @Expose
+        @SerializedName("tokenRegistTime")
+        public int tokenRegistTime;
+
+        @Expose
+        @SerializedName("tokenUpdateTime")
+        public int tokenUpdateTime;
+
+        @Expose
+        @SerializedName("tokenExpireTime")
+        public int tokenExpireTime;
+
+        @Expose
+        @SerializedName("status")
+        public int status;
+
+        @Expose
+        @SerializedName("command")
+        public ResultCommand command;
 
         public SuggestResponse() {
         }
+    }
+
+    class ResultCommand {
+        @Expose
+        @SerializedName("tags")
+        public ArrayList<String> tags;
     }
 
     public class HashTag {
@@ -176,6 +227,45 @@ public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<HashTagSuggestWit
         public HashTag(String tag, String count) {
             this.tag = tag;
             this.count = count;
+        }
+    }
+
+    public class RequestBody
+    {
+        @Expose
+        @SerializedName("accessToken")
+        public String accessToken;
+        @Expose
+        @SerializedName("version")
+        public int version;
+        @Expose
+        @SerializedName("command")
+        public RequestCommand command;
+
+        public RequestBody(String accessToken, int version, RequestCommand command){
+            this.accessToken = accessToken;
+            this.version = version;
+            this.command = command;
+        }
+    }
+
+    class RequestCommand {
+        @Expose
+        @SerializedName("tags")
+        public String tags;
+
+        @Expose
+        @SerializedName("limit")
+        public int limit;
+
+        @Expose
+        @SerializedName("offset")
+        public int offset;
+
+        public RequestCommand(String tags, int limit, int offset){
+            this.tags = tags;
+            this.limit = limit;
+            this.offset = offset;
         }
     }
 }

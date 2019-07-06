@@ -13,7 +13,7 @@
         <RelativeLayout
             android:id="@+id/relative_gall_imgviewer"
             android:layout_width="match_parent"
-            android:layout_height="360dp">
+            android:layout_height="wrap_content">
 
             <!--<com.feed.plugin.widget.crop.CropperView-->
                 <!--android:background="#ff282828"-->
@@ -79,7 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#00ffffff"
-            android:layout_marginTop="320dp"
+            android:layout_marginTop="260dp"
             android:orientation="vertical">
 
             <RelativeLayout

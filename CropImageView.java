@@ -2268,21 +2268,9 @@ public class CropImageView extends ImageView{
     }
 
     private RectF applyInitialFrameRect(RectF initialFrameRect){
-//        RectF frameRect = new RectF();
-//        frameRect.set(initialFrameRect.left * mScale, initialFrameRect.top * mScale,
-//                initialFrameRect.right * mScale, initialFrameRect.bottom * mScale);
-//        frameRect.offset(mImageRect.left, mImageRect.top);
-//        float l = Math.max(mImageRect.left, frameRect.left);
-//        float t = Math.max(mImageRect.top, frameRect.top);
-//        float r = Math.min(mImageRect.right, frameRect.right);
-//        float b = Math.min(mImageRect.bottom, frameRect.bottom);
-//        frameRect.set(l, t, r, b);
-//        return frameRect;
-
-
         RectF frameRect = new RectF();
-        frameRect.set(initialFrameRect.left, initialFrameRect.top,
-                initialFrameRect.right, initialFrameRect.bottom);
+        frameRect.set(initialFrameRect.left * mScale, initialFrameRect.top * mScale,
+                initialFrameRect.right * mScale, initialFrameRect.bottom * mScale);
         frameRect.offset(mImageRect.left, mImageRect.top);
         float l = Math.max(mImageRect.left, frameRect.left);
         float t = Math.max(mImageRect.top, frameRect.top);
@@ -2290,7 +2278,6 @@ public class CropImageView extends ImageView{
         float b = Math.min(mImageRect.bottom, frameRect.bottom);
         frameRect.set(l, t, r, b);
         return frameRect;
-
     }
 
     /**

@@ -103,6 +103,18 @@ public class FiltersListFragment extends Fragment implements FilterSelectListene
         mImgPath = path;
     }
 
+    public void initSelected()
+    {
+        for(ThumbnailItem item : thumbnailItemList)
+        {
+            item.isSetted = false;
+            item.isSelected = false;
+        }
+        mAdapter.selectedIndex = 0;
+
+        mAdapter.notifyDataSetChanged();
+    }
+
     public void updateThumbnail(String path)
     {
         AsyncCreateFiter async = new AsyncCreateFiter();
@@ -155,7 +167,7 @@ public class FiltersListFragment extends Fragment implements FilterSelectListene
             // add normal bitmap first
             ThumbnailItem thumbnailItem = new ThumbnailItem();
             thumbnailItem.image = bitmap;
-            thumbnailItem.filterName = "Normal";
+            thumbnailItem.filterName = getActivity().getString(R.string.normal);
 
             result.add(thumbnailItem);
 
@@ -184,7 +196,7 @@ public class FiltersListFragment extends Fragment implements FilterSelectListene
 //                gpumage.setFilter(filter);
 //                //gpumage.requestRender();
 //                Bitmap filterBitmp = gpumage.getBitmapWithFilterApplied(bitmap);
-//                //Bitmap filterBitmp = gpumage.getBitmapWithFilterApplied(bitmap, true);    // 앱 크레쉬 발생
+//                //Bitmap filterBitmp = gpumage.getBitmapWithFilterApplied(bitmap, true);    //
 //
 //                ThumbnailItem ti = new ThumbnailItem();
 //                ti.image = filterBitmp;

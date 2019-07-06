@@ -1,33 +1,28 @@
-package com.feed.plugin.fragment;
+package com.feed.plugin;
 
-import android.content.Context;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.graphics.RectF;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.feed.plugin.ImgSelectActivity;
-import com.feed.plugin.ProfileActivity;
-import com.feed.plugin.R;
-import com.feed.plugin.android.gpuimage.GPUImage;
+import com.feed.plugin.fragment.ProfileCookiGalleryFragment;
 import com.feed.plugin.fragment.gallery.GalleryAdapter;
 import com.feed.plugin.fragment.gallery.GalleryManager;
 import com.feed.plugin.fragment.gallery.GridDividerDecoration;
@@ -35,20 +30,16 @@ import com.feed.plugin.fragment.gallery.OnItemClickListener;
 import com.feed.plugin.fragment.gallery.PhotoVO;
 import com.feed.plugin.widget.cookicrop.CookieCutterImageView;
 import com.feed.plugin.widget.cookicrop.ImageUtils;
-import com.feed.plugin.widget.crop.CropperView;
 import com.feed.plugin.widget.cropimgview.util.CropUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class ProfileCookiGalleryFragment extends ImgSelFragment{
+public class ProfileGalleryActivity extends AppCompatActivity{
+    private int REQUEST_IMAGE_FILTER = 0x1002;
 
     private String profileImageName = "profileImage.jpg";
     private static ProfileCookiGalleryFragment instance;
@@ -70,6 +61,8 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
 
     private int PROFILE_SCALE_SIZE = 512;
 
+    protected ProgressDialog mProgress = null;
+
     Handler mHandler = new Handler()
     {
         @Override
@@ -79,40 +72,22 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
         }
     };
 
-    public static ProfileCookiGalleryFragment getInstance()
-    {
-        if(instance == null)
-        {
-            Bundle args = new Bundle();
-            instance = new ProfileCookiGalleryFragment();
-            instance.setArguments(args);
-        }
-        return instance;
-    }
-
-    public ProfileCookiGalleryFragment()
-    {
-
-    }
-
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setRetainInstance(true);
-    }
+        setContentView(R.layout.activity_profile_gallery);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        View rootView = inflater.inflate(R.layout.fragment_profile_cooki_gallery, container, false);
-        mParentActivity = (ProfileActivity)getActivity();
-        recyclerGallery = (RecyclerView) rootView.findViewById(R.id.recycler_gallery);
+        mProgress = new ProgressDialog(this);
 
-        mImageView = (CookieCutterImageView)rootView.findViewById(R.id.img_selimg);
+        recyclerGallery = (RecyclerView) findViewById(R.id.recycler_gallery);
+
+        mImageView = (CookieCutterImageView)findViewById(R.id.img_selimg);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
 
@@ -120,7 +95,7 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
         params.height = width;
         mImageView.setLayoutParams(params);
 
-        LinearLayout galleryLayout = (LinearLayout)rootView.findViewById(R.id.gallery_layout);
+        LinearLayout galleryLayout = (LinearLayout)findViewById(R.id.gallery_layout);
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams)galleryLayout.getLayoutParams();
         lp.setMargins(0, width, 0, 0);
         galleryLayout.setLayoutParams(lp);
@@ -130,31 +105,31 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
         initRecyclerGallery();
 
         mHandler.sendEmptyMessageDelayed(1, 200);
-        return rootView;
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
 
 
+        findViewById(R.id.btn_next).setOnClickListener(mOnClickListener);
+        findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
     }
 
 
+    /**
+     * 갤러리 아미지 데이터 초기화
+     */
     private List<PhotoVO> initGalleryPathList() {
 
-        mGalleryManager = new GalleryManager(getContext());
+        mGalleryManager = new GalleryManager(getApplicationContext());
         //return mGalleryManager.getDatePhotoPathList(2015, 9, 19);
         return mGalleryManager.getAllPhotoPathList();
     }
 
+
     private void initRecyclerGallery() {
 
         //galleryAdapter = new GalleryAdapter(getActivity(), initGalleryPathList(), R.layout.item_photo);
-        galleryAdapter = new GalleryAdapter(getActivity(), initGalleryPathList(), R.layout.gallery_item_photo);
+        galleryAdapter = new GalleryAdapter(ProfileGalleryActivity.this, initGalleryPathList(), R.layout.gallery_item_photo);
         galleryAdapter.setOnItemClickListener(mOnItemClickListener);
         recyclerGallery.setAdapter(galleryAdapter);
-        recyclerGallery.setLayoutManager(new GridLayoutManager(getContext(), 4));
+        recyclerGallery.setLayoutManager(new GridLayoutManager(getApplicationContext(), 4));
         recyclerGallery.setItemAnimator(new DefaultItemAnimator());
         recyclerGallery.addItemDecoration(new GridDividerDecoration(getResources(), R.drawable.divider_recycler_gallery));
 
@@ -174,12 +149,13 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
 
     }
 
+
     private void loadNewImage(String filePath) {
         try{
             String imgPath = "file://" + filePath;
             Uri imageUri = Uri.parse(imgPath);
-            Point screenSize = ImageUtils.getScreenSize(getActivity());
-            Bitmap scaledBitmap = ImageUtils.decodeUriToScaledBitmap(getActivity(), imageUri, screenSize.x, screenSize.y);
+            Point screenSize = ImageUtils.getScreenSize(ProfileGalleryActivity.this);
+            Bitmap scaledBitmap = ImageUtils.decodeUriToScaledBitmap(ProfileGalleryActivity.this, imageUri, screenSize.x, screenSize.y);
             mImageView.setImageBitmap(scaledBitmap);
 
 //            Bitmap bitmap = BitmapFactory.decodeFile(filePath);
@@ -189,14 +165,10 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
         {
             e.printStackTrace();
         }
-
-
     }
 
     public void getCropImgList()
     {
-        ((ProfileActivity)getActivity()).showProgress(getActivity(), true);
-
         if(mCropImgList == null)
             mCropImgList = new ArrayList<>();
 
@@ -208,31 +180,27 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
 //        mCropView.crop(uri).execute(mCropCallback);
 //        mSavePos += 1;
 
-        ((ProfileActivity)getActivity()).showProgress(getActivity(), true);
+        showProgress(ProfileGalleryActivity.this, true);
         AsyncSaveTask task = new AsyncSaveTask();
         task.execute();
 
 
     }
 
-    public Uri createSaveUri() {
-        return createNewUri(getContext(), mCompressFormat);
-    }
-
-    public static Uri createNewUri(Context context, Bitmap.CompressFormat format){
-        long currentTimeMillis = System.currentTimeMillis();
-        Date today = new Date(currentTimeMillis);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        String title = dateFormat.format(today);
-        String dirPath = CropUtils.getDirPath(context);
-        String fileName = "crop" + title + "." + CropUtils.getMimeType(format);
-        String path = dirPath + "/" + fileName;
-
-        path = "file://" + path;
-        Uri newUri = Uri.parse(path);
-        return newUri;
-
-    }
+    private View.OnClickListener mOnClickListener = new View.OnClickListener(){
+        @Override
+        public void onClick(View v){
+            if(v.getId() == R.id.btn_back)
+            {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+            else if(v.getId() == R.id.btn_next)
+            {
+                getCropImgList();
+            }
+        }
+    };
 
     private OnItemClickListener mOnItemClickListener = new OnItemClickListener() {
 
@@ -268,6 +236,28 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
     };
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == REQUEST_IMAGE_FILTER)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                finish();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void startResultActivity(ArrayList<String> imgList) {
+        Intent intent = new Intent();
+        //intent.setClass(getApplicationContext(), ImgEditActivity.class);
+        intent.setClass(getApplicationContext(), ImgFilterActivity.class);
+        intent.putStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST, imgList);
+        intent.putExtra(BridgeCls.EXTRA_ACTIVITY_MODE, BridgeCls.ACTIVITY_MODE_PROFILE);
+        startActivityForResult(intent, REQUEST_IMAGE_FILTER);
+        imgList.clear();
+    }
+
     @Deprecated
     private class AsyncSaveTask extends AsyncTask<Void, Void, Void>{
         @Override
@@ -278,7 +268,7 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
             image = CropUtils.getScaledBitmap(image, PROFILE_SCALE_SIZE, PROFILE_SCALE_SIZE);
 
             File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            String filePath = CropUtils.getDirPath(getContext());
+            String filePath = CropUtils.getDirPath(getApplicationContext());
             String savePath = filePath + "/" + profileImageName;
 
             File file = new File(savePath);
@@ -302,8 +292,8 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
         @Override
         protected void onPostExecute(Void aVoid){
             super.onPostExecute(aVoid);
-            ((ProfileActivity)getActivity()).showProgress(getActivity(), false);
-            ((ProfileActivity) getActivity()).startResultActivity(mCropImgList);
+            showProgress(ProfileGalleryActivity.this, false);
+            startResultActivity(mCropImgList);
 
         }
 
@@ -312,4 +302,39 @@ public class ProfileCookiGalleryFragment extends ImgSelFragment{
 
 
 
+
+
+
+
+
+
+
+    public void showProgress(final Activity act, final boolean bShow)
+    {
+        act.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                mProgress.setMessage(getString(R.string.saving));
+                try
+                {
+                    if (bShow)
+                    {
+                        mProgress.show();
+                    }
+                    else
+                    {
+                        mProgress.dismiss();
+                    }
+                }
+                catch (Exception e)
+                {
+                    // TODO: handle exception
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }

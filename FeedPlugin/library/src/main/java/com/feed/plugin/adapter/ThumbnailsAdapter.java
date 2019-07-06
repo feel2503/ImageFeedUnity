@@ -31,7 +31,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
     private ArrayList<ThumbnailItem> thumbnailItemList;
     private FilterSelectListener listener;
     private Context mContext;
-    private int selectedIndex = 0;
+    public int selectedIndex = 0;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -94,6 +94,9 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(thumbnailItem.filterName.equalsIgnoreCase("Normal") && thumbnailItem.isSelected)
+                    return;
+
                 listener.onFilterSelected(thumbnailItem.filter, thumbnailItem.isSelected);
                 //thumbnailItem.isSelected = true;
 

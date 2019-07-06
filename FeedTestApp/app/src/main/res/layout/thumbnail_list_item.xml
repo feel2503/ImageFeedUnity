@@ -27,7 +27,7 @@
             android:id="@+id/gpuimage_thumbnail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitCenter"/>
 
         <ImageView
             android:id="@+id/filtervalue_view"

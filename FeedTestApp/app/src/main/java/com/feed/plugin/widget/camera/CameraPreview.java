@@ -227,7 +227,7 @@ public class CameraPreview extends Thread {
                 @Override
                 public void onConfigureFailed(CameraCaptureSession session) {
                     // TODO Auto-generated method stub
-                    Toast.makeText(mContext, "onConfigureFailed", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(mContext, "onConfigureFailed", Toast.LENGTH_LONG).show();
                 }
             }, null);
         } catch (CameraAccessException e) {
@@ -390,7 +390,7 @@ public class CameraPreview extends Thread {
             // Orientation
             int rotation = ((Activity)mContext).getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
-            String dirPath = CropUtils.getDirPath();
+            String dirPath = CropUtils.getDirPath(mContext);
             final File file = new File(dirPath + imgName);
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
                 @Override
@@ -430,9 +430,9 @@ public class CameraPreview extends Thread {
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
-                    Toast.makeText(mContext, "Saved:" + file, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "Saved:" + file, Toast.LENGTH_SHORT).show();
 
-                    String filePath = CropUtils.getDirPath() + imgName;
+                    String filePath = CropUtils.getDirPath(mContext) + imgName;
                     ArrayList<String> arrImg = new ArrayList<String>();
                     arrImg.add(filePath);
 

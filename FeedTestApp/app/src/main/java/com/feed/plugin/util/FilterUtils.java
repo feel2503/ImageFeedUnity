@@ -105,12 +105,7 @@ import java.util.List;
 
 public class FilterUtils{
 
-    // 아래 필터 구분 필요
-    // CONTRAST 대비
-    // BRIGHTNESS 밝기
-    // 선명도
-    // 채도
-    // 배경 흐리게
+
     public static enum FilterType {
         CONTRAST, GRAYSCALE, SHARPEN, SEPIA, SOBEL_EDGE_DETECTION, THRESHOLD_EDGE_DETECTION, THREE_X_THREE_CONVOLUTION, FILTER_GROUP, EMBOSS, POSTERIZE, GAMMA, BRIGHTNESS, INVERT, HUE, PIXELATION,
         SATURATION, EXPOSURE, HIGHLIGHT_SHADOW, MONOCHROME, OPACITY, RGB, WHITE_BALANCE, VIGNETTE, BLEND_COLOR_BURN, BLEND_COLOR_DODGE, BLEND_DARKEN,
@@ -315,48 +310,48 @@ public class FilterUtils{
     public static ArrayList<FilterTypeItem> getFilterTypeList(Context context)
     {
         ArrayList<FilterTypeItem> filterTypes = new ArrayList<>();
-        filterTypes.add(new FilterTypeItem("Invert", FilterType.INVERT));
-        filterTypes.add(new FilterTypeItem("Pixelation", FilterType.PIXELATION));
-        filterTypes.add(new FilterTypeItem("Hue", FilterType.HUE));
-        filterTypes.add(new FilterTypeItem("Gamma", FilterType.GAMMA));
-        filterTypes.add(new FilterTypeItem("Sepia", FilterType.SEPIA));
-        filterTypes.add(new FilterTypeItem("Grayscale", FilterType.GRAYSCALE));
-        filterTypes.add(new FilterTypeItem("Sobel", FilterType.SOBEL_EDGE_DETECTION));
-        filterTypes.add(new FilterTypeItem("Emboss", FilterType.EMBOSS));
-        filterTypes.add(new FilterTypeItem("Posterize", FilterType.POSTERIZE));
-        filterTypes.add(new FilterTypeItem("Grouped filters", FilterType.FILTER_GROUP));
-        filterTypes.add(new FilterTypeItem("Saturation", FilterType.SATURATION));
-        filterTypes.add(new FilterTypeItem("Exposure", FilterType.EXPOSURE));
-        filterTypes.add(new FilterTypeItem("Highlight Shadow", FilterType.HIGHLIGHT_SHADOW));
-        filterTypes.add(new FilterTypeItem("Monochrome", FilterType.MONOCHROME));
-        filterTypes.add(new FilterTypeItem("Opacity", FilterType.OPACITY));
-        filterTypes.add(new FilterTypeItem("RGB", FilterType.RGB));
-        filterTypes.add(new FilterTypeItem("White Balance", FilterType.WHITE_BALANCE));
-        filterTypes.add(new FilterTypeItem("Lookup (Amatorka)", FilterType.LOOKUP_AMATORKA));
-        filterTypes.add(new FilterTypeItem("Gaussian Blur", FilterType.GAUSSIAN_BLUR));
-        filterTypes.add(new FilterTypeItem("Crosshatch", FilterType.CROSSHATCH));
-        filterTypes.add(new FilterTypeItem("Box Blur", FilterType.BOX_BLUR));
-        filterTypes.add(new FilterTypeItem("CGA Color Space", FilterType.CGA_COLORSPACE));
-        filterTypes.add(new FilterTypeItem("Dilation", FilterType.DILATION));
-        filterTypes.add(new FilterTypeItem("Kuwahara", FilterType.KUWAHARA));
-        filterTypes.add(new FilterTypeItem("Toon", FilterType.TOON));
-        filterTypes.add(new FilterTypeItem("Smooth Toon", FilterType.SMOOTH_TOON));
-        filterTypes.add(new FilterTypeItem("Halftone", FilterType.HALFTONE));
-        filterTypes.add(new FilterTypeItem("Bulge Distortion", FilterType.BULGE_DISTORTION));
-        filterTypes.add(new FilterTypeItem("Glass Sphere", FilterType.GLASS_SPHERE));
-        filterTypes.add(new FilterTypeItem("Haze", FilterType.HAZE));
-        filterTypes.add(new FilterTypeItem("Laplacian", FilterType.LAPLACIAN));
-        filterTypes.add(new FilterTypeItem("Swirl", FilterType.SWIRL));
-        filterTypes.add(new FilterTypeItem("False Color", FilterType.FALSE_COLOR));
-        filterTypes.add(new FilterTypeItem("Color Balance", FilterType.COLOR_BALANCE));
-        filterTypes.add(new FilterTypeItem("Levels Min (Mid Adjust)", FilterType.LEVELS_FILTER_MIN));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Invert), FilterType.INVERT));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Pixelation), FilterType.PIXELATION));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Hue), FilterType.HUE));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Gamma), FilterType.GAMMA));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Sepia), FilterType.SEPIA));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Grayscale), FilterType.GRAYSCALE));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Sobel), FilterType.SOBEL_EDGE_DETECTION));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Emboss), FilterType.EMBOSS));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Posterize), FilterType.POSTERIZE));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Grouped_filters), FilterType.FILTER_GROUP));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Saturation), FilterType.SATURATION));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Exposure), FilterType.EXPOSURE));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Highlight_Shadow), FilterType.HIGHLIGHT_SHADOW));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Monochrome), FilterType.MONOCHROME));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Opacity), FilterType.OPACITY));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.RGB), FilterType.RGB));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.White_Balance), FilterType.WHITE_BALANCE));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Lookup), FilterType.LOOKUP_AMATORKA));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Gaussian), FilterType.GAUSSIAN_BLUR));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Crosshatch), FilterType.CROSSHATCH));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Box_Blur), FilterType.BOX_BLUR));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.CGA_Color_Space), FilterType.CGA_COLORSPACE));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Dilation), FilterType.DILATION));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Kuwahara), FilterType.KUWAHARA));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Toon), FilterType.TOON));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Smooth_Toon), FilterType.SMOOTH_TOON));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Halftone), FilterType.HALFTONE));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Bulge_Distortion), FilterType.BULGE_DISTORTION));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Glass_Sphere), FilterType.GLASS_SPHERE));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Haze), FilterType.HAZE));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Laplacian), FilterType.LAPLACIAN));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Swirl), FilterType.SWIRL));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.False_Color), FilterType.FALSE_COLOR));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Color_Balance), FilterType.COLOR_BALANCE));
+        filterTypes.add(new FilterTypeItem(context.getString(R.string.Levels), FilterType.LEVELS_FILTER_MIN));
 
         return filterTypes;
     }
 
     public static String getFilterName(FilterType type)
     {
-        return "temp";
+        return " ";
     }
 
 

@@ -13,15 +13,15 @@
         android:paddingRight="10dp"
         android:background="#ffffffff">
 
-        <TextView
-            android:id="@+id/text_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/btn_back"
-            android:layout_marginLeft="16dp"
-            android:textColor="#ff000000"
-            android:text="New post" />
+        <!--<TextView-->
+            <!--android:id="@+id/text_title"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_toRightOf="@id/btn_back"-->
+            <!--android:layout_marginLeft="16dp"-->
+            <!--android:textColor="#ff000000"-->
+            <!--android:text="New post" />-->
 
         <Button
             android:id="@+id/btn_back"

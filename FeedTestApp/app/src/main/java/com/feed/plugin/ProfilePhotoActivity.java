@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.feed.plugin.adapter.ImageViewSlideAdapter;
 import com.feed.plugin.widget.camera.CameraView;
 import com.feed.plugin.widget.cropimgview.util.CropUtils;
 import com.unity3d.player.UnityPlayer;
@@ -26,15 +24,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
-public class FacePhotoActivity extends AppCompatActivity{
+public class ProfilePhotoActivity extends AppCompatActivity{
+    private int REQUEST_IMAGE_FILTER = 0x1002;
     private Handler mBackgroundHandler;
-
     private CameraView mCameraView;
 
     private ToggleButton mToggleFlash;
     private Button mBtnCameraRotate;
     private Button mBtnCapture;
-    private Button mBtnGallery;
+
 
     private int REQUEST_GALLERY_SELECT = 0x1011;
 
@@ -45,7 +43,7 @@ public class FacePhotoActivity extends AppCompatActivity{
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_face_photo);
+        setContentView(R.layout.activity_profile_photo);
 
         mCameraView = (CameraView) findViewById(R.id.camera_preview);
         if (mCameraView != null) {
@@ -60,11 +58,8 @@ public class FacePhotoActivity extends AppCompatActivity{
         mBtnCapture = findViewById(R.id.button_main_capture);
         mBtnCapture.setOnClickListener(mOnClickListener);
 
-        mBtnGallery = findViewById(R.id.btn_gallery_select);
-        mBtnGallery.setOnClickListener(mOnClickListener);
 
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
-        findViewById(R.id.text_share).setOnClickListener(mOnClickListener);
 
     }
 
@@ -113,6 +108,13 @@ public class FacePhotoActivity extends AppCompatActivity{
                 finish();
             }
         }
+        else if(requestCode == REQUEST_IMAGE_FILTER)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                finish();
+            }
+        }
     }
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -132,22 +134,12 @@ public class FacePhotoActivity extends AppCompatActivity{
                             CameraView.FACING_BACK : CameraView.FACING_FRONT);
                 }
             }
-            else if(v.getId() == R.id.btn_gallery_select)
-            {
-                Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), FaceGalleryActivity.class);
-                startActivityForResult(intent, REQUEST_GALLERY_SELECT);
-            }
             else if(v.getId() == R.id.btn_back)
             {
                 UnityPlayer.UnitySendMessage("FeedModule", "SetFacePhotoPath", "BACK");
                 finish();
             }
-            else if(v.getId() == R.id.text_share)
-            {
-                UnityPlayer.UnitySendMessage("FeedModule", "SetFacePhotoPath", "SKIP");
-                finish();
-            }
+
         }
     };
 
@@ -201,7 +193,7 @@ public class FacePhotoActivity extends AppCompatActivity{
                 public void run() {
                     // This demo app saves the taken picture to a constant file.
                     //File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),"picture.jpg");
-                    String filePath = CropUtils.getDirPath(getApplicationContext()) + "/"+"facephoto.jpg";
+                    String filePath = CropUtils.getDirPath(getApplicationContext()) + "/"+"profile_picture.jpg";
                     final File file = new File(filePath);
                     if(file.exists())
                         file.delete();
@@ -223,17 +215,15 @@ public class FacePhotoActivity extends AppCompatActivity{
                         }
                     }
 
-                    Log.d("AAAA", "---------- picurl : "+filePath);
-                    Log.d("AAAA", "---------- picurl : "+filePath);
-                    UnityPlayer.UnitySendMessage("FeedModule", "SetFacePhotoPath", filePath);
+                    ArrayList<String> arrImg = new ArrayList<String>();
+                    arrImg.add(filePath);
 
-                    BridgeCls.mStrFacePath = filePath;
-
-//                    Intent msgIntent = new Intent();
-//                    msgIntent.setClass(getApplicationContext(), UnityExtActivity.class);
-//                    msgIntent.putExtra("AndroidMessage", filePath);
-//                    startActivity(msgIntent);
-                    finish();
+                    Intent intent = new Intent();
+                    //intent.setClass(getApplicationContext(), ImgEditActivity.class);
+                    intent.setClass(getApplicationContext(), ImgFilterActivity.class);
+                    intent.putStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST, arrImg);
+                    intent.putExtra(BridgeCls.EXTRA_ACTIVITY_MODE, BridgeCls.ACTIVITY_MODE_PROFILE);
+                    startActivityForResult(intent, REQUEST_IMAGE_FILTER);
                 }
             });
         }

@@ -13,6 +13,11 @@ import android.widget.TextView;
 
 import com.feed.plugin.R;
 import com.feed.plugin.adapter.items.ThumbnailItem;
+import com.feed.plugin.android.gpuimage.filter.GPUImageBrightnessFilter;
+import com.feed.plugin.android.gpuimage.filter.GPUImageContrastFilter;
+import com.feed.plugin.android.gpuimage.filter.GPUImageSaturationFilter;
+import com.feed.plugin.android.gpuimage.filter.GPUImageSharpenFilter;
+import com.feed.plugin.android.gpuimage.filter.GPUImageVignetteFilter;
 import com.feed.plugin.util.FilterUtils;
 
 import java.util.ArrayList;
@@ -23,7 +28,7 @@ public class EditImageAdapter extends RecyclerView.Adapter<EditImageAdapter.MyVi
     private ArrayList<ThumbnailItem> editItemList;
     private FilterSelectListener listener;
     private Context mContext;
-    private int selectedIndex = 0;
+    private int selectedIndex = -1;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView thumbnail;
@@ -104,37 +109,54 @@ public class EditImageAdapter extends RecyclerView.Adapter<EditImageAdapter.MyVi
         this.editItemList = editItemList;
     }
 
+    public void initSelected()
+    {
+        selectedIndex = -1;
+        for(ThumbnailItem item : editItemList)
+        {
+            item.isSelected = false;
+            item.isSetted = false;
+        }
+
+        ((GPUImageBrightnessFilter)editItemList.get(0).filter).setBrightness(0.0f);
+        ((GPUImageContrastFilter)editItemList.get(1).filter).setContrast(1.0f);
+        ((GPUImageSharpenFilter)editItemList.get(2).filter).setSharpness(4.0f);
+        ((GPUImageSaturationFilter)editItemList.get(3).filter).setSaturation(1.0f);
+        ((GPUImageVignetteFilter)editItemList.get(4).filter).setVignetteStart(1.0f);
+
+    }
+
     private void initEditList()
     {
         editItemList = new ArrayList<ThumbnailItem>();
 
         ThumbnailItem itemBrightness = new ThumbnailItem();
         itemBrightness.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ico_edit_bright );
-        itemBrightness.filterName = "Brights";
+        itemBrightness.filterName = mContext.getString(R.string.Brightness);
         itemBrightness.filter = FilterUtils.createFilterForType(mContext, FilterUtils.FilterType.BRIGHTNESS);
         editItemList.add(itemBrightness);
 
         ThumbnailItem itemContrast = new ThumbnailItem();
         itemContrast.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ico_edit_contrast );
-        itemContrast.filterName = "Contrast";
+        itemContrast.filterName = mContext.getString(R.string.Contrast);
         itemContrast.filter = FilterUtils.createFilterForType(mContext, FilterUtils.FilterType.CONTRAST);
         editItemList.add(itemContrast);
 
         ThumbnailItem itemSharpen = new ThumbnailItem();
         itemSharpen.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ico_edit_sharpen );
-        itemSharpen.filterName = "Sharpen";
+        itemSharpen.filterName = mContext.getString(R.string.Sharpen);
         itemSharpen.filter = FilterUtils.createFilterForType(mContext, FilterUtils.FilterType.SHARPEN);
         editItemList.add(itemSharpen);
 
         ThumbnailItem itemSaturation = new ThumbnailItem();
         itemSaturation.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ico_edit_saturation );
-        itemSaturation.filterName = "Saturation";
+        itemSaturation.filterName = mContext.getString(R.string.Saturation);
         itemSaturation.filter = FilterUtils.createFilterForType(mContext, FilterUtils.FilterType.SATURATION);
         editItemList.add(itemSaturation);
 
         ThumbnailItem itemVignette = new ThumbnailItem();
         itemVignette.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ico_edit_vignette );
-        itemVignette.filterName = "Vignette";
+        itemVignette.filterName = mContext.getString(R.string.Vignette);
         itemVignette.filter = FilterUtils.createFilterForType(mContext, FilterUtils.FilterType.VIGNETTE);
         editItemList.add(itemVignette);
 

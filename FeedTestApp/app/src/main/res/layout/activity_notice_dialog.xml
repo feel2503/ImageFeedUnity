@@ -23,7 +23,7 @@
             android:textColor="#ff000000"
             android:textSize="12dp"
             android:textStyle="bold"
-            android:text="NOTICE" />
+            android:text="@string/notice" />
 
         <View
             android:layout_width="match_parent"
@@ -38,7 +38,7 @@
             android:layout_marginTop="34dp"
             android:textColor="#ff000000"
             android:textSize="14dp"
-            android:text="If you back now, the editing\n will disapper. \n\nWould you like to go back?" />
+            android:text="@string/notice_content" />
 
         <View
             android:layout_width="match_parent"
@@ -58,7 +58,7 @@
                 android:gravity="center"
                 android:textColor="#ff000000"
                 android:textSize="12dp"
-                android:text="YES" />
+                android:text="@string/yes" />
 
             <TextView
                 android:id="@+id/text_no"
@@ -68,7 +68,7 @@
                 android:gravity="center"
                 android:textColor="#ff000000"
                 android:textSize="12dp"
-                android:text="NO" />
+                android:text="@string/no" />
 
         </LinearLayout>
     </LinearLayout>

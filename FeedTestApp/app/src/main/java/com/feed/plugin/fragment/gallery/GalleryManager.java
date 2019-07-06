@@ -24,8 +24,9 @@ public class GalleryManager {
                 MediaStore.MediaColumns.DATA,
                 MediaStore.Images.Media.DATE_ADDED
         };
+        String orcefBy =  MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC";
 
-        Cursor cursor = mContext.getContentResolver().query(uri, projection, null, null, null);
+        Cursor cursor = mContext.getContentResolver().query(uri, projection, null, null, orcefBy);
         int columnIndexData = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
         while (cursor.moveToNext()) {
             PhotoVO photoVO = new PhotoVO(cursor.getString(columnIndexData), false);

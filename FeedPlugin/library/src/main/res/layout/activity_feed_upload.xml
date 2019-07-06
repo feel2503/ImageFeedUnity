@@ -22,7 +22,7 @@
             android:layout_toRightOf="@id/btn_back"
             android:layout_marginLeft="16dp"
             android:textColor="#ff000000"
-            android:text="New post" />
+            android:text="@string/new_post" />
 
         <Button
             android:id="@+id/btn_back"

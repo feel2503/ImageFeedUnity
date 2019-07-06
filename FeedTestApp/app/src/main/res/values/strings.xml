@@ -10,6 +10,7 @@
     <string name="filter">Filter</string>
     <string name="edit">Edit</string>
 
+    <string name="normal">Normal</string>
     <string name="Contrast">Contrast</string>
     <string name="Invert">Invert</string>
     <string name="Pixelation">Pixelation</string>
@@ -33,6 +34,33 @@
     <string name="RGB">RGB</string>
     <string name="WhiteBalance">White Balance"</string>
     <string name="Vignette">Vignette</string>
+    <string name="Sobel">Sobel</string>
+    <string name="Grouped_filters">Grouped filters</string>
+    <string name="Highlight_Shadow">Highlight Shadow</string>
+    <string name="White_Balance">White Balance</string>
+    <string name="Lookup">Lookup (Amatorka)</string>
+    <string name="Gaussian">Gaussian Blur</string>
+    <string name="Crosshatch">Crosshatch</string>
+    <string name="Box_Blur">Box Blur</string>
+    <string name="CGA_Color_Space">CGA Color Space</string>
+    <string name="Dilation">Dilation</string>
+    <string name="Kuwahara">Kuwahara</string>
+    <string name="Toon">Toon</string>
+    <string name="Smooth_Toon">Smooth Toon</string>
+    <string name="Halftone">Halftone</string>
+    <string name="Bulge_Distortion">Bulge Distortion</string>
+    <string name="Glass_Sphere">Glass Sphere</string>
+    <string name="Haze">Haze</string>
+    <string name="Laplacian">Laplacian</string>
+    <string name="Swirl">Swirl</string>
+    <string name="False_Color">False Color</string>
+    <string name="Color_Balance">Color Balance</string>
+    <string name="Levels">Levels Min (Mid Adjust)</string>
+    <string name="Brights">Brights</string>
+
+    <string name="Sharpen">Sharpen</string>
+
+
 
     <string name="saving">Saving...</string>
 
@@ -43,4 +71,12 @@
     <string name="ok">OK</string>
 
     <string name="select_image">Please select image.</string>
+    <string name="done">Done</string>
+    <string name="new_post">New Post</string>
+    <string name="notice">NOTICE</string>
+    <string name="notice_content">If you back now, the editing will disapper. \n\n Would you like to go back?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+
+
 </resources>

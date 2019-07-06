@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import com.feed.plugin.R;
 import com.feed.plugin.adapter.items.GPUImgItem;
 import com.feed.plugin.adapter.items.ThumbnailItem;
+import com.feed.plugin.android.gpuimage.GPUImage;
 import com.feed.plugin.android.gpuimage.GPUImageView;
 
 import java.util.ArrayList;
@@ -63,6 +64,7 @@ public class GpuimageSlideAdapter extends PagerAdapter{
         {
             v = inflater.inflate(R.layout.slider_gpuimage, container, false);
             GPUImageView imageView = (GPUImageView)v.findViewById(R.id.slide_gpuimageview);
+            imageView.setScaleType(GPUImage.ScaleType.CENTER_INSIDE);
 
             imageView.setImage(BitmapFactory.decodeFile(item.getImagePath()));
             if(item.getFilter() != null)

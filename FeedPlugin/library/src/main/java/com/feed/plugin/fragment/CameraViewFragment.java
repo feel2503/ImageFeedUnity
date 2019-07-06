@@ -168,13 +168,13 @@ public class CameraViewFragment extends ImgSelFragment
         @Override
         public void onPictureTaken(CameraView cameraView, final byte[] data) {
             Log.d(TAG, "onPictureTaken " + data.length);
-            Toast.makeText(cameraView.getContext(), "onPictureTaken", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(cameraView.getContext(), "onPictureTaken", Toast.LENGTH_SHORT).show();
             getBackgroundHandler().post(new Runnable() {
                 @Override
                 public void run() {
                     // This demo app saves the taken picture to a constant file.
                     //File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),"picture.jpg");
-                    String filePath = CropUtils.getDirPath() + "/"+"picture.jpg";
+                    String filePath = CropUtils.getDirPath(getContext()) + "/"+"picture.jpg";
                     final File file = new File(filePath);
 
                     OutputStream os = null;

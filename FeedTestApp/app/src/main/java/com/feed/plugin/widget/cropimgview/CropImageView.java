@@ -637,7 +637,6 @@ public class CropImageView extends ImageView{
 
     private float spacing(MotionEvent event){
         try{
-
             float x = event.getX(0) - event.getX(1);
             float y = event.getY(0) - event.getY(1);
             float result = (float)Math.sqrt(x * x + y * y);
@@ -668,7 +667,7 @@ public class CropImageView extends ImageView{
                 onDown(event);
                 return true;
             case MotionEvent.ACTION_POINTER_DOWN:
-                if(mode == DRAG){    // 모드가 drag였던 것이면 ZOOM으로한다.
+                if(mode == DRAG){
                     mode = ZOOM;
                     oldDist = spacing(event);
                 }
@@ -1567,6 +1566,22 @@ public class CropImageView extends ImageView{
                 Math.min(bottom, imageH));
     }
 
+    private Rect calcCropRect(int originalImageWidth, int originalImageHeight, float angle){
+        float scaleToOriginal =
+                getRotatedWidth(angle, originalImageWidth, originalImageHeight) / mImageRect.width();
+        float offsetX = mImageRect.left * scaleToOriginal;
+        float offsetY = mImageRect.top * scaleToOriginal;
+        int left = Math.round(mFrameRect.left * scaleToOriginal - offsetX);
+        int top = Math.round(mFrameRect.top * scaleToOriginal - offsetY);
+        int right = Math.round(mFrameRect.right * scaleToOriginal - offsetX);
+        int bottom = Math.round(mFrameRect.bottom * scaleToOriginal - offsetY);
+        int imageW = Math.round(getRotatedWidth(angle, originalImageWidth, originalImageHeight));
+        int imageH = Math.round(getRotatedHeight(angle, originalImageWidth, originalImageHeight));
+        return new Rect(Math.max(left, 0), Math.max(top, 0), Math.min(right, imageW),
+                Math.min(bottom, imageH));
+    }
+
+
     private Bitmap scaleBitmapIfNeeded(Bitmap cropped){
         int width = cropped.getWidth();
         int height = cropped.getHeight();
@@ -2253,9 +2268,21 @@ public class CropImageView extends ImageView{
     }
 
     private RectF applyInitialFrameRect(RectF initialFrameRect){
+//        RectF frameRect = new RectF();
+//        frameRect.set(initialFrameRect.left * mScale, initialFrameRect.top * mScale,
+//                initialFrameRect.right * mScale, initialFrameRect.bottom * mScale);
+//        frameRect.offset(mImageRect.left, mImageRect.top);
+//        float l = Math.max(mImageRect.left, frameRect.left);
+//        float t = Math.max(mImageRect.top, frameRect.top);
+//        float r = Math.min(mImageRect.right, frameRect.right);
+//        float b = Math.min(mImageRect.bottom, frameRect.bottom);
+//        frameRect.set(l, t, r, b);
+//        return frameRect;
+
+
         RectF frameRect = new RectF();
-        frameRect.set(initialFrameRect.left * mScale, initialFrameRect.top * mScale,
-                initialFrameRect.right * mScale, initialFrameRect.bottom * mScale);
+        frameRect.set(initialFrameRect.left, initialFrameRect.top,
+                initialFrameRect.right, initialFrameRect.bottom);
         frameRect.offset(mImageRect.left, mImageRect.top);
         float l = Math.max(mImageRect.left, frameRect.left);
         float t = Math.max(mImageRect.top, frameRect.top);
@@ -2263,6 +2290,7 @@ public class CropImageView extends ImageView{
         float b = Math.min(mImageRect.bottom, frameRect.bottom);
         frameRect.set(l, t, r, b);
         return frameRect;
+
     }
 
     /**
@@ -2470,7 +2498,16 @@ public class CropImageView extends ImageView{
      */
     public void setCropEnabled(boolean enabled){
         mIsCropEnabled = enabled;
+        if(!enabled)
+        {
+            mFrameRect = new RectF(mImageRect);
+        }
         invalidate();
+    }
+
+    public boolean isCropEnable()
+    {
+        return mIsCropEnabled;
     }
 
     /**
@@ -2645,6 +2682,11 @@ public class CropImageView extends ImageView{
         this.mScale = mScale;
     }
 
+    public float getScale()
+    {
+        return mScale;
+    }
+
     private void setCenter(PointF mCenter){
         this.mCenter = mCenter;
     }
@@ -2655,6 +2697,42 @@ public class CropImageView extends ImageView{
 
     private float getFrameH(){
         return (mFrameRect.bottom - mFrameRect.top);
+    }
+
+    public RectF getFrameRect()
+    {
+        return mFrameRect;
+    }
+
+    public void setFrameRect(RectF rect, float scale)
+    {
+//        RectF frameRect = new RectF();
+//        frameRect.set(rect.left * scale, rect.top * scale,
+//                rect.right * scale, rect.bottom * scale);
+//        frameRect.offset(mImageRect.left, mImageRect.top);
+//        float l = Math.max(mImageRect.left, frameRect.left);
+//        float t = Math.max(mImageRect.top, frameRect.top);
+//        float r = Math.min(mImageRect.right, frameRect.right);
+//        float b = Math.min(mImageRect.bottom, frameRect.bottom);
+//        frameRect.set(l, t, r, b);
+
+        RectF frameRect = new RectF();
+        frameRect.set(rect.left , rect.top,
+                rect.right, rect.bottom);
+        frameRect.offset(mImageRect.left, mImageRect.top);
+        float l = Math.max(mImageRect.left, frameRect.left);
+        float t = Math.max(mImageRect.top, frameRect.top);
+        float r = Math.min(mImageRect.right, frameRect.right);
+        float b = Math.min(mImageRect.bottom, frameRect.bottom);
+        frameRect.set(l, t, r, b);
+
+        mFrameRect = frameRect;
+
+    }
+
+    public RectF getImageRect()
+    {
+        return mImageRect;
     }
 
     // Enum ////////////////////////////////////////////////////////////////////////////////////////

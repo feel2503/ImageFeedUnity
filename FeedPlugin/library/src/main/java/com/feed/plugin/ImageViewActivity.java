@@ -3,6 +3,7 @@ package com.feed.plugin;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.feed.plugin.adapter.GpuimageSlideAdapter;
@@ -30,5 +31,13 @@ public class ImageViewActivity extends AppCompatActivity{
 
         mImageAdapter.setImages(mImagList);
         mImagePager.setAdapter(mImageAdapter);
+
+
+        findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                finish();
+            }
+        });
     }
 }

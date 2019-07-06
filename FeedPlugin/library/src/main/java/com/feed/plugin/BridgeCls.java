@@ -109,6 +109,33 @@ public class BridgeCls{
         context.startActivity(intent);
     }
 
+    public void startProfileGallleryActivity(Context context)
+    {
+        Intent intent = new Intent(context, ProfileGalleryActivity.class);
+        context.startActivity(intent);
+    }
+
+    public void startProfilePhotoActivity(Context context)
+    {
+        Intent intent = new Intent(context, ProfilePhotoActivity.class);
+        context.startActivity(intent);
+    }
+
+    public void setRequestTagURL( String url)
+    {
+
+    }
+
+    public void setRequestPeopleURL( String url)
+    {
+
+    }
+
+    public void setRequestToken( String ip)
+    {
+
+    }
+
 
     public void requestFilterImg(Context context)
     {
