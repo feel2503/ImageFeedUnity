@@ -71,9 +71,8 @@ public class FeedUploadActivity extends AppCompatActivity {
 //            }
 //        });
 
-        List<HashTagSuggestWithAPIAdapter.HashTag> object = new ArrayList<>();
-
-        HashTagSuggestWithAPIAdapter adapter = new HashTagSuggestWithAPIAdapter(this, android.R.layout.simple_dropdown_item_1line, object);
+        List<String> object = new ArrayList<>();
+        HashTagSuggestWithAPIAdapter adapter = new HashTagSuggestWithAPIAdapter(this, R.layout.hashtag_suggest_cell);
         adapter.setCursorPositionListener(new HashTagSuggestWithAPIAdapter.CursorPositionListener() {
             @Override
             public int currentCursorPosition() {

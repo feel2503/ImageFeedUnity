@@ -2,18 +2,28 @@ package com.feed.plugin.widget.hashtag;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
+import android.widget.TextView;
 
+import com.feed.plugin.BridgeCls;
 import com.feed.plugin.R;
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,18 +37,34 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
-public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<HashTagSuggestWithAPIAdapter.HashTag>{
+public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<String>{
     private HashTagFilter filter;
-    private List<HashTag> suggests = new ArrayList<>();
-
+    private List<String> suggests = new ArrayList<>();
     private LayoutInflater inflater;
     private CursorPositionListener listener;
+    private Gson mGson;
 
-    private String baseUrl = "http://34.85.93.94/";
+    private String tagUrl = "http://34.85.93.94:8081/game/tag/search";
+    private String peopleUrl = "http://34.85.93.94:8081/game/people/search";
 
-    public HashTagSuggestWithAPIAdapter(Context context, int resource, List<HashTag> objects) {
-        super(context, resource, objects);
+    private String tokenValue = "9a9429f39e7b2e4e2797474d037f02c778347657";
+    private int versionValue = 12;
+    private int mResource;
+
+    public HashTagSuggestWithAPIAdapter(Context context, int resource) {
+        super(context, resource);
+        mResource = resource;
+        mGson = new Gson();
         inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        if(BridgeCls.mTagUrl != null && BridgeCls.mTagUrl.length() > 0)
+            tagUrl = BridgeCls.mTagUrl;
+
+        if(BridgeCls.mPeopleUrl != null && BridgeCls.mPeopleUrl.length() > 0)
+            peopleUrl = BridgeCls.mPeopleUrl;
+
+        if(BridgeCls.mTokenValue != null && BridgeCls.mTokenValue.length() > 0)
+            tokenValue = BridgeCls.mTokenValue;
     }
 
     public interface CursorPositionListener {
@@ -50,35 +76,12 @@ public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<HashTagSuggestWit
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        if (convertView == null) {
-            convertView = inflater.inflate(R.layout.hashtag_suggest_cell, null);
-        }
-
-        try {
-            HashTag hashTag = getItem(position);
-
-            AppCompatTextView tagName = (AppCompatTextView) convertView.findViewById(R.id.hash_tag_name);
-            AppCompatTextView tagCount = (AppCompatTextView) convertView.findViewById(R.id.hash_tag_count);
-
-            tagName.setText(hashTag.tag);
-            tagCount.setText(hashTag.count);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return convertView;
-    }
-
-    @Override
     public int getCount() {
         return suggests.size();
     }
 
     @Override
-    public HashTag getItem(int position) {
+    public String getItem(int position) {
         return suggests.get(position);
     }
 
@@ -92,28 +95,48 @@ public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<HashTagSuggestWit
         return filter;
     }
 
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        if (convertView == null) {
+            convertView = inflater.inflate(mResource, null);
+        }
+
+        try {
+            String hashTag = getItem(position);
+
+            TextView tagName = (TextView) convertView.findViewById(R.id.text_tag);
+            tagName.setText(hashTag);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return convertView;
+    }
+
+
+
     public class HashTagFilter extends Filter {
 
-        private final Pattern pattern = Pattern.compile("[#＃]([Ａ-Ｚａ-ｚA-Za-z一-\u9FC60-9０-９ぁ-ヶｦ-ﾟー])+");
-
-        private SuggestService service;
+        private final Pattern pattern = Pattern.compile("[#＃@]([Ａ-Ｚａ-ｚA-Za-z一-\u9FC60-9０-９ぁ-ヶｦ-ﾟー])+");
 
         public int start;
         public int end;
+        public String tagValue = "";
 
         public HashTagFilter() {
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            service = retrofit.create(SuggestService.class);
         }
 
         @Override
         public CharSequence convertResultToString(Object resultValue) {
-            return String.format("#%s ", ((HashTag) resultValue).tag);
+            //return String.format("#%s ", resultValue);
+            String prefix = "#";
+            if(tagValue.equalsIgnoreCase("#"))
+                prefix = "#";
+            else if(tagValue.equalsIgnoreCase("@"))
+                prefix = "@";
+            return prefix + resultValue.toString() + " ";
         }
 
         @Override
@@ -121,7 +144,8 @@ public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<HashTagSuggestWit
 
             FilterResults filterResults = new FilterResults();
 
-            if (constraint != null) {
+            if (constraint != null)
+            {
 
                 suggests.clear();
 
@@ -129,25 +153,25 @@ public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<HashTagSuggestWit
 
                 Matcher m = pattern.matcher(constraint.toString());
                 while (m.find()) {
-
                     if (m.start() < cursorPosition && cursorPosition <= m.end()) {
-
+                        String url = tagUrl;
                         start = m.start();
                         end = m.end();
 
+                        tagValue = constraint.subSequence(m.start() , m.start()+1).toString();
+                        if(tagValue.equalsIgnoreCase("#"))
+                            url = tagUrl;
+                        else if(tagValue.equalsIgnoreCase("@"))
+                            url = peopleUrl;
+
                         String keyword = constraint.subSequence(m.start() + 1, m.end()).toString();
                         RequestCommand reqCmd = new RequestCommand(keyword, 0, 20);
-                        RequestBody reqBody = new RequestBody("9a9429f39e7b2e4e2797474d037f02c778347657", 12, reqCmd);
+                        RequestBody reqBody = new RequestBody(tokenValue, versionValue, reqCmd);
+                        String reqPost = mGson.toJson(reqBody);
 
-                        Call<SuggestResponse> call = service.listHashTags(reqBody);
-                        try {
-                            //suggests = call.execute().body().results;
-                            //ArrayList<String> result = call.execute().body().command.tags;
-                            ResultCommand cmd = call.execute().body().command;
-                            int a = 0;
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        String resultStr = requestPost(url, reqPost);
+                        SuggestResponse respons = mGson.fromJson(resultStr, SuggestResponse.class);
+                        suggests = respons.command.tags;
                     }
                 }
             }
@@ -168,10 +192,50 @@ public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<HashTagSuggestWit
         }
     }
 
-    public interface SuggestService {
-        @POST("game/people/search")
-        Call<SuggestResponse> listHashTags(@Body RequestBody body);
+    public String requestPost(String addr, String param)
+    {
+        String result = "";
+        try{
+            URL url = new URL(addr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            if(conn!=null)
+            {
+                conn.setConnectTimeout(10000);
+                conn.setRequestMethod("POST");
+                conn.setUseCaches(false);
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+                conn.setRequestProperty("Content-Type","application/json");
+
+                byte[] outputInBytes = param.getBytes("UTF-8");
+                OutputStream os = conn.getOutputStream();
+                os.write( outputInBytes );
+                os.close();
+
+                if(conn.getResponseCode() == HttpURLConnection.HTTP_OK)
+                {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(),"utf-8"));
+                    String line;
+                    StringBuffer response = new StringBuffer();
+                    while((line = br.readLine()) != null) {
+                        response.append(line);
+                    }
+                    br.close();
+
+                    result = response.toString();
+                }
+                conn.disconnect();
+            }
+        }catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return result;
+
     }
+
+
+
 
     public class SuggestResponse {
         @Expose
@@ -251,8 +315,8 @@ public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<HashTagSuggestWit
 
     class RequestCommand {
         @Expose
-        @SerializedName("tags")
-        public String tags;
+        @SerializedName("tag")
+        public String tag;
 
         @Expose
         @SerializedName("limit")
@@ -262,8 +326,8 @@ public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<HashTagSuggestWit
         @SerializedName("offset")
         public int offset;
 
-        public RequestCommand(String tags, int limit, int offset){
-            this.tags = tags;
+        public RequestCommand(String tag, int limit, int offset){
+            this.tag = tag;
             this.limit = limit;
             this.offset = offset;
         }

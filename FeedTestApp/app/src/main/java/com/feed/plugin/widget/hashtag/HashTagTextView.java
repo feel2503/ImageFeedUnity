@@ -23,8 +23,11 @@ public class HashTagTextView extends AutoCompleteTextView  {
     protected void replaceText(CharSequence text) {
         clearComposingText();
 
-        HashTagSuggestAdapter adapter = (HashTagSuggestAdapter) getAdapter();
-        HashTagSuggestAdapter.HashTagFilter filter = (HashTagSuggestAdapter.HashTagFilter) adapter.getFilter();
+        HashTagSuggestWithAPIAdapter adapter = (HashTagSuggestWithAPIAdapter)getAdapter();
+        HashTagSuggestWithAPIAdapter.HashTagFilter filter = (HashTagSuggestWithAPIAdapter.HashTagFilter) adapter.getFilter();
+
+//        HashTagSuggestAdapter adapter = (HashTagSuggestAdapter) getAdapter();
+//        HashTagSuggestAdapter.HashTagFilter filter = (HashTagSuggestAdapter.HashTagFilter) adapter.getFilter();
 
         Editable span = getText();
         span.replace(filter.start, filter.end, text);

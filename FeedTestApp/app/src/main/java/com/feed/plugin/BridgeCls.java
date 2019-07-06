@@ -27,6 +27,10 @@ public class BridgeCls{
     public static String mStrProfilePath;
     public static String mStrFilterPath;
 
+    public static String mTagUrl;
+    public static String mPeopleUrl;
+    public static String mTokenValue;
+
     public static BridgeCls instance()
     {
         if(mInstance == null)
@@ -123,17 +127,17 @@ public class BridgeCls{
 
     public void setRequestTagURL( String url)
     {
-
+        mTagUrl = url;
     }
 
     public void setRequestPeopleURL( String url)
     {
-
+        mPeopleUrl = url;
     }
 
-    public void setRequestToken( String ip)
+    public void setRequestToken( String token)
     {
-
+        mTokenValue = token;
     }
 
 
