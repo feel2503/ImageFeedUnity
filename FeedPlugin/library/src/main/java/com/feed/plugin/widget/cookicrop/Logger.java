@@ -3,9 +3,6 @@ package com.feed.plugin.widget.cookicrop;
 import android.util.Log;
 
 
-/**
- * Created by adamstyrc on 31/03/16.
- */
 public class Logger {
 
     private static boolean sEnabled = false;

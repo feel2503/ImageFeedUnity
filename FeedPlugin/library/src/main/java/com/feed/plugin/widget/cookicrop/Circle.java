@@ -1,8 +1,5 @@
 package com.feed.plugin.widget.cookicrop;
 
-/**
- * Created by adamstyrc on 01/04/16.
- */
 public class Circle {
 
     private int cx;

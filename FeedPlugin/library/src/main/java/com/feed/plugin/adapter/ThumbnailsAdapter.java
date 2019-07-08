@@ -22,10 +22,6 @@ import java.util.List;
 
 
 
-/**
- * Created by ravi on 23/10/17.
- */
-
 public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.MyViewHolder> {
 
     private ArrayList<ThumbnailItem> thumbnailItemList;

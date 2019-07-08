@@ -6,9 +6,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
-/**
- * Created by adamstyrc on 31/03/16.
- */
 public class CookieCutterTouchListener implements View.OnTouchListener {
 
     private final Circle circle;

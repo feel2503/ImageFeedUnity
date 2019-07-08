@@ -2,9 +2,6 @@ package com.feed.plugin.widget.cookicrop;
 
 import android.graphics.Matrix;
 
-/**
- * Created by adamstyrc on 01/04/16.
- */
 public class MatrixParams {
 
     private float x;

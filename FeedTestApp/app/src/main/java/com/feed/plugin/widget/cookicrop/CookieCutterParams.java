@@ -4,9 +4,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 
-/**
- * Created by adamstyrc on 04/04/16.
- */
 public class CookieCutterParams {
 
     private int circleRadius = 400;

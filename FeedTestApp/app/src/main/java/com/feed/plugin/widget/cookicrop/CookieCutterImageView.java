@@ -15,9 +15,6 @@ import android.util.AttributeSet;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
-/**
- * Created by adamstyrc on 31/03/16.
- */
 public class CookieCutterImageView extends ImageView{
 
     private CookieCutterParams cookieCutterParams;
