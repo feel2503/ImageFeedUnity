@@ -8,6 +8,7 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -59,12 +61,16 @@ public class ImgSelectActivity extends AppCompatActivity{
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
 
         mTextTitle = (TextView)findViewById(R.id.text_title);
+        mTextTitle.setTypeface(Typeface.createFromAsset(getAssets(), "RingsideWide-Semibold.otf"));
+        mTextTitle.setText(getString(R.string.gallelry));
+        setCustomFont();
     }
 
     private void initTab()
     {
-        mTabLayout = (TabLayout)findViewById(R.id.tabLayout);
+        mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.gallelry));
+
 //        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.stylebook));
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.camera));
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -187,6 +193,30 @@ public class ImgSelectActivity extends AppCompatActivity{
 
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
+    public void setCustomFont() {
+
+        ViewGroup vg = (ViewGroup) mTabLayout.getChildAt(0);
+        int tabsCount = vg.getChildCount();
+
+        for (int j = 0; j < tabsCount; j++) {
+            ViewGroup vgTab = (ViewGroup) vg.getChildAt(j);
+
+            int tabChildsCount = vgTab.getChildCount();
+
+            for (int i = 0; i < tabChildsCount; i++) {
+                View tabViewChild = vgTab.getChildAt(i);
+                if (tabViewChild instanceof TextView) {
+                    //Put your font in assests folder
+                    //assign name of the font here (Must be case sensitive)
+                    ((TextView) tabViewChild).setTypeface(Typeface.createFromAsset(getAssets(), "RingsideWide-Semibold.otf"));
+                    ((TextView) tabViewChild).setTextColor(0xffffffff);
+                }
+            }
+        }
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){

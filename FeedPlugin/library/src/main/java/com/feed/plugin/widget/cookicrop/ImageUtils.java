@@ -15,6 +15,7 @@ import android.view.WindowManager;
 
 import java.io.FileNotFoundException;
 
+
 public class ImageUtils {
 
     public static Bitmap getCircularBitmap(Bitmap bitmap) {

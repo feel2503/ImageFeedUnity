@@ -7,12 +7,14 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.feed.plugin.widget.hashtag.HashTagSuggestAdapter;
 import com.feed.plugin.widget.hashtag.HashTagSuggestWithAPIAdapter;
@@ -44,6 +46,9 @@ public class FeedUploadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed_upload);
 
+        TextView textTitle = findViewById(R.id.text_title);
+        textTitle.setTypeface(Typeface.createFromAsset(getAssets(), "RingsideWide-Semibold.otf"));
+
         mProgress = new ProgressDialog(this);
         mImagList = getIntent().getStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST);
 
@@ -62,6 +67,7 @@ public class FeedUploadActivity extends AppCompatActivity {
 
         // hashtag
         textView = (HashTagTextView) findViewById(R.id.input_form);
+        textView.setTypeface(Typeface.createFromAsset(getAssets(), "RecklessTRIAL-Regular.otf"));
 
 //        HashTagSuggestAdapter adapter = new HashTagSuggestAdapter(this, android.R.layout.simple_dropdown_item_1line, COUNTRIES);
 //        adapter.setCursorPositionListener(new HashTagSuggestAdapter.CursorPositionListener() {

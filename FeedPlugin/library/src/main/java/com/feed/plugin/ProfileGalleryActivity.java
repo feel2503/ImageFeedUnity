@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.feed.plugin.fragment.ProfileCookiGalleryFragment;
 import com.feed.plugin.fragment.gallery.GalleryAdapter;
@@ -79,6 +81,10 @@ public class ProfileGalleryActivity extends AppCompatActivity{
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_profile_gallery);
+
+        TextView textTitle = findViewById(R.id.text_title);
+        textTitle.setTypeface(Typeface.createFromAsset(getAssets(), "RingsideWide-Semibold.otf"));
+        textTitle.setText(getString(R.string.gallelry));
 
         mProgress = new ProgressDialog(this);
 

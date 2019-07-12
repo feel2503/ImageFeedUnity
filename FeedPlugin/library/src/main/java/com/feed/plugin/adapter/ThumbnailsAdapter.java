@@ -2,6 +2,7 @@ package com.feed.plugin.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,12 +23,17 @@ import java.util.List;
 
 
 
+
+
 public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.MyViewHolder> {
 
     private ArrayList<ThumbnailItem> thumbnailItemList;
     private FilterSelectListener listener;
     private Context mContext;
     public int selectedIndex = 0;
+    private Typeface mTypeface;
+
+    public String mSelectedName = "";
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -46,6 +52,8 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
         mContext = context;
         this.thumbnailItemList = thumbnailItemList;
         this.listener = listener;
+
+        mTypeface = Typeface.createFromAsset(context.getAssets(), "RingsideWide-Semibold.otf");
     }
 
     public void setThubmnailItemList(ArrayList<ThumbnailItem> thumbnailItemList)
@@ -61,6 +69,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
         //viewHolder.thumbnail = (GPUImageView) itemView.findViewById(R.id.gpuimage_thumbnail);
         viewHolder.thumbnail = (ImageView) itemView.findViewById(R.id.gpuimage_thumbnail);
         viewHolder.filterName = (TextView)itemView.findViewById(R.id.filter_name);
+        viewHolder.filterName.setTypeface(mTypeface);
         viewHolder.filterValueView = (ImageView)itemView.findViewById(R.id.filtervalue_view);
 
 
@@ -93,6 +102,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
                 if(thumbnailItem.filterName.equalsIgnoreCase("Normal") && thumbnailItem.isSelected)
                     return;
 
+                mSelectedName = thumbnailItem.filterName;
                 listener.onFilterSelected(thumbnailItem.filter, thumbnailItem.isSelected);
                 //thumbnailItem.isSelected = true;
 

@@ -64,6 +64,7 @@ public class GalleryFragment extends ImgSelFragment{
     private GalleryAdapter galleryAdapter;
 
     private boolean imgViewState = true;
+    private boolean multiSelState = true;
 
     private ImgSelectActivity mParentActivity;
 
@@ -75,7 +76,8 @@ public class GalleryFragment extends ImgSelFragment{
     protected ArrayList<String> mCropImgList;
 
     private Button mBtnViewState;
-    private ToggleButton mToggleSelState;
+    //private ToggleButton mToggleSelState;
+    private Button mToggleSelState;
     private Button mBtnCrop16_9;
     private Button mBtnCrop3_4;
     private Button mBtnCrop1_1;
@@ -148,7 +150,7 @@ public class GalleryFragment extends ImgSelFragment{
         mRelImgViewer = (LinearLayout)rootView.findViewById(R.id.gallery_layout);
 
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams)mRelImgViewer.getLayoutParams();
-        int margintop = width - (int)(displayMetrics.density * 40);
+        int margintop = width - (int)(displayMetrics.density * 65);
         lp.setMargins(0, margintop, 0, 0);
         mRelImgViewer.setLayoutParams(lp);
 
@@ -171,8 +173,8 @@ public class GalleryFragment extends ImgSelFragment{
         mCropView.setCropEnabled(false);
 
         recyclerGallery = (RecyclerView) rootView.findViewById(R.id.recycler_gallery);
-        mBtnViewState = rootView.findViewById(R.id.btn_change_gall_imgview_state);
-        mBtnViewState.setOnClickListener(mOnClickListenr);
+        rootView.findViewById(R.id.btn_change_gall_imgview_state).setOnClickListener(mOnClickListenr);;
+
         mToggleSelState = rootView.findViewById(R.id.btn_img_sel_mode);
         mToggleSelState.setOnClickListener(mOnClickListenr);
         mBtnCrop16_9 = rootView.findViewById(R.id.btn_crop_16_9);
@@ -528,17 +530,25 @@ public class GalleryFragment extends ImgSelFragment{
                     //mImgViewLayout.topMargin = (int)getResources().getDimension(R.dimen.view_min);
                     mRelImgViewer.setLayoutParams(mImgViewLayout);
                     //mRelImgViewer.setVisibility(View.GONE);
-                    mBtnViewState.setBackgroundResource(R.drawable.btn_gallery_slide_down);
+                    //mBtnViewState.setBackgroundResource(R.drawable.btn_gallery_slide_down);
                     imgViewState = false;
                 }
                 else
                 {
-                    //mImgViewLayout.height = (int)getResources().getDimension(R.dimen.view_max);
-                    mImgViewLayout.topMargin = (int)getResources().getDimension(R.dimen.view_max);
-                    mRelImgViewer.setLayoutParams(mImgViewLayout);
+                    DisplayMetrics displayMetrics = new DisplayMetrics();
+                    getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                    int width = displayMetrics.widthPixels;
+                    RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams)mRelImgViewer.getLayoutParams();
+                    int margintop = width - (int)(displayMetrics.density * 65);
+                    lp.setMargins(0, margintop, 0, 0);
+                    mRelImgViewer.setLayoutParams(lp);
+
+//                    //mImgViewLayout.height = (int)getResources().getDimension(R.dimen.view_max);
+//                    mImgViewLayout.topMargin = (int)getResources().getDimension(R.dimen.view_max);
+//                    mRelImgViewer.setLayoutParams(mImgViewLayout);
 
                     //mRelImgViewer.setVisibility(View.VISIBLE);
-                    mBtnViewState.setBackgroundResource(R.drawable.btn_gallery_slide);
+                    //mBtnViewState.setBackgroundResource(R.drawable.btn_gallery_slide);
                     imgViewState = true;
                 }
             }
@@ -714,12 +724,15 @@ public class GalleryFragment extends ImgSelFragment{
             }
             else if(v.getId() == R.id.btn_img_sel_mode)
             {
-                if(mToggleSelState.isChecked())
+                if(multiSelState)
                 {
+                    multiSelState = false;
                     galleryAdapter.setMultiSelectMode(true);
+
                 }
                 else
                 {
+                    multiSelState = true;
                     galleryAdapter.setMultiSelectMode(false);
                     String imgPath = mArrImgList.get(mArrImgList.size()-1).mImgString;
                     mArrImgList.clear();
@@ -739,8 +752,35 @@ public class GalleryFragment extends ImgSelFragment{
                             item.setSelectCount(-1);
                         }
                     }
-
                 }
+//                if(mToggleSelState.isChecked())
+//                {
+//                    galleryAdapter.setMultiSelectMode(true);
+//                }
+//                else
+//                {
+//                    galleryAdapter.setMultiSelectMode(false);
+//                    String imgPath = mArrImgList.get(mArrImgList.size()-1).mImgString;
+//                    mArrImgList.clear();
+//                    mArrImgList.add(new CropImgItem(imgPath, null, null));
+//
+//                    List<PhotoVO> itemList = galleryAdapter.getmPhotoList();
+//                    for(PhotoVO item : itemList)
+//                    {
+//                        if(item.getImgPath().equalsIgnoreCase(imgPath))
+//                        {
+//                            item.setSelected(true);
+//                            item.setSelectCount(mArrImgList.size());
+//                        }
+//                        else
+//                        {
+//                            item.setSelected(false);
+//                            item.setSelectCount(-1);
+//                        }
+//                    }
+//
+//                }
+
                 galleryAdapter.notifyDataSetChanged();
             }
         }

@@ -16,6 +16,7 @@
         android:background="#ffffffff" >
 
         <TextView
+            android:id="@+id/notice_title"
             android:layout_width="match_parent"
             android:layout_height="16.5dp"
             android:gravity="center_horizontal"
@@ -32,6 +33,7 @@
             android:background="#ff262624" />
 
         <TextView
+            android:id="@+id/notice_content"
             android:layout_width="197dp"
             android:layout_height="68dp"
             android:gravity="center_horizontal"

@@ -121,6 +121,11 @@ public class FiltersListFragment extends Fragment implements FilterSelectListene
         async.execute(path);
     }
 
+    public String getSelectFilterName()
+    {
+        return mAdapter.mSelectedName;
+    }
+
     private Bitmap scaleBitmap(Bitmap bm) {
         int width = bm.getWidth();
         int height = bm.getHeight();

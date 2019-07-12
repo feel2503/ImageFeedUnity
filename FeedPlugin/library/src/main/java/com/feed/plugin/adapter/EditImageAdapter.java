@@ -3,6 +3,7 @@ package com.feed.plugin.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,7 +30,7 @@ public class EditImageAdapter extends RecyclerView.Adapter<EditImageAdapter.MyVi
     private FilterSelectListener listener;
     private Context mContext;
     private int selectedIndex = -1;
-
+    private Typeface mTypeface;
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView thumbnail;
         TextView filterName;
@@ -45,6 +46,9 @@ public class EditImageAdapter extends RecyclerView.Adapter<EditImageAdapter.MyVi
     public EditImageAdapter(Context context, FilterSelectListener listener) {
         mContext = context;
         this.listener = listener;
+
+        mTypeface = Typeface.createFromAsset(context.getAssets(), "RingsideWide-Semibold.otf");
+
         initEditList();
     }
 
@@ -58,6 +62,7 @@ public class EditImageAdapter extends RecyclerView.Adapter<EditImageAdapter.MyVi
         //viewHolder.thumbnail = (GPUImageView) itemView.findViewById(R.id.gpuimage_thumbnail);
         viewHolder.thumbnail = (ImageView) itemView.findViewById(R.id.gpuimage_thumbnail);
         viewHolder.filterName = (TextView)itemView.findViewById(R.id.filter_name);
+        viewHolder.filterName.setTypeface(mTypeface);
         viewHolder.seleteState = (View)itemView.findViewById(R.id.view_filter_selete);
         return viewHolder;
     }
@@ -131,31 +136,31 @@ public class EditImageAdapter extends RecyclerView.Adapter<EditImageAdapter.MyVi
         editItemList = new ArrayList<ThumbnailItem>();
 
         ThumbnailItem itemBrightness = new ThumbnailItem();
-        itemBrightness.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ico_edit_bright );
+        itemBrightness.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.btn_brightness );
         itemBrightness.filterName = mContext.getString(R.string.Brightness);
         itemBrightness.filter = FilterUtils.createFilterForType(mContext, FilterUtils.FilterType.BRIGHTNESS);
         editItemList.add(itemBrightness);
 
         ThumbnailItem itemContrast = new ThumbnailItem();
-        itemContrast.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ico_edit_contrast );
+        itemContrast.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.btn_contrast );
         itemContrast.filterName = mContext.getString(R.string.Contrast);
         itemContrast.filter = FilterUtils.createFilterForType(mContext, FilterUtils.FilterType.CONTRAST);
         editItemList.add(itemContrast);
 
         ThumbnailItem itemSharpen = new ThumbnailItem();
-        itemSharpen.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ico_edit_sharpen );
+        itemSharpen.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.btn_sharpen );
         itemSharpen.filterName = mContext.getString(R.string.Sharpen);
         itemSharpen.filter = FilterUtils.createFilterForType(mContext, FilterUtils.FilterType.SHARPEN);
         editItemList.add(itemSharpen);
 
         ThumbnailItem itemSaturation = new ThumbnailItem();
-        itemSaturation.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ico_edit_saturation );
+        itemSaturation.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.btn_saturation );
         itemSaturation.filterName = mContext.getString(R.string.Saturation);
         itemSaturation.filter = FilterUtils.createFilterForType(mContext, FilterUtils.FilterType.SATURATION);
         editItemList.add(itemSaturation);
 
         ThumbnailItem itemVignette = new ThumbnailItem();
-        itemVignette.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ico_edit_vignette );
+        itemVignette.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.btn_vignette );
         itemVignette.filterName = mContext.getString(R.string.Vignette);
         itemVignette.filter = FilterUtils.createFilterForType(mContext, FilterUtils.FilterType.VIGNETTE);
         editItemList.add(itemVignette);

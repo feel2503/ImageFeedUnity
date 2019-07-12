@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">FeedPlugin</string>
 
-    <string name="gallelry">Gallery</string>
+    <string name="gallelry">GALLERY</string>
     <string name="stylebook">Style Book</string>
-    <string name="camera">Camera</string>
+    <string name="camera">CAMERA</string>
     <string name="requestpermission">This is a required permission. Please enable this permission in Settings.</string>
     <string name="setting">Setting</string>
-    <string name="cancel">Cancel</string>
+    <string name="cancel">CANCEL</string>
     <string name="filter">Filter</string>
-    <string name="edit">Edit</string>
+    <string name="edit">EDIT</string>
 
     <string name="normal">Normal</string>
     <string name="Contrast">Contrast</string>
@@ -71,8 +71,8 @@
     <string name="ok">OK</string>
 
     <string name="select_image">Please select image.</string>
-    <string name="done">Done</string>
-    <string name="new_post">New Post</string>
+    <string name="done">DONE</string>
+    <string name="new_post">NEW POST</string>
     <string name="notice">NOTICE</string>
     <string name="notice_content">If you back now, the editing will disapper. \n\n Would you like to go back?</string>
     <string name="yes">YES</string>

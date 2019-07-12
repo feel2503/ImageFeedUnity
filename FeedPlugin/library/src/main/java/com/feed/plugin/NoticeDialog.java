@@ -1,12 +1,14 @@
 package com.feed.plugin;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 public class NoticeDialog extends Activity{
 
@@ -22,8 +24,21 @@ public class NoticeDialog extends Activity{
 
         setContentView(R.layout.activity_notice_dialog);
 
-        findViewById(R.id.text_yes).setOnClickListener(mOnClickListener);
-        findViewById(R.id.text_no).setOnClickListener(mOnClickListener);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "RingsideWide-Semibold.otf");
+
+        TextView textTitle = findViewById(R.id.notice_title);
+        textTitle.setTypeface(typeface);
+
+        TextView textContent = findViewById(R.id.notice_content);
+        textContent.setTypeface(typeface);
+
+        TextView textYes = findViewById(R.id.text_yes);
+        textYes.setTypeface(typeface);
+        textYes.setOnClickListener(mOnClickListener);
+
+        TextView textNo = findViewById(R.id.text_no);
+        textNo.setTypeface(typeface);
+        textNo.setOnClickListener(mOnClickListener);
     }
 
 
