@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,7 +19,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -75,11 +79,13 @@ public class ImgFilterActivity extends AppCompatActivity{
 
     private RelativeLayout mRelFilterValue;
     private RelativeLayout mRelFilterSelect;
+    private LinearLayout mLinearPagerPos;
 
     private ThumbTextSeekBar mSeekbarValue;
 
     private TextView mTextCancel;
     private TextView mTextDone;
+    private TextView mTextFilterName;
 
     private ArrayList<GPUImgItem> mArrEditFilter = new ArrayList<>();
     private GPUImgItem mCurrentTransFilter;
@@ -92,6 +98,8 @@ public class ImgFilterActivity extends AppCompatActivity{
     private String mStrActivitMode;
 
 
+    private int dotsCount;
+    private ImageView[] dots;
 
     Handler mHandler = new Handler()
     {
@@ -140,8 +148,13 @@ public class ImgFilterActivity extends AppCompatActivity{
 
         mProgress = new ProgressDialog(this);
 
+        TextView textTitle = findViewById(R.id.text_title);
+        textTitle.setTypeface(Typeface.createFromAsset(getAssets(), "RingsideWide-Semibold.otf"));
+        textTitle.setText(getString(R.string.edit));
+
         findViewById(R.id.btn_next).setOnClickListener(mOnClickListener);
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
+
 
         String editImgPath = getIntent().getStringExtra(BridgeCls.EXTRA_EDITIMG_LIST);
 
@@ -179,9 +192,12 @@ public class ImgFilterActivity extends AppCompatActivity{
         mTabLayout = (TabLayout)findViewById(R.id.edit_tabs);
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setSelectedTabIndicatorHeight(0);
+        setCustomFont();
 
         mRelFilterSelect = (RelativeLayout)findViewById(R.id.relative_filter_select);
         mRelFilterValue = (RelativeLayout)findViewById(R.id.relative_filter_value);
+        mLinearPagerPos = findViewById(R.id.linear_pager_pos);
+
 
         mRelFilterValue.setVisibility(View.GONE);
 
@@ -189,9 +205,16 @@ public class ImgFilterActivity extends AppCompatActivity{
         mSeekbarValue.setOnSeekBarChangeListener(mOnSeekbarChangeListener);
 
         mTextCancel = (TextView)findViewById(R.id.text_cancel);
+        mTextCancel.setTypeface(Typeface.createFromAsset(getAssets(), "RingsideWide-Semibold.otf"));
         mTextCancel.setOnClickListener(mOnClickListener);
         mTextDone = (TextView)findViewById(R.id.text_done);
+        mTextDone.setTypeface(Typeface.createFromAsset(getAssets(), "RingsideWide-Semibold.otf"));
         mTextDone.setOnClickListener(mOnClickListener);
+
+        mTextFilterName = findViewById(R.id.text_filter_name);
+        mTextFilterName.setTypeface(Typeface.createFromAsset(getAssets(), "RingsideWide-Semibold.otf"));
+
+        initPageMark();
     }
 
 
@@ -246,6 +269,79 @@ public class ImgFilterActivity extends AppCompatActivity{
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void initPageMark()
+    {
+        dotsCount = mImagList.size();
+        dots = new ImageView[dotsCount];
+
+        for (int i = 0; i < dotsCount; i++) {
+            dots[i] = new ImageView(this);
+//            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams)mLinearPagerPos.getLayoutParams();
+//            lp.setMargins(10, 0, 0, 0);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(10, 0, 0, 0);
+            dots[i].setLayoutParams(params);
+
+            dots[i].setImageResource(R.drawable.pagepos_oval);
+            mLinearPagerPos.addView(dots[i]);
+        }
+
+        dots[0].setImageResource(R.drawable.pagepos_sel_oval);
+
+
+    }
+
+    private void pagePositionCheck(int position)
+    {
+
+        for (int i = 0; i < dotsCount; i++) {
+            dots[i].setImageResource(R.drawable.pagepos_oval);
+        }
+        dots[position].setImageResource(R.drawable.pagepos_sel_oval);
+
+        // Config.PAGE_SELECT_MIN_LEFT 95
+//
+//        int setLeft = 0;
+//
+//        setLeft = Config.PAGE_SELECT_MIN_LEFT
+//
+//                + (position * Config.PAGE_SELECT_LEFT_PLUS);
+//
+//
+//
+//        bottomPoint.setPadding(setLeft, 0, 0, 0);
+
+    }
+
+
+
+
+
+
+
+    public void setCustomFont() {
+
+        ViewGroup vg = (ViewGroup) mTabLayout.getChildAt(0);
+        int tabsCount = vg.getChildCount();
+
+        for (int j = 0; j < tabsCount; j++) {
+            ViewGroup vgTab = (ViewGroup) vg.getChildAt(j);
+
+            int tabChildsCount = vgTab.getChildCount();
+
+            for (int i = 0; i < tabChildsCount; i++) {
+                View tabViewChild = vgTab.getChildAt(i);
+                if (tabViewChild instanceof TextView) {
+                    //Put your font in assests folder
+                    //assign name of the font here (Must be case sensitive)
+                    ((TextView) tabViewChild).setTypeface(Typeface.createFromAsset(getAssets(), "RingsideWide-Semibold.otf"));
+                    ((TextView) tabViewChild).setTextColor(0xffffffff);
+                }
+            }
+        }
     }
 
     private void initGPUImageList()
@@ -309,6 +405,8 @@ public class ImgFilterActivity extends AppCompatActivity{
         public void onPageSelected(int position){
             mCurrentGPUImage = mGPUImgList.get(position);
             mFiltersListFragment.updateThumbnail(mImagList.get(position));
+
+            pagePositionCheck(position);
         }
 
         @Override
@@ -502,6 +600,7 @@ public class ImgFilterActivity extends AppCompatActivity{
             {
                 mRelFilterValue.setVisibility(View.GONE);
                 mRelFilterSelect.setVisibility(View.VISIBLE);
+                mLinearPagerPos.setVisibility(View.VISIBLE);
             }
             else if(v.getId() == R.id.text_done)
             {
@@ -532,6 +631,7 @@ public class ImgFilterActivity extends AppCompatActivity{
                 }
                 mRelFilterValue.setVisibility(View.GONE);
                 mRelFilterSelect.setVisibility(View.VISIBLE);
+                mLinearPagerPos.setVisibility(View.VISIBLE);
 
             }
         }
@@ -546,6 +646,9 @@ public class ImgFilterActivity extends AppCompatActivity{
             {
                 mRelFilterValue.setVisibility(View.VISIBLE);
                 mRelFilterSelect.setVisibility(View.GONE);
+                mLinearPagerPos.setVisibility(View.GONE);
+
+                mTextFilterName.setText(mFiltersListFragment.getSelectFilterName());
                 mSeekbarValue.initProgressValue(false);
             }
             else

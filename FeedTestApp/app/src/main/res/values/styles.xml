@@ -23,7 +23,6 @@
         <item name="flash">auto</item>
     </style>
 
-
     <declare-styleable name="crop__CropperView">
         <attr name="crop__grid_color" format="color"/>
         <attr name="crop__grid_thickness" format="dimension"/>

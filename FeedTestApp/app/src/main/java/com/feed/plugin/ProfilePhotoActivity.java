@@ -1,6 +1,7 @@
 package com.feed.plugin;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -44,6 +46,10 @@ public class ProfilePhotoActivity extends AppCompatActivity{
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_profile_photo);
+
+        TextView textTitle = findViewById(R.id.text_title);
+        textTitle.setTypeface(Typeface.createFromAsset(getAssets(), "RingsideWide-Semibold.otf"));
+        textTitle.setText(getString(R.string.camera));
 
         mCameraView = (CameraView) findViewById(R.id.camera_preview);
         if (mCameraView != null) {

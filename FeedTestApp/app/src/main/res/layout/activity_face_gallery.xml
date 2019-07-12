@@ -3,30 +3,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#ffffffff">
+    android:background="@drawable/bg_marble">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="42.5dp"
-        android:background="#ffffffff">
+        android:background="@drawable/backgroundcopy2">
 
-        <ImageButton
+        <View
+            android:layout_width="22.5dp"
+            android:layout_height="22.5dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/btn_arrow_w" />
+
+        <RelativeLayout
             android:id="@+id/btn_back"
             android:layout_width="42.5dp"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:src="@drawable/button_arrow_back"
-            android:scaleType="center"
-            android:background="#ffffff"/>
+            android:padding="10dp">
+        </RelativeLayout>
 
-        <TextView
+        <View
+            android:layout_width="22.5dp"
+            android:layout_height="22.5dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/btn_check_w" />
+        <RelativeLayout
             android:id="@+id/text_ok"
-            android:layout_width="wrap_content"
+            android:layout_width="42.5dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:padding="10dp"
-            android:gravity="center"
-            android:text="@string/ok" />
+            android:padding="10dp">
+        </RelativeLayout>
+
+
+        <!--<TextView-->
+            <!--android:id="@+id/text_ok"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:padding="10dp"-->
+            <!--android:gravity="center"-->
+            <!--android:text="@string/ok" />-->
 
         <TextView
             android:id="@+id/text_title"
@@ -34,7 +55,7 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:textColor="#ff000000"
+            android:textColor="#ffffffff"
             android:textSize="14dp"
             android:textAllCaps="true"
             android:text="@string/face_gallery"/>
@@ -48,6 +69,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#ffffff"
         android:orientation="vertical">
 
         <ImageView

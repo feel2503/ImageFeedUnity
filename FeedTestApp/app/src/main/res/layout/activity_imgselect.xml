@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffffff"
+    android:background="@drawable/bg_marble"
     android:orientation="vertical"
     tools:context=".ImgSelectActivity">
 
@@ -25,7 +25,11 @@
             android:id="@+id/tabLayout"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
-            android:layout_height="55.3dp" />
+            android:layout_height="55.3dp"
+            android:background="@drawable/backgroundcopy2"
+            />
+
+
     </RelativeLayout>
 
 

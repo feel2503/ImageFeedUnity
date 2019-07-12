@@ -46,30 +46,10 @@
                 app:scv_touch_padding="8dp"
                 />
 
-            <Button
-                android:id="@+id/btn_crop_16_9"
-                android:layout_width="56dp"
-                android:layout_height="40dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/button_16_9"/>
 
-            <Button
-                android:id="@+id/btn_crop_3_4"
-                android:layout_width="40dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="5dp"
-                android:layout_above="@id/btn_crop_16_9"
-                android:background="@drawable/button_4_3"/>
 
-            <Button
-                android:id="@+id/btn_crop_1_1"
-                android:layout_width="40dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="5dp"
-                android:layout_above="@id/btn_crop_3_4"
-                android:background="@drawable/button_1_1"/>
+
+
 
         </RelativeLayout>
 
@@ -79,33 +59,91 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#00ffffff"
-            android:layout_marginTop="260dp"
+            android:layout_marginTop="240dp"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="45dp">
+                android:layout_height="65dp">
+
+                <!--<Button-->
+                    <!--android:id="@+id/btn_change_gall_imgview_state"-->
+                    <!--android:layout_width="20dp"-->
+                    <!--android:layout_height="27dp"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:layout_alignParentBottom="true"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:background="@drawable/btn_gallery_slide"/>-->
+
+                <!--<ToggleButton-->
+                    <!--android:id="@+id/btn_img_sel_mode"-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_marginRight="15dp"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:button="@drawable/btnphotomulti"-->
+                    <!--android:textOn=""-->
+                    <!--android:text=""-->
+                    <!--android:background="@null"  />-->
 
                 <Button
-                    android:id="@+id/btn_change_gall_imgview_state"
-                    android:layout_width="20dp"
-                    android:layout_height="27dp"
+                    android:id="@+id/btn_img_sel_mode"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/btnphotomulti"/>
+
+
+                <Button
+                    android:id="@+id/btn_crop_1_1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/btnphoto11"/>
+
+                <Button
+                    android:id="@+id/btn_crop_3_4"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/btn_crop_1_1"
+                    android:background="@drawable/btnphoto34"/>
+
+                <Button
+                    android:id="@+id/btn_crop_16_9"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/btn_crop_3_4"
+                    android:background="@drawable/btnphoto169"/>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="14dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/backgroundcopy"/>
+                <View
+
+                    android:layout_width="60dp"
+                    android:layout_height="2dp"
                     android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/btn_gallery_slide"/>
+                    android:layout_marginBottom="6dp"
+                    android:background="#ffffffff">
+                </View>
 
-                <ToggleButton
-                    android:id="@+id/btn_img_sel_mode"
-                    android:layout_width="21dp"
-                    android:layout_height="21dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginBottom="19dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
-                    android:button="@drawable/toggle_img_select_mode"
-                    android:background="@null"  />
+                <View
+                    android:id="@+id/btn_change_gall_imgview_state"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true">
+                </View>
+
             </RelativeLayout>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_gallery"
                 android:layout_width="match_parent"

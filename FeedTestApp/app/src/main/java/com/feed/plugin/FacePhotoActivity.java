@@ -1,6 +1,7 @@
 package com.feed.plugin;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -47,6 +49,9 @@ public class FacePhotoActivity extends AppCompatActivity{
 
         setContentView(R.layout.activity_face_photo);
 
+        TextView textTitle = findViewById(R.id.text_title);
+        textTitle.setTypeface(Typeface.createFromAsset(getAssets(), "RingsideWide-Semibold.otf"));
+
         mCameraView = (CameraView) findViewById(R.id.camera_preview);
         if (mCameraView != null) {
             mCameraView.addCallback(mCallback);
@@ -64,7 +69,9 @@ public class FacePhotoActivity extends AppCompatActivity{
         mBtnGallery.setOnClickListener(mOnClickListener);
 
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
-        findViewById(R.id.text_share).setOnClickListener(mOnClickListener);
+        TextView textSkip = findViewById(R.id.text_share);
+        textSkip.setTypeface(Typeface.createFromAsset(getAssets(), "RingsideWide-Semibold.otf"));
+        textSkip.setOnClickListener(mOnClickListener);
 
     }
 

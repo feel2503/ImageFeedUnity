@@ -1,5 +1,6 @@
 package com.feed.plugin;
 
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.feed.plugin.adapter.ImageViewSlideAdapter;
@@ -40,6 +42,9 @@ public class FaceGalleryActivity extends AppCompatActivity{
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_face_gallery);
+
+        TextView textTitle = findViewById(R.id.text_title);
+        textTitle.setTypeface(Typeface.createFromAsset(getAssets(), "RingsideWide-Semibold.otf"));
 
         mSelectImageView = (ImageView)findViewById(R.id.select_image_view);
         recyclerGallery = (RecyclerView) findViewById(R.id.recycler_gallery);

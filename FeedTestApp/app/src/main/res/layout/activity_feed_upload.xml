@@ -9,38 +9,59 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="42.5dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:background="#ffffffff">
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_top">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="42.5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/backgroundcopy2">
 
-        <TextView
-            android:id="@+id/text_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/btn_back"
-            android:layout_marginLeft="16dp"
-            android:textColor="#ff000000"
-            android:text="@string/new_post" />
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="16dp"
+                android:textColor="#ffffffff"
+                android:text="@string/new_post" />
 
-        <Button
-            android:id="@+id/btn_back"
-            android:layout_width="17.5dp"
-            android:layout_height="17.5dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:background="@drawable/button_arrow_back"/>
+            <View
+                android:layout_width="22.5dp"
+                android:layout_height="22.5dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/btn_arrow_w" />
 
-        <TextView
-            android:id="@+id/text_share"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:gravity="center"
-            android:text="@string/share" />
+            <RelativeLayout
+                android:id="@+id/btn_back"
+                android:layout_width="42.5dp"
+                android:layout_height="match_parent"
+                android:padding="10dp">
+            </RelativeLayout>
 
+            <View
+                android:layout_width="22.5dp"
+                android:layout_height="22.5dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/btn_check_w" />
+            <RelativeLayout
+                android:id="@+id/text_share"
+                android:layout_width="42.5dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:padding="10dp">
+            </RelativeLayout>
+
+
+
+        </RelativeLayout>
     </RelativeLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
