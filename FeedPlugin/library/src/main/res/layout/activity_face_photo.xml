@@ -91,12 +91,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
-                    <Button
-                        android:id="@+id/btn_camera_rotate"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/btn_rotate_camera"/>
+                    <!--<Button-->
+                        <!--android:id="@+id/btn_camera_rotate"-->
+                        <!--android:layout_width="32dp"-->
+                        <!--android:layout_height="32dp"-->
+                        <!--android:layout_centerInParent="true"-->
+                        <!--android:background="@drawable/btn_rotate_camera"/>-->
                 </RelativeLayout>
             </LinearLayout>
 
@@ -123,13 +123,25 @@
                 android:layout_centerInParent="true"
                 android:background="@drawable/oval"
                 />
+
+            <Button
+                android:id="@+id/btn_camera_rotate"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="19dp"
+                android:background="@drawable/btn_rotate_camera"/>
+
             <ToggleButton
                 android:id="@+id/btn_camera_flash_mode"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginRight="15dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginBottom="19dp"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
                 android:background="@drawable/toggle_camera_flash_mode"
                 android:textOn=""
                 android:textOff=""/>

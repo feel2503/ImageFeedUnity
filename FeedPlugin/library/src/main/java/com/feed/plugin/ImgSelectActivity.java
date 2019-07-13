@@ -29,6 +29,8 @@ public class ImgSelectActivity extends AppCompatActivity{
 
     private final int REQEUST_PERFMSSION_CODE = 0x1001;
     private int REQUEST_IMAGE_FILTER = 0x1002;
+    private int REQUEST_SETTING_FOR_PERMISSION = 0x1003;
+
 
     private String[] REQUIRED_PERMISSIONS  = {Manifest.permission.CAMERA, // 카메라
             Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};  // 외부 저장소
@@ -49,13 +51,14 @@ public class ImgSelectActivity extends AppCompatActivity{
 
         setContentView(R.layout.activity_imgselect);
 
-        mProgress = new ProgressDialog(this);
-
         boolean isPermission = checkVerify();
         if(isPermission)
         {
             initTab();
+            setCustomFont();
         }
+
+        mProgress = new ProgressDialog(this);
 
         findViewById(R.id.btn_next).setOnClickListener(mOnClickListener);
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
@@ -63,7 +66,7 @@ public class ImgSelectActivity extends AppCompatActivity{
         mTextTitle = (TextView)findViewById(R.id.text_title);
         mTextTitle.setTypeface(Typeface.createFromAsset(getAssets(), "RingsideWide-Semibold.otf"));
         mTextTitle.setText(getString(R.string.gallelry));
-        setCustomFont();
+
     }
 
     private void initTab()
@@ -190,6 +193,23 @@ public class ImgSelectActivity extends AppCompatActivity{
                 finish();
             }
         }
+        else if(requestCode == REQUEST_SETTING_FOR_PERMISSION)
+        {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
+                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                        checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED )
+                {
+                    initTab();
+                    setCustomFont();
+                }
+                else
+                {
+                    finish();
+                }
+            }
+        }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -232,6 +252,7 @@ public class ImgSelectActivity extends AppCompatActivity{
             }
             if ( check_result ) {
                 initTab();
+                setCustomFont();
             }
             else {
                 showRequestAgainDialog();
@@ -247,7 +268,8 @@ public class ImgSelectActivity extends AppCompatActivity{
             public void onClick(DialogInterface dialog, int which) {
                 try{
                     Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(Uri.parse("package:" + getPackageName()));
-                    startActivity(intent);
+                    startActivityForResult(intent, REQUEST_SETTING_FOR_PERMISSION);
+                    //startActivity(intent);
                 }catch (ActivityNotFoundException ae)
                 {
                     ae.printStackTrace();
