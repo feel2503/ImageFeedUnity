@@ -6,10 +6,14 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.provider.Settings;
@@ -23,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.feed.plugin.widget.camera.AspectRatio;
 import com.feed.plugin.widget.camera.CameraView;
 import com.feed.plugin.widget.cropimgview.util.CropUtils;
 import com.unity3d.player.UnityPlayer;
@@ -42,6 +47,7 @@ public class ProfilePhotoActivity extends AppCompatActivity{
     private Button mBtnCameraRotate;
     private Button mBtnCapture;
 
+    private int imageSize = 512;
 
     private int REQUEST_GALLERY_SELECT = 0x1011;
 
@@ -75,7 +81,9 @@ public class ProfilePhotoActivity extends AppCompatActivity{
         mCameraView = (CameraView) findViewById(R.id.camera_preview);
         if (mCameraView != null) {
             mCameraView.addCallback(mCallback);
+            mCameraView.setFacing(CameraView.FACING_FRONT);
         }
+
 
         mToggleFlash = findViewById(R.id.btn_camera_flash_mode);
         mToggleFlash.setOnCheckedChangeListener(mOnCheckedChangeListener);
@@ -308,8 +316,95 @@ public class ProfilePhotoActivity extends AppCompatActivity{
             getBackgroundHandler().post(new Runnable() {
                 @Override
                 public void run() {
+                    Bitmap resultBitmapt;
+
+//                    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+//                    int width = bitmap.getWidth();
+//                    int height = bitmap.getHeight();
+//
+//                    Matrix matrix = new Matrix();
+//                    matrix.postRotate(90);
+//                    Bitmap rotbitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+//                    bitmap.recycle();
+//
+//                    width = rotbitmap.getWidth();
+//                    height = rotbitmap.getHeight();
+
+
+                    Bitmap rotbitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    int width = rotbitmap.getWidth();
+                    int height = rotbitmap.getHeight();
+
+                    if(width > height)
+                    {
+                        Matrix matrix = new Matrix();
+                        if(mCameraView.getFacing() == CameraView.FACING_FRONT)
+                            matrix.postRotate(-90);
+                        else
+                            matrix.postRotate(90);
+
+                        rotbitmap = Bitmap.createBitmap(rotbitmap, 0, 0, width, height, matrix, true);
+
+                        width = rotbitmap.getWidth();
+                        height = rotbitmap.getHeight();
+                    }
+
+                    if(width <= imageSize || height <= imageSize){
+                        resultBitmapt = rotbitmap;
+                    }
+                    else
+                    {
+                        if(width > height)
+                        {
+//                            Matrix matrix = new Matrix();
+//                            matrix.postRotate(90);
+//                            rotbitmap = Bitmap.createBitmap(rotbitmap, 0, 0, width, height, matrix, true);
+
+                            Bitmap scalbitmap = CropUtils.getScaledBitmapForHeight(rotbitmap, imageSize);
+                            rotbitmap.recycle();
+
+                            Log.d("AAAA", "1 widht : " +scalbitmap.getWidth() +" height : " + scalbitmap.getHeight());
+                            width = scalbitmap.getWidth() > imageSize ? scalbitmap.getWidth() : imageSize;
+                            int x = (width - imageSize)/2;
+                            int cropW = (x + imageSize) > scalbitmap.getWidth() ? (imageSize-x) : imageSize;
+                            int cropH = scalbitmap.getHeight() > imageSize ? imageSize : scalbitmap.getHeight();
+
+                            Bitmap cropbitmap = Bitmap.createBitmap(scalbitmap, x, 0, cropW, cropH);
+                            scalbitmap.recycle();
+
+                            resultBitmapt = cropbitmap;
+                        }
+                        else
+                        {
+                            Bitmap scalbitmap = CropUtils.getScaledBitmapForWidth(rotbitmap, imageSize);
+                            rotbitmap.recycle();
+
+                            Log.d("AAAA", "2 widht : " +scalbitmap.getWidth() +" height : " + scalbitmap.getHeight());
+
+                            height = scalbitmap.getHeight() > imageSize ? scalbitmap.getHeight() : imageSize;
+                            int y = (height - imageSize)/2;
+
+                            int cropW = scalbitmap.getWidth() > imageSize ? imageSize : scalbitmap.getWidth();
+                            int cropH = (y + imageSize) > scalbitmap.getHeight() ? (imageSize-y) : imageSize;
+                            Bitmap cropbitmap = Bitmap.createBitmap(scalbitmap, 0, y, cropW, cropH);
+                            scalbitmap.recycle();
+
+                            resultBitmapt = cropbitmap;
+                        }
+
+                    }
+
+
+//                    Bitmap scalbitmap = CropUtils.getScaledBitmapForWidth(bitmap, imageSize);
+//                    bitmap.recycle();
+//
+//                    width = scalbitmap.getWidth();
+//                    int x = (width - imageSize)/2;
+//                    Bitmap cropbitmap = Bitmap.createBitmap(scalbitmap, x, 0, imageSize, imageSize);
+//                    scalbitmap.recycle();
+
                     // This demo app saves the taken picture to a constant file.
-                    //File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),"picture.jpg");
+//                    File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),"picture.jpg");
                     String filePath = CropUtils.getDirPath(getApplicationContext()) + "/"+"profile_picture.jpg";
                     final File file = new File(filePath);
                     if(file.exists())
@@ -318,7 +413,8 @@ public class ProfilePhotoActivity extends AppCompatActivity{
                     OutputStream os = null;
                     try {
                         os = new FileOutputStream(file);
-                        os.write(data);
+                        resultBitmapt.compress(Bitmap.CompressFormat.JPEG, 100, os);
+                        //os.write(data);
                         os.close();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -331,6 +427,7 @@ public class ProfilePhotoActivity extends AppCompatActivity{
                             }
                         }
                     }
+                    resultBitmapt.recycle();
 
                     ArrayList<String> arrImg = new ArrayList<String>();
                     arrImg.add(filePath);

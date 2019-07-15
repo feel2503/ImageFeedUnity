@@ -75,6 +75,7 @@ public class FacePhotoActivity extends AppCompatActivity{
         mCameraView = (CameraView) findViewById(R.id.camera_preview);
         if (mCameraView != null) {
             mCameraView.addCallback(mCallback);
+            mCameraView.setFacing(CameraView.FACING_FRONT);
         }
 
         mToggleFlash = findViewById(R.id.btn_camera_flash_mode);

@@ -422,7 +422,7 @@ class Camera2 extends CameraViewImpl{
         while (it.hasNext()) {
             // Get employee name and age
             Size size = (Size) it.next();
-            if(size.getHeight() > 960)
+            if(size.getHeight() > mMaxSize)
             {
                 largest = size;
                 break;
@@ -603,6 +603,9 @@ class Camera2 extends CameraViewImpl{
             mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback, null);
         } catch (CameraAccessException e) {
             Log.e(TAG, "Failed to lock focus.", e);
+        } catch(Exception ee)
+        {
+            ee.printStackTrace();
         }
     }
 

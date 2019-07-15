@@ -156,7 +156,7 @@ public class ImgFilterActivity extends AppCompatActivity{
         findViewById(R.id.btn_back).setOnClickListener(mOnClickListener);
 
 
-        String editImgPath = getIntent().getStringExtra(BridgeCls.EXTRA_EDITIMG_LIST);
+        //String editImgPath = getIntent().getStringExtra(BridgeCls.EXTRA_EDITIMG_LIST);
 
         Intent intent = getIntent();
 

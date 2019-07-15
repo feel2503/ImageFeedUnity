@@ -9,6 +9,12 @@ abstract class CameraViewImpl {
 
     protected final Callback mCallback;
 
+    protected int mMaxSize = 960;
+    public void setMaxSize(int maxSize)
+    {
+        mMaxSize = maxSize;
+    }
+
     public CameraViewImpl(Callback callback) {
         mCallback = callback;
     }

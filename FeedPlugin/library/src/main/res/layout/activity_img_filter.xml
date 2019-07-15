@@ -72,7 +72,8 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager_gpuimage"
             android:layout_width="match_parent"
-            android:layout_height="360dp">
+            android:layout_height="match_parent"
+            android:layout_above="@id/relative_filter">
         </android.support.v4.view.ViewPager>
 
         <!--<com.feed.plugin.android.gpuimage.GPUImageView-->
@@ -83,6 +84,7 @@
 
 
         <RelativeLayout
+            android:id="@+id/relative_filter"
             android:layout_width="match_parent"
             android:layout_height="237.5dp"
             android:layout_alignParentBottom="true">
