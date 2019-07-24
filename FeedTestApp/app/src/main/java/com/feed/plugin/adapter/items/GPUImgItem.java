@@ -1,5 +1,6 @@
 package com.feed.plugin.adapter.items;
 
+import android.graphics.Bitmap;
 import android.view.View;
 
 import com.feed.plugin.android.gpuimage.GPUImage;
@@ -109,6 +110,14 @@ public class GPUImgItem{
     {
         if(gpuImageView != null && gpuImageView instanceof GPUImageView)
             ((GPUImageView) gpuImageView).saveToPictures(folderName, fileName, listener);
+    }
+
+    public Bitmap capture(int width, int height) throws InterruptedException
+    {
+        if(gpuImageView != null && gpuImageView instanceof GPUImageView)
+            return ((GPUImageView) gpuImageView).capture(width, height);
+        else
+            return null;
     }
 
     private float range(int percentage, float start, float end)

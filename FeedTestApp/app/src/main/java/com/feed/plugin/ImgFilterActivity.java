@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.feed.plugin.adapter.GpuimageSlideAdapter;
 import com.feed.plugin.adapter.items.GPUImgItem;
+import com.feed.plugin.adapter.items.ImgFilterSetItem;
 import com.feed.plugin.adapter.items.ThumbnailItem;
 import com.feed.plugin.android.gpuimage.GPUImage;
 import com.feed.plugin.android.gpuimage.GPUImageView;
@@ -62,6 +63,7 @@ public class ImgFilterActivity extends AppCompatActivity{
     //private boolean isCallByUnity = false;
     private ArrayList<String> mImagList;
     private ArrayList<String> mFilterImgList;
+    private ArrayList<ImgFilterSetItem> mArrImgSetFilterList;
 
     // gpuimageview
     private ViewPager mGPUImagePager;
@@ -347,11 +349,17 @@ public class ImgFilterActivity extends AppCompatActivity{
     private void initGPUImageList()
     {
         mGPUImgList = new ArrayList<GPUImgItem>();
+        mArrImgSetFilterList = new ArrayList<ImgFilterSetItem>();
         for(String imgPath : mImagList)
         {
             GPUImgItem item = new GPUImgItem();
             item.setImagePath(imgPath);
             mGPUImgList.add(item);
+
+            ImgFilterSetItem ifitem = new ImgFilterSetItem();
+            ifitem.imagePath = imgPath;
+            mArrImgSetFilterList.add(ifitem);
+
         }
         mCurrentGPUImage = mGPUImgList.get(0);
         mGPUImageAdapter.setImages(mGPUImgList);
@@ -403,10 +411,52 @@ public class ImgFilterActivity extends AppCompatActivity{
 
         @Override
         public void onPageSelected(int position){
+            for(ImgFilterSetItem item : mArrImgSetFilterList)
+            {
+                if(item.imagePath.equalsIgnoreCase(mCurrentGPUImage.getImagePath()))
+                {
+                    GPUImgItem transFilter = new GPUImgItem();
+                    if(mCurrentTransFilter != null )
+                    {
+                        transFilter.setFilter(mCurrentTransFilter.getFilter());
+                        transFilter.setFilterValue(mCurrentTransFilter.getFilterValue());
+                        item.mTransFilter = transFilter;
+                    }
+                    ArrayList<GPUImgItem> arrEditFilter = new ArrayList<>();
+                    if(mArrEditFilter != null && mArrEditFilter.size() > 0)
+                    {
+                        for(GPUImgItem editItem : mArrEditFilter)
+                        {
+                            GPUImgItem gitem = new GPUImgItem();
+                            gitem.setFilter(editItem.getFilter());
+                            //gitem.setFilterValue(editItem.getFilterValue());
+                            arrEditFilter.add(gitem);
+
+                        }
+                        item.mArrEditFilter = arrEditFilter;
+                    }
+                    break;
+                }
+            }
+
             mCurrentGPUImage = mGPUImgList.get(position);
             mFiltersListFragment.updateThumbnail(mImagList.get(position));
-
             pagePositionCheck(position);
+
+            for(ImgFilterSetItem item : mArrImgSetFilterList)
+            {
+                if(item.imagePath.equalsIgnoreCase(mCurrentGPUImage.getImagePath()))
+                {
+                    if(item.mTransFilter != null)
+                    {
+                        mCurrentTransFilter = item.mTransFilter;
+                    }
+                    if(item.mArrEditFilter != null && item.mArrEditFilter.size() > 0)
+                    {
+                        mArrEditFilter = item.mArrEditFilter;
+                    }
+                }
+            }
         }
 
         @Override
@@ -581,9 +631,46 @@ public class ImgFilterActivity extends AppCompatActivity{
             {
                 showProgress(ImgFilterActivity.this, true);
 
-                AsyncSetFilter async = new AsyncSetFilter();
-                async.execute();
+                for(ImgFilterSetItem item : mArrImgSetFilterList)
+                {
+                    if(item.imagePath.equalsIgnoreCase(mCurrentGPUImage.getImagePath()))
+                    {
+                        GPUImgItem transFilter = new GPUImgItem();
+                        if(mCurrentTransFilter != null )
+                        {
+                            transFilter.setFilter(mCurrentTransFilter.getFilter());
+                            //transFilter.setFilterValue(mCurrentTransFilter.getFilterValue());
+                            item.mTransFilter = transFilter;
+                        }
+                        ArrayList<GPUImgItem> arrEditFilter = new ArrayList<>();
+                        if(mArrEditFilter != null && mArrEditFilter.size() > 0)
+                        {
+                            for(GPUImgItem editItem : mArrEditFilter)
+                            {
+                                GPUImgItem gitem = new GPUImgItem();
+                                gitem.setFilter(editItem.getFilter());
+                                //gitem.setFilterValue(editItem.getFilterValue());
+                                arrEditFilter.add(gitem);
+                            }
+                            item.mArrEditFilter = arrEditFilter;
+                        }
+                        break;
+                    }
+                }
 
+                if(mStrActivitMode == null && mImagList.size() > 1)
+                {
+                    AsyncMulSetFilter async = new AsyncMulSetFilter();
+                    async.execute(mSavedImgCount);
+                }
+                else
+                {
+                    AsyncSetFilter async = new AsyncSetFilter();
+                    async.execute();
+                }
+
+//                AsyncSetFilter async = new AsyncSetFilter();
+//                async.execute();
             }
             else if(v.getId() == R.id.btn_back)
             {
@@ -945,4 +1032,141 @@ public class ImgFilterActivity extends AppCompatActivity{
             return mFragmentTitleList.get(position);
         }
     }
+
+    private class AsyncMulSetFilter extends AsyncTask<Integer, Void, Boolean>
+    {
+        @Override
+        protected Boolean doInBackground(Integer... params)
+        {
+            int pos = params[0];
+            GPUImgItem gpuimg = mGPUImgList.get(pos);
+            ArrayList<GPUImageFilter> arrFilters = new ArrayList<GPUImageFilter>();
+            GPUImageFilterGroup grFilter = new GPUImageFilterGroup();
+
+            for(ImgFilterSetItem filItem : mArrImgSetFilterList)
+            {
+                if(filItem.imagePath.equalsIgnoreCase(gpuimg.getImagePath()))
+                {
+
+                    if(filItem.mTransFilter != null)
+                    {
+                        grFilter.addFilter(filItem.mTransFilter.getFilter());
+                    }
+                    if(filItem.mArrEditFilter != null && filItem.mArrEditFilter.size() > 0)
+                    {
+                        for(GPUImgItem efilter : filItem.mArrEditFilter)
+                        {
+                            grFilter.addFilter(efilter.getFilter());
+                        }
+                    }
+                    arrFilters.add(grFilter);
+                    break;
+                }
+            }
+
+
+            if(grFilter.getFilters().size() < 1)
+            {
+                mSavedImgCount++;
+
+                if(mFilterImgList == null)
+                    mFilterImgList = new ArrayList<String>();
+
+                mFilterImgList.add(gpuimg.getImagePath());
+                return true;
+            }
+            else
+            {
+                Bitmap source = BitmapFactory.decodeFile(gpuimg.getImagePath());
+                GPUImage.getBitmapForMultipleFilters(source, arrFilters, mReponseMulListener);
+
+                return false;
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result){
+            super.onPostExecute(result);
+
+            if(result)
+            {
+                if(mSavedImgCount == mGPUImgList.size())
+                {
+                    mSavedImgCount= 0;
+                    showProgress(ImgFilterActivity.this, false);
+
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), FeedUploadActivity.class);
+                    intent.putStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST, mFilterImgList);
+                    startActivityForResult(intent, REQUEST_FEED_UPLOAD);
+                }
+                else
+                {
+                    AsyncMulSetFilter async = new AsyncMulSetFilter();
+                    async.execute(mSavedImgCount);
+                }
+            }
+
+        }
+    }
+
+    GPUImage.ResponseListener<Bitmap> mReponseMulListener = new GPUImage.ResponseListener<Bitmap>()
+    {
+        @Override
+        public void response(Bitmap item){
+            String fullpath = mGPUImgList.get(mSavedImgCount).getImagePath();
+            int idx = fullpath.lastIndexOf("/");
+            String path = fullpath.substring(0, idx);
+            String name = "filter_" + fullpath.substring(idx + 1, fullpath.length());
+            mSavedImgCount++;
+
+            //File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File file = new File(path, name);
+            file.getParentFile().mkdirs();
+
+            FileOutputStream out = null;
+            //Bitmap bitmap = mGPUImageView.getGPUImage().getBitmapWithFilterApplied();
+            try {
+                out = new FileOutputStream(file);
+                item.compress(Bitmap.CompressFormat.PNG, 100, out);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (out != null) {
+                        out.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if(mFilterImgList == null)
+                mFilterImgList = new ArrayList<String>();
+
+            String imgUrl = path+"/"+name;
+            mFilterImgList.add(imgUrl);
+            if(mSavedImgCount == mGPUImgList.size())
+            {
+                mSavedImgCount= 0;
+
+                if(mStrActivitMode == null || mStrActivitMode.length() < 1)
+                {
+                    showProgress(ImgFilterActivity.this, false);
+
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), FeedUploadActivity.class);
+                    intent.putStringArrayListExtra(BridgeCls.EXTRA_EDITIMG_LIST, mFilterImgList);
+                    startActivityForResult(intent, REQUEST_FEED_UPLOAD);
+                }
+            }
+            else
+            {
+                AsyncMulSetFilter async = new AsyncMulSetFilter();
+                async.execute(mSavedImgCount);
+            }
+        }
+    };
 }

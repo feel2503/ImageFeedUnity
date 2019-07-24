@@ -556,6 +556,10 @@ public class GPUImageView extends FrameLayout{
             File file = new File(folderName + "/" + fileName);
             try {
                 file.getParentFile().mkdirs();
+                String path = file.getAbsolutePath();
+                //String path = file.getPath();
+                final Uri destUri = Uri.parse(path);
+
                 image.compress(Bitmap.CompressFormat.JPEG, 80, new FileOutputStream(file));
                 MediaScannerConnection.scanFile(getContext(),
                         new String[]{
@@ -569,7 +573,8 @@ public class GPUImageView extends FrameLayout{
 
                                         @Override
                                         public void run() {
-                                            listener.onPictureSaved(uri);
+                                            //listener.onPictureSaved(uri);
+                                            listener.onPictureSaved(destUri);
                                         }
                                     });
                                 }

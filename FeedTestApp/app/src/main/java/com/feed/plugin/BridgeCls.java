@@ -2,6 +2,7 @@ package com.feed.plugin;
 
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.camera2.CameraManager;
 import android.widget.Toast;
 
 import com.unity3d.player.UnityPlayer;
@@ -49,8 +50,27 @@ public class BridgeCls{
         Toast.makeText(this.mContext, msg, Toast.LENGTH_LONG).show();
 
     }
+
+    private boolean checkCamera(Context context)
+    {
+        try{
+            CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
+            String[] camList = cameraManager.getCameraIdList();
+            if(camList == null || camList.length < 1)
+                return false;
+            else
+                return true;
+        }catch(Exception e)
+        {
+            return false;
+        }
+    }
+
     public void startGalleryActivity(Context context)
     {
+        if(!checkCamera(context))
+            return;
+
         Intent intent = new Intent(context, ImgSelectActivity.class);
         context.startActivity(intent);
     }
@@ -103,6 +123,9 @@ public class BridgeCls{
 
     public void startFacePhotoActivity(Context context)
     {
+        if(!checkCamera(context))
+            return;
+
         Intent intent = new Intent(context, FacePhotoActivity.class);
         context.startActivity(intent);
     }
@@ -121,6 +144,9 @@ public class BridgeCls{
 
     public void startProfilePhotoActivity(Context context)
     {
+        if(!checkCamera(context))
+            return;
+        
         Intent intent = new Intent(context, ProfilePhotoActivity.class);
         context.startActivity(intent);
     }

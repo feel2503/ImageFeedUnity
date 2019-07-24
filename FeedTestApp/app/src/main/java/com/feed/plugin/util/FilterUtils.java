@@ -122,7 +122,7 @@ public class FilterUtils{
     public static GPUImageFilter createFilterForType(final Context context, final FilterType type) {
         switch (type) {
             case CONTRAST:
-                return new GPUImageContrastFilter(2.0f);
+                return new GPUImageContrastFilter(1.0f);
             case GAMMA:
                 return new GPUImageGammaFilter(2.0f);
             case INVERT:

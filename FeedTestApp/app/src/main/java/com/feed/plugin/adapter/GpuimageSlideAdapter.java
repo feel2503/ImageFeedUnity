@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.feed.plugin.R;
 import com.feed.plugin.adapter.items.GPUImgItem;
@@ -51,6 +52,9 @@ public class GpuimageSlideAdapter extends PagerAdapter{
     public boolean isViewFromObject(View view, Object object) {
         //return view == ((LinearLayout) object);
         return view == ((GPUImageView) object);
+
+
+        //return view == ((RelativeLayout) object);
     }
 
     @Override
