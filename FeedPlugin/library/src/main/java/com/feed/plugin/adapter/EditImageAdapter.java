@@ -154,13 +154,13 @@ public class EditImageAdapter extends RecyclerView.Adapter<EditImageAdapter.MyVi
         editItemList.add(itemSharpen);
 
         ThumbnailItem itemSaturation = new ThumbnailItem();
-        itemSaturation.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.btn_saturation );
+        itemSaturation.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.btn_saturation_copy );
         itemSaturation.filterName = mContext.getString(R.string.Saturation);
         itemSaturation.filter = FilterUtils.createFilterForType(mContext, FilterUtils.FilterType.SATURATION);
         editItemList.add(itemSaturation);
 
         ThumbnailItem itemVignette = new ThumbnailItem();
-        itemVignette.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.btn_vignette );
+        itemVignette.image = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.btn_vignette_copy );
         itemVignette.filterName = mContext.getString(R.string.Vignette);
         itemVignette.filter = FilterUtils.createFilterForType(mContext, FilterUtils.FilterType.VIGNETTE);
         editItemList.add(itemVignette);

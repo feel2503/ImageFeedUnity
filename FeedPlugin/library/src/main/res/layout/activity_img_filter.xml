@@ -76,6 +76,12 @@
             android:layout_above="@id/relative_filter">
         </android.support.v4.view.ViewPager>
 
+        <com.feed.plugin.widget.CycleView
+            android:id="@+id/cycle_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/relative_filter"/>
+
         <!--<com.feed.plugin.android.gpuimage.GPUImageView-->
         <!--android:id="@+id/gpuimage"-->
         <!--android:layout_width="match_parent"-->

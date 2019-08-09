@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:layout_weight="1"
-                app:scv_background_color="@color/windowBackground"
+                app:scv_background_color="@color/white"
                 app:scv_crop_mode="fit_image"
                 app:scv_frame_color="@color/colorAccent"
                 app:scv_frame_stroke_weight="1dp"
@@ -86,20 +86,62 @@
                     <!--android:text=""-->
                     <!--android:background="@null"  />-->
 
-                <Button
-                    android:id="@+id/btn_img_sel_mode"
+                <!--<Button-->
+                    <!--android:id="@+id/btn_img_sel_mode"-->
+                    <!--android:layout_width="40dp"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:background="@drawable/btnphotomulti"/>-->
+
+                <ToggleButton
+                    android:id="@+id/toggle_img_sel_mode"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginRight="10dp"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/btnphotomulti"/>
+                    android:button="@color/transfrant"
+                    android:textOff=""
+                    android:textOn=""
+                    android:text=""
+                    android:background="@drawable/toggle_img_multi"/>
 
+                <RadioGroup
+                    android:id="@+id/radiogroup_croptype"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:id="@+id/radio_crop_1_1"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:button="@color/transfrant"
+                        android:background="@drawable/toggle_crop1_1"/>
 
+                    <RadioButton
+                        android:id="@+id/radio_crop_3_4"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="10dp"
+                        android:button="@color/transfrant"
+                        android:background="@drawable/toggle_crop4_3"/>
+
+                    <RadioButton
+                        android:id="@+id/radio_crop_16_9"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="10dp"
+                        android:button="@color/transfrant"
+                        android:background="@drawable/toggle_crop16_9"/>
+                    
+                </RadioGroup>
                 <Button
                     android:id="@+id/btn_crop_1_1"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
+                    android:visibility="gone"
                     android:background="@drawable/btnphoto11"/>
 
                 <Button
@@ -108,6 +150,7 @@
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@id/btn_crop_1_1"
+                    android:visibility="gone"
                     android:background="@drawable/btnphoto34"/>
 
                 <Button
@@ -116,6 +159,7 @@
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@id/btn_crop_3_4"
+                    android:visibility="gone"
                     android:background="@drawable/btnphoto169"/>
 
 

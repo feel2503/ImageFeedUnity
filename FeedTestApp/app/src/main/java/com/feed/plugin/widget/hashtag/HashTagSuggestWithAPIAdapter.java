@@ -1,6 +1,7 @@
 package com.feed.plugin.widget.hashtag;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,6 +52,8 @@ public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<String>{
     private int versionValue = 12;
     private int mResource;
 
+    private Typeface mTypeFace;
+
     public HashTagSuggestWithAPIAdapter(Context context, int resource) {
         super(context, resource);
         mResource = resource;
@@ -65,6 +68,8 @@ public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<String>{
 
         if(BridgeCls.mTokenValue != null && BridgeCls.mTokenValue.length() > 0)
             tokenValue = BridgeCls.mTokenValue;
+
+        mTypeFace = Typeface.createFromAsset(context.getAssets(), "RingsideWide-Semibold.otf");
     }
 
     public interface CursorPositionListener {
@@ -106,6 +111,7 @@ public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<String>{
             String hashTag = getItem(position);
 
             TextView tagName = (TextView) convertView.findViewById(R.id.text_tag);
+            tagName.setTypeface(mTypeFace);
             tagName.setText(hashTag);
 
         } catch (Exception e) {
@@ -144,9 +150,9 @@ public class HashTagSuggestWithAPIAdapter extends ArrayAdapter<String>{
 
             FilterResults filterResults = new FilterResults();
 
-            if (constraint != null)
+            // limit 10 ch
+            if (constraint != null && constraint.length() < 12)
             {
-
                 suggests.clear();
 
                 int cursorPosition = listener.currentCursorPosition();

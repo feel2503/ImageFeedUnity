@@ -508,10 +508,13 @@ public class GPUImage {
         }
 
         private void saveImage(final String folderName, final String fileName, final Bitmap image) {
-            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            File file = new File(path, folderName + "/" + fileName);
+//            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+//            File file = new File(path, folderName + "/" + fileName);
+            File file = new File(folderName + "/" + fileName);
             try {
                 file.getParentFile().mkdirs();
+                String path = file.getAbsolutePath();
+                final Uri destUri = Uri.parse(path);
                 image.compress(CompressFormat.JPEG, 80, new FileOutputStream(file));
                 MediaScannerConnection.scanFile(context,
                         new String[]{
@@ -525,7 +528,8 @@ public class GPUImage {
 
                                         @Override
                                         public void run() {
-                                            listener.onPictureSaved(uri);
+                                            //listener.onPictureSaved(uri);
+                                            listener.onPictureSaved(destUri);
                                         }
                                     });
                                 }

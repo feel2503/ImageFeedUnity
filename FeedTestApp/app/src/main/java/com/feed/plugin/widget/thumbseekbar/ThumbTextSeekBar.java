@@ -80,6 +80,23 @@ public class ThumbTextSeekBar extends LinearLayout{
         });
     }
 
+    public void initProgressValue(int value)
+    {
+        setProgress(value);
+        if(value == 50)
+            mIsCenterValue = true;
+        else
+            mIsCenterValue = false;
+
+        tvThumb.post( new Runnable() {
+            @Override
+            public void run() {
+                // your layout is now drawn completely , use it here.
+                tvThumb.attachToSeekBar(seekBar);
+            }
+        });
+    }
+
     public void setThumbText(String text) {
         if(mIsCenterValue)
         {

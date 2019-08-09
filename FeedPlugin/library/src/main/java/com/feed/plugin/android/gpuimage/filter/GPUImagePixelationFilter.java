@@ -52,6 +52,11 @@ public class GPUImagePixelationFilter extends GPUImageFilter {
         pixel = 1.0f;
     }
 
+    public GPUImagePixelationFilter(float value) {
+        super(NO_FILTER_VERTEX_SHADER, PIXELATION_FRAGMENT_SHADER);
+        pixel = value;
+    }
+
     @Override
     public void onInit() {
         super.onInit();

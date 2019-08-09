@@ -37,10 +37,13 @@ import com.feed.plugin.android.gpuimage.filter.GPUImageBrightnessFilter;
 import com.feed.plugin.android.gpuimage.filter.GPUImageContrastFilter;
 import com.feed.plugin.android.gpuimage.filter.GPUImageFilter;
 import com.feed.plugin.android.gpuimage.filter.GPUImageFilterGroup;
+import com.feed.plugin.android.gpuimage.filter.GPUImageHueFilter;
+import com.feed.plugin.android.gpuimage.filter.GPUImagePixelationFilter;
 import com.feed.plugin.android.gpuimage.filter.GPUImageSaturationFilter;
 import com.feed.plugin.fragment.EditImageFragment;
 import com.feed.plugin.fragment.FiltersListFragment;
 import com.feed.plugin.fragment.FiltersListSelectListener;
+import com.feed.plugin.widget.CycleView;
 import com.feed.plugin.widget.SwipeViewPager;
 import com.feed.plugin.widget.thumbseekbar.ThumbTextSeekBar;
 import com.unity3d.player.UnityPlayer;
@@ -102,6 +105,7 @@ public class ImgFilterActivity extends AppCompatActivity{
 
     private int dotsCount;
     private ImageView[] dots;
+    private CycleView mCycleView;
 
     Handler mHandler = new Handler()
     {
@@ -217,6 +221,17 @@ public class ImgFilterActivity extends AppCompatActivity{
         mTextFilterName.setTypeface(Typeface.createFromAsset(getAssets(), "RingsideWide-Semibold.otf"));
 
         initPageMark();
+
+        mCycleView = (CycleView)findViewById(R.id.cycle_view);
+        if(mStrActivitMode != null && mStrActivitMode.equalsIgnoreCase(BridgeCls.ACTIVITY_MODE_PROFILE))
+        {
+            mCycleView.setPathColor(0xffffffff);
+        }
+        else
+        {
+            mCycleView.setVisibility(View.GONE);
+        }
+
     }
 
 
@@ -736,7 +751,14 @@ public class ImgFilterActivity extends AppCompatActivity{
                 mLinearPagerPos.setVisibility(View.GONE);
 
                 mTextFilterName.setText(mFiltersListFragment.getSelectFilterName());
-                mSeekbarValue.initProgressValue(false);
+
+                if(filter instanceof GPUImagePixelationFilter)
+                    mSeekbarValue.initProgressValue(1);
+//                else if(filter instanceof GPUImageHueFilter)
+//                    mSeekbarValue.initProgressValue(25);
+                else
+                    mSeekbarValue.initProgressValue(false);
+
             }
             else
             {

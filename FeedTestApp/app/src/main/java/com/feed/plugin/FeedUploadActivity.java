@@ -37,10 +37,6 @@ public class FeedUploadActivity extends AppCompatActivity {
 
     protected ProgressDialog mProgress = null;
 
-    private static final String[] COUNTRIES = new String[]{
-            "#Belgium", "#France", "#Italy", "#Germany", "#Spain"
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

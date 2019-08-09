@@ -23,7 +23,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
@@ -76,8 +78,10 @@ public class GalleryFragment extends ImgSelFragment{
     protected ArrayList<String> mCropImgList;
 
     private Button mBtnViewState;
-    //private ToggleButton mToggleSelState;
-    private Button mToggleSelState;
+    private ToggleButton mToggleSel;
+    //private Button mToggleSelState;
+
+    private RadioGroup mRGCropType;
     private Button mBtnCrop16_9;
     private Button mBtnCrop3_4;
     private Button mBtnCrop1_1;
@@ -175,14 +179,22 @@ public class GalleryFragment extends ImgSelFragment{
         recyclerGallery = (RecyclerView) rootView.findViewById(R.id.recycler_gallery);
         rootView.findViewById(R.id.btn_change_gall_imgview_state).setOnClickListener(mOnClickListenr);;
 
-        mToggleSelState = rootView.findViewById(R.id.btn_img_sel_mode);
-        mToggleSelState.setOnClickListener(mOnClickListenr);
+        mToggleSel = rootView.findViewById(R.id.toggle_img_sel_mode);
+        mToggleSel.setOnCheckedChangeListener(mCheckChangeListenr);
+
+//        mToggleSelState = rootView.findViewById(R.id.btn_img_sel_mode);
+//        mToggleSelState.setOnClickListener(mOnClickListenr);
         mBtnCrop16_9 = rootView.findViewById(R.id.btn_crop_16_9);
         mBtnCrop16_9.setOnClickListener(mOnClickListenr);
         mBtnCrop3_4 = rootView.findViewById(R.id.btn_crop_3_4);
         mBtnCrop3_4.setOnClickListener(mOnClickListenr);
         mBtnCrop1_1 = rootView.findViewById(R.id.btn_crop_1_1);
         mBtnCrop1_1.setOnClickListener(mOnClickListenr);
+
+        mRGCropType = (RadioGroup)rootView.findViewById(R.id.radiogroup_croptype);
+        mRGCropType.setOnCheckedChangeListener(mRadioCheckChangeListenr);
+        //mRGCropType.check(R.id.radio_crop_1_1);
+
     }
 
     @Override
@@ -208,8 +220,8 @@ public class GalleryFragment extends ImgSelFragment{
         galleryAdapter.setOnItemClickListener(mOnItemClickListener);
         recyclerGallery.setAdapter(galleryAdapter);
         recyclerGallery.setLayoutManager(new GridLayoutManager(getContext(), 4));
-        recyclerGallery.setItemAnimator(new DefaultItemAnimator());
-        recyclerGallery.addItemDecoration(new GridDividerDecoration(getResources(), R.drawable.divider_recycler_gallery));
+        //recyclerGallery.setItemAnimator(new DefaultItemAnimator());
+        //recyclerGallery.addItemDecoration(new GridDividerDecoration(getResources(), R.drawable.divider_recycler_gallery));
 
 
         // init select image
@@ -722,37 +734,107 @@ public class GalleryFragment extends ImgSelFragment{
                 }
 
             }
-            else if(v.getId() == R.id.btn_img_sel_mode)
+//            else if(v.getId() == R.id.btn_img_sel_mode)
+//            {
+//                if(multiSelState)
+//                {
+//                    multiSelState = false;
+//                    galleryAdapter.setMultiSelectMode(true);
+//
+//                }
+//                else
+//                {
+//                    multiSelState = true;
+//                    galleryAdapter.setMultiSelectMode(false);
+//                    String imgPath = mArrImgList.get(mArrImgList.size()-1).mImgString;
+//                    mArrImgList.clear();
+//                    mArrImgList.add(new CropImgItem(imgPath, null, null));
+//
+//                    List<PhotoVO> itemList = galleryAdapter.getmPhotoList();
+//                    for(PhotoVO item : itemList)
+//                    {
+//                        if(item.getImgPath().equalsIgnoreCase(imgPath))
+//                        {
+//                            item.setSelected(true);
+//                            item.setSelectCount(mArrImgList.size());
+//                        }
+//                        else
+//                        {
+//                            item.setSelected(false);
+//                            item.setSelectCount(-1);
+//                        }
+//                    }
+//                }
+////                if(mToggleSelState.isChecked())
+////                {
+////                    galleryAdapter.setMultiSelectMode(true);
+////                }
+////                else
+////                {
+////                    galleryAdapter.setMultiSelectMode(false);
+////                    String imgPath = mArrImgList.get(mArrImgList.size()-1).mImgString;
+////                    mArrImgList.clear();
+////                    mArrImgList.add(new CropImgItem(imgPath, null, null));
+////
+////                    List<PhotoVO> itemList = galleryAdapter.getmPhotoList();
+////                    for(PhotoVO item : itemList)
+////                    {
+////                        if(item.getImgPath().equalsIgnoreCase(imgPath))
+////                        {
+////                            item.setSelected(true);
+////                            item.setSelectCount(mArrImgList.size());
+////                        }
+////                        else
+////                        {
+////                            item.setSelected(false);
+////                            item.setSelectCount(-1);
+////                        }
+////                    }
+////
+////                }
+//
+//                galleryAdapter.notifyDataSetChanged();
+//            }
+        }
+    };
+
+    private CompoundButton.OnCheckedChangeListener mCheckChangeListenr = new CompoundButton.OnCheckedChangeListener(){
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+        {
+            if(isChecked)
             {
-                if(multiSelState)
-                {
-                    multiSelState = false;
-                    galleryAdapter.setMultiSelectMode(true);
+                multiSelState = false;
+                galleryAdapter.setMultiSelectMode(true);
 
-                }
-                else
-                {
-                    multiSelState = true;
-                    galleryAdapter.setMultiSelectMode(false);
-                    String imgPath = mArrImgList.get(mArrImgList.size()-1).mImgString;
-                    mArrImgList.clear();
-                    mArrImgList.add(new CropImgItem(imgPath, null, null));
+            }
+            else
+            {
+                multiSelState = true;
+                galleryAdapter.setMultiSelectMode(false);
+                String imgPath = mArrImgList.get(mArrImgList.size()-1).mImgString;
+                mArrImgList.clear();
+                CropImgItem cropitem = new CropImgItem(imgPath, null, null);
+                RectF imgRect = mCropView.getImageRect();
+                cropitem.mImgRect = new RectF(imgRect);
+                mArrImgList.add(cropitem);
+                //mArrImgList.add(new CropImgItem(imgPath, null, null));
 
-                    List<PhotoVO> itemList = galleryAdapter.getmPhotoList();
-                    for(PhotoVO item : itemList)
+                List<PhotoVO> itemList = galleryAdapter.getmPhotoList();
+                for(PhotoVO item : itemList)
+                {
+                    if(item.getImgPath().equalsIgnoreCase(imgPath))
                     {
-                        if(item.getImgPath().equalsIgnoreCase(imgPath))
-                        {
-                            item.setSelected(true);
-                            item.setSelectCount(mArrImgList.size());
-                        }
-                        else
-                        {
-                            item.setSelected(false);
-                            item.setSelectCount(-1);
-                        }
+                        item.setSelected(true);
+                        item.setSelectCount(mArrImgList.size());
+                    }
+                    else
+                    {
+                        item.setSelected(false);
+                        item.setSelectCount(-1);
                     }
                 }
+            }
 //                if(mToggleSelState.isChecked())
 //                {
 //                    galleryAdapter.setMultiSelectMode(true);
@@ -781,11 +863,148 @@ public class GalleryFragment extends ImgSelFragment{
 //
 //                }
 
-                galleryAdapter.notifyDataSetChanged();
-            }
+            galleryAdapter.notifyDataSetChanged();
         }
     };
 
+    private RadioGroup.OnCheckedChangeListener mRadioCheckChangeListenr = new RadioGroup.OnCheckedChangeListener(){
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId)
+        {
+            if(checkedId == R.id.radio_crop_1_1)
+            {
+                mCropView.setCropEnabled(true);
+                mCropView.setCropMode(CropImageView.CropMode.SQUARE);
+                for(CropImgItem item : mArrImgList)
+                {
+                    float wf = item.mImgRect.right - item.mImgRect.left;
+                    float hf = item.mImgRect.bottom - item.mImgRect.top;
+                    if(wf == hf)
+                    {
+                        item.mCropRect = new RectF(0, 0, wf, hf);
+                    }
+                    else if(wf > hf)
+                    {
+                        float left = (wf - hf)/2;
+                        float top  = 0;
+                        float right = left + hf;
+                        float bottom = hf;
+
+                        item.mCropRect = new RectF(left, top, right, bottom);
+                    }
+                    else if(wf < hf)
+                    {
+                        float top = (hf - wf)/2;
+                        float left = 0;
+                        float right = wf;
+                        float bottom = top + wf;
+                        item.mCropRect = new RectF(left, top, right, bottom);
+                    }
+
+                    //item.mCropRect = null;
+                }
+            }
+            else if(checkedId == R.id.radio_crop_3_4)
+            {
+                mCropView.setCropEnabled(true);
+                mCropView.setCropMode(CropImageView.CropMode.RATIO_3_4);
+                mCropType = 1;
+
+                for(CropImgItem item : mArrImgList)
+                {
+                    float wf = item.mImgRect.right - item.mImgRect.left;
+                    float hf = item.mImgRect.bottom - item.mImgRect.top;
+                    if((wf == hf) || (wf > hf))
+                    {
+                        float width = (hf*3)/4;
+                        float left = (wf-width)/2;
+                        float top  = 0;
+                        float right = left + width;
+                        float bottom = hf;
+                        item.mCropRect = new RectF(left, top, right, bottom);
+                    }
+                    else if(wf < hf)
+                    {
+                        if((wf*4) == (hf*3))
+                        {
+                            item.mCropRect = new RectF(0, 0, wf, hf);
+                        }
+                        else
+                        {
+                            if((wf*4) < (hf*3))
+                            {
+                                float height = (4*wf)/3;
+                                float left = 0;
+                                float top = (hf-height)/2;
+                                float right = wf;
+                                float bottom = top + height;
+                                item.mCropRect = new RectF(left, top, right, bottom);
+                            }
+                            else
+                            {
+                                float width = (hf*3)/4;
+                                float left = (wf-width)/2;
+                                float top  = 0;
+                                float right = left + width;
+                                float bottom = hf;
+                                item.mCropRect = new RectF(left, top, right, bottom);
+                            }
+                        }
+                    }
+                }
+            }
+            else if(checkedId == R.id.radio_crop_16_9)
+            {
+                mCropView.setCropEnabled(true);
+                mCropView.setCropMode(CropImageView.CropMode.RATIO_16_9);
+                mCropType = 0;
+
+                for(CropImgItem item : mArrImgList)
+                {
+                    float wf = item.mImgRect.right - item.mImgRect.left;
+                    float hf = item.mImgRect.bottom - item.mImgRect.top;
+                    if((wf == hf) || (wf < hf))
+                    {
+                        float height = ((9 * wf) / 16);
+                        float left = 0;
+                        float top = (hf-height) / 2;
+                        float right = wf;
+                        float bottom = top + height;
+
+                        item.mCropRect = new RectF(left, top, right, bottom);
+                    }
+                    else if(wf > hf)
+                    {
+                        if((wf*9) == (hf*16))
+                        {
+                            item.mCropRect = new RectF(0, 0, wf, hf);
+                        }
+                        else
+                        {
+                            if((wf*9) > (hf*16))
+                            {
+                                float width = (hf*16)/9;
+                                float left = (wf-width)/2;
+                                float top  = 0;
+                                float right = left + width;
+                                float bottom = hf;
+                                item.mCropRect = new RectF(left, top, right, bottom);
+                            }
+                            else
+                            {
+                                float height = (wf*9)/16;
+                                float left = 0;
+                                float top = (hf-height)/2;
+                                float right = wf;
+                                float bottom = top + height;
+                                item.mCropRect = new RectF(left, top, right, bottom);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
 
     private final LoadCallback mLoadCallback = new LoadCallback() {
         @Override public void onSuccess() {
@@ -801,6 +1020,9 @@ public class GalleryFragment extends ImgSelFragment{
                     //item.mCropRect = new RectF(frameRect);
                 }
             }
+
+            if(!mCropView.isCropEnable())
+                mRGCropType.check(R.id.radio_crop_1_1);
         }
 
         @Override public void onError(Throwable e) {

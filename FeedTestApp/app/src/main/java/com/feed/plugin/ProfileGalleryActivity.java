@@ -149,8 +149,8 @@ public class ProfileGalleryActivity extends AppCompatActivity{
         galleryAdapter.setOnItemClickListener(mOnItemClickListener);
         recyclerGallery.setAdapter(galleryAdapter);
         recyclerGallery.setLayoutManager(new GridLayoutManager(getApplicationContext(), 4));
-        recyclerGallery.setItemAnimator(new DefaultItemAnimator());
-        recyclerGallery.addItemDecoration(new GridDividerDecoration(getResources(), R.drawable.divider_recycler_gallery));
+//        recyclerGallery.setItemAnimator(new DefaultItemAnimator());
+//        recyclerGallery.addItemDecoration(new GridDividerDecoration(getResources(), R.drawable.divider_recycler_gallery));
 
 
         // init select image
